@@ -420,7 +420,7 @@ export default function VIPSubscriptionPage() {
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b4364e80-ae3c-498a-bfe4-40b2b1b4a67e-dIRYvA1h6xKpRlPKfp00t1rnRIJziA.jpg"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center"
+            className="object-cover object-left"
             sizes="100vw"
           />
           
