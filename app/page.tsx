@@ -176,8 +176,8 @@ export default function VIPSubscriptionPage() {
         </div>
       </div>
 
-      {/* Banner Section with Profile Overlay */}
-      <div className="w-full bg-zinc-900 relative">
+      {/* Banner Section */}
+      <div className="w-full bg-zinc-900">
         <div className="relative w-full h-[130px] overflow-hidden">
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0447.PNG-73vlhPvb0rUhTgmubSul8fZ6KSJuhd.jpeg"
@@ -187,42 +187,45 @@ export default function VIPSubscriptionPage() {
             priority
           />
         </div>
-        
-        {/* Stats row - positioned at bottom right of banner */}
-        <div className="absolute bottom-2 right-4 flex items-center gap-3 text-xs text-white/90">
-          <div className="flex items-center gap-1">
-            <span className="font-semibold">159</span>
-            <span className="opacity-80">Fotos</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="font-semibold">68</span>
-            <span className="opacity-80">{'Vídeos'}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="font-semibold">69.2K</span>
-            <span className="opacity-80">Likes</span>
-          </div>
-        </div>
       </div>
 
       {/* Profile Header Section */}
       <div className="px-4 pb-3 bg-white relative">
-        {/* Profile picture - half overlapping banner */}
-        <div className="-mt-[38px] mb-2">
-          <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
-            <Image
-              src="/nina-profile.jpg"
-              alt="Nina Lebedeva"
-              width={76}
-              height={76}
-              className="w-full h-full object-cover"
-              priority
-            />
+        {/* Profile picture and stats row */}
+        <div className="flex items-end justify-between">
+          {/* Profile picture - half overlapping banner */}
+          <div className="-mt-[38px]">
+            <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
+              <Image
+                src="/nina-profile.jpg"
+                alt="Nina Lebedeva"
+                width={76}
+                height={76}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+          </div>
+          
+          {/* Stats row - aligned right, same line as profile pic bottom */}
+          <div className="flex items-center gap-4 text-xs text-muted-foreground pb-2">
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">159</span>
+              <span>Fotos</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">68</span>
+              <span>{'Vídeos'}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">69.2K</span>
+              <span>Likes</span>
+            </div>
           </div>
         </div>
 
         {/* Name and username */}
-        <div className="mb-2">
+        <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
             <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
