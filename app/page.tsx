@@ -18,10 +18,41 @@ function getPromoDate() {
   })
 }
 
+function ProfileBio() {
+  const [expanded, setExpanded] = useState(false)
+  const bioText = 'Talvez você tenha chegado aqui depois do meu vídeo que viralizou… então vou te mostrar um lado meu que ninguém conhece. Minha bunda grande e redondinha faz meu corpo ser único — e aqui eu mostro tudo sem censura. Ficou curioso…? vem me ver toda! 😈'
+  
+  return (
+    <div className="text-sm text-foreground leading-relaxed">
+      {expanded ? (
+        <>
+          <p>{bioText}</p>
+          <button 
+            onClick={() => setExpanded(false)}
+            className="text-primary font-medium mt-1 hover:underline"
+          >
+            Ver menos
+          </button>
+        </>
+      ) : (
+        <>
+          <p className="line-clamp-2">{bioText}</p>
+          <button 
+            onClick={() => setExpanded(true)}
+            className="text-primary font-medium mt-1 hover:underline"
+          >
+            Ver mais
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
 const CRITICAL_IMAGES = [
   '/images/locked-1.jpg',
   '/images/locked-2.jpg',
-  '/images/lana-profile.jpg',
+  '/nina-profile.jpg',
 ]
 
 function preloadImages(srcs: string[]): Promise<void[]> {
@@ -102,7 +133,7 @@ export default function VIPSubscriptionPage() {
             </div>
             
             <h1 className="text-2xl font-bold text-foreground mb-2">{'Conteúdos VIP'}</h1>
-            <p className="text-muted-foreground mb-8">Lana Alvarenga</p>
+            <p className="text-muted-foreground mb-8">Nina Lebedeva</p>
             
             {/* Age warning box */}
             <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
@@ -151,8 +182,8 @@ export default function VIPSubscriptionPage() {
         <div className="flex items-start gap-4 mb-4">
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] flex-shrink-0 overflow-hidden">
             <Image
-              src="/images/lana-profile.jpg"
-              alt="Lana Alvarenga"
+              src="/nina-profile.jpg"
+              alt="Nina Lebedeva"
               width={64}
               height={64}
               className="w-full h-full object-cover"
@@ -161,35 +192,31 @@ export default function VIPSubscriptionPage() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <h2 className="text-lg font-bold text-foreground">Lana Alvarenga</h2>
+              <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                 <Check className="w-3 h-3 text-white" />
               </div>
             </div>
-            <p className="text-sm text-muted-foreground mb-3">@lana.alvarenga</p>
+            <p className="text-sm text-muted-foreground mb-3">@nina.lebedeva</p>
             
             <div className="flex items-center gap-4 text-sm">
               <div className="text-center">
-                <span className="font-bold text-foreground">59</span>
+                <span className="font-bold text-foreground">159</span>
                 <span className="text-muted-foreground ml-1">Fotos</span>
               </div>
               <div className="text-center">
-                <span className="font-bold text-foreground">38</span>
+                <span className="font-bold text-foreground">68</span>
                 <span className="text-muted-foreground ml-1">{'Vídeos'}</span>
               </div>
               <div className="text-center">
-                <span className="font-bold text-foreground">6.2K</span>
+                <span className="font-bold text-foreground">69.2K</span>
                 <span className="text-muted-foreground ml-1">Likes</span>
               </div>
             </div>
           </div>
         </div>
         
-        <p className="text-sm text-foreground leading-relaxed">
-          {'Quer ver minha 🌸 com vitiligo...? 🙈'}
-          <br />
-          {'Minha pele faz meu corpo ser único — e aqui vou te mostrar tudinho sem censuras. 😈'}
-        </p>
+        <ProfileBio />
       </div>
 
       {/* Divider line */}
