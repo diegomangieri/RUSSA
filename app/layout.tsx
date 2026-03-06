@@ -7,8 +7,8 @@ import './globals.css'
 const _inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Lana Alvarenga - Conteúdos VIP',
-  description: 'Acesse os conteúdos exclusivos da Lana Alvarenga. Fotos, vídeos e muito mais.',
+  title: 'Conteúdos VIP - Nina Lebedeva',
+  description: 'Acesse os conteúdos exclusivos da Nina Lebedeva. Fotos, vídeos e muito mais.',
   generator: 'v0.app',
   icons: {
     icon: [
