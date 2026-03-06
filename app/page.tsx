@@ -177,54 +177,53 @@ export default function VIPSubscriptionPage() {
       </div>
 
       {/* Banner Section */}
-      <div className="w-full bg-zinc-900">
-        <div className="relative w-full aspect-[16/9] max-h-[220px] overflow-hidden">
+      <div className="w-full bg-zinc-900 relative">
+        <div className="relative w-full h-[150px] overflow-hidden">
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0447.PNG-73vlhPvb0rUhTgmubSul8fZ6KSJuhd.jpeg"
             alt="Banner"
             fill
-            className="object-cover object-center"
+            className="object-cover object-[center_35%]"
             priority
           />
         </div>
       </div>
 
       {/* Profile Header Section */}
-      <div className="px-4 pt-0 pb-4 bg-white relative">
+      <div className="px-4 pb-4 bg-white relative">
         {/* Profile picture overlapping banner */}
-        <div className="-mt-10 mb-3">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-4 border-white shadow-lg">
+        <div className="-mt-8 mb-2 flex items-end gap-3">
+          <div className="w-[70px] h-[70px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg flex-shrink-0">
             <Image
               src="/nina-profile.jpg"
               alt="Nina Lebedeva"
-              width={80}
-              height={80}
+              width={70}
+              height={70}
               className="w-full h-full object-cover"
               priority
             />
           </div>
-        </div>
-
-        {/* Stats row */}
-        <div className="flex items-center gap-6 text-xs text-muted-foreground mb-3">
-          <div className="flex items-center gap-1">
-            <span className="font-semibold text-foreground">159</span>
-            <span>Fotos</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="font-semibold text-foreground">68</span>
-            <span>{'Vídeos'}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="font-semibold text-foreground">69.2K</span>
-            <span>Likes</span>
+          {/* Stats row inline with profile pic */}
+          <div className="flex items-center gap-4 text-xs text-muted-foreground pb-1">
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">159</span>
+              <span>Fotos</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">68</span>
+              <span>{'Vídeos'}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-foreground">69.2K</span>
+              <span>Likes</span>
+            </div>
           </div>
         </div>
 
         {/* Name and username */}
-        <div className="mb-3">
-          <div className="flex items-center gap-2 mb-0.5">
-            <h2 className="text-xl font-bold text-foreground">Nina Lebedeva</h2>
+        <div className="mb-2">
+          <div className="flex items-center gap-2 mb-0">
+            <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
