@@ -226,9 +226,9 @@ export default function VIPSubscriptionPage() {
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/POV%20you%20see%20me%20in%20public%20%F0%9F%91%80.gif-w0n39ClqBf6SP5iXdXUPKdPPolgVw5.jpeg"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/POV%20you%20see%20me%20in%20public%20%F0%9F%91%80-w0n39ClqBf6SP5iXdXUPKdPPolgVw5.gif"
             alt="Conteúdo Exclusivo"
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[2px]"
+            className="absolute inset-0 w-full h-full object-cover object-center blur-[6px]"
           />
           
           {/* Lock Overlay */}
