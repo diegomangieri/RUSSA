@@ -111,9 +111,9 @@ export default function VIPSubscriptionPage() {
   ]
 
   const checkoutLinks = {
-    semanal: 'https://go.fruitfypay.com/xlDVizKCbIcy14Ng',
-    mensal: 'https://go.fruitfypay.com/gep6lH0u8DJlTrRg',
-    anual: 'https://go.fruitfypay.com/hC159wXgr6n94Lzq',
+    semanal: 'https://go.fruitfypay.com/jGPNBy9dln3rDgyl',
+    mensal: 'https://go.fruitfypay.com/prx2C8zbuRY689eG',
+    semestral: 'https://go.fruitfypay.com/9gbJc3tfUXvv634Z',
   }
 
   return (
@@ -225,13 +225,10 @@ export default function VIPSubscriptionPage() {
       {/* Hero Image Section - Preview */}
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-          <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cc2c2d6d-02cb-4e29-9c04-71c9535c9f45-Ce1Uwu1iW1cENABnPNBMcX3FWi5sgr.jpg"
+          <img
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/POV%20you%20see%20me%20in%20public%20%F0%9F%91%80.gif-w0n39ClqBf6SP5iXdXUPKdPPolgVw5.jpeg"
             alt="Conteúdo Exclusivo"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
+            className="absolute inset-0 w-full h-full object-cover object-center blur-[2px]"
           />
           
           {/* Lock Overlay */}
@@ -316,12 +313,12 @@ export default function VIPSubscriptionPage() {
             </Button>
           </Card>
 
-          {/* Anual Plan */}
+          {/* Semestral Plan */}
           <Card className="bg-white border-2 border-zinc-200 p-5 shadow-md">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-lg font-semibold text-foreground mb-0.5">Anual</p>
-                <p className="text-xs text-muted-foreground">365 dias de acesso</p>
+                <p className="text-lg font-semibold text-foreground mb-0.5">Semestral</p>
+                <p className="text-xs text-muted-foreground">180 dias de acesso</p>
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground line-through">R$ 199,90</p>
@@ -331,9 +328,9 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => window.location.href = checkoutLinks.anual}
+              onClick={() => window.location.href = checkoutLinks.semestral}
             >
-              Assinar Anual
+              Assinar Semestral
             </Button>
           </Card>
         </div>
