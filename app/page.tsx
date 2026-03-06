@@ -176,43 +176,60 @@ export default function VIPSubscriptionPage() {
         </div>
       </div>
 
+      {/* Banner Section */}
+      <div className="w-full bg-zinc-900">
+        <div className="relative w-full aspect-[16/9] max-h-[220px] overflow-hidden">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0447.PNG-73vlhPvb0rUhTgmubSul8fZ6KSJuhd.jpeg"
+            alt="Banner"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+      </div>
+
       {/* Profile Header Section */}
-      <div className="px-4 py-4 bg-white">
-        <div className="flex items-start gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] flex-shrink-0 overflow-hidden">
+      <div className="px-4 pt-0 pb-4 bg-white relative">
+        {/* Profile picture overlapping banner */}
+        <div className="-mt-10 mb-3">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-4 border-white shadow-lg">
             <Image
               src="/nina-profile.jpg"
               alt="Nina Lebedeva"
-              width={64}
-              height={64}
+              width={80}
+              height={80}
               className="w-full h-full object-cover"
               priority
             />
           </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
-              <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                <Check className="w-3 h-3 text-white" />
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">@nina.lebedeva</p>
-            
-            <div className="flex items-center gap-4 text-sm">
-              <div className="text-center">
-                <span className="font-bold text-foreground">159</span>
-                <span className="text-muted-foreground ml-1">Fotos</span>
-              </div>
-              <div className="text-center">
-                <span className="font-bold text-foreground">68</span>
-                <span className="text-muted-foreground ml-1">{'Vídeos'}</span>
-              </div>
-              <div className="text-center">
-                <span className="font-bold text-foreground">69.2K</span>
-                <span className="text-muted-foreground ml-1">Likes</span>
-              </div>
+        </div>
+
+        {/* Stats row */}
+        <div className="flex items-center gap-6 text-xs text-muted-foreground mb-3">
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-foreground">159</span>
+            <span>Fotos</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-foreground">68</span>
+            <span>{'Vídeos'}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-foreground">69.2K</span>
+            <span>Likes</span>
+          </div>
+        </div>
+
+        {/* Name and username */}
+        <div className="mb-3">
+          <div className="flex items-center gap-2 mb-0.5">
+            <h2 className="text-xl font-bold text-foreground">Nina Lebedeva</h2>
+            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+              <Check className="w-3 h-3 text-white" />
             </div>
           </div>
+          <p className="text-sm text-muted-foreground">@nina.lebedeva</p>
         </div>
         
         <ProfileBio />
