@@ -287,7 +287,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => window.location.href = checkoutLinks.semanal}
             >
-              Assinar Semanal
+              Assinar Semanal!
             </Button>
           </Card>
 
@@ -308,7 +308,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
               onClick={() => window.location.href = checkoutLinks.mensal}
             >
-              Assinar Mensal
+              Assinar Mensal!
             </Button>
           </Card>
 
@@ -329,7 +329,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => window.location.href = checkoutLinks.semestral}
             >
-              Assinar Semestral
+              Assinar Semestral!
             </Button>
           </Card>
         </div>
