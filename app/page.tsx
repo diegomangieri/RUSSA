@@ -226,10 +226,10 @@ export default function VIPSubscriptionPage() {
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
           <Image
-            src="/images/locked-1.jpg"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cc2c2d6d-02cb-4e29-9c04-71c9535c9f45-Ce1Uwu1iW1cENABnPNBMcX3FWi5sgr.jpg"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-top"
+            className="object-cover object-center"
             priority
             sizes="100vw"
           />
@@ -249,7 +249,7 @@ export default function VIPSubscriptionPage() {
           <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-4">
             <div className="flex items-center gap-2 text-white">
               <Heart className="w-5 h-5" />
-              <span className="font-semibold text-sm">2.5K</span>
+              <span className="font-semibold text-sm">22.4K</span>
             </div>
             <div className="flex items-center gap-2 text-white">
               <MessageCircle className="w-5 h-5" />
@@ -360,7 +360,7 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview - Portrait */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
-            src="/images/locked-2.jpg"
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/42285de4-f01f-4093-ade1-f2aa38a87ca3-DrWXZca3wNkMRdjCPjPEEUJ9gAVtZF.jpg"
             alt="Conteúdo Exclusivo"
             fill
             className="object-cover object-center"
