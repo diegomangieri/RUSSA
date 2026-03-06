@@ -1,0 +1,396 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+
+
+function getPromoDate() {
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  return tomorrow.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
+}
+
+const CRITICAL_IMAGES = [
+  '/images/locked-1.jpg',
+  '/images/locked-2.jpg',
+  '/images/lana-profile.jpg',
+]
+
+function preloadImages(srcs: string[]): Promise<void[]> {
+  return Promise.all(
+    srcs.map(
+      (src) =>
+        new Promise<void>((resolve) => {
+          const img = new window.Image()
+          img.crossOrigin = 'anonymous'
+          img.onload = () => resolve()
+          img.onerror = () => resolve()
+          img.src = src
+        })
+    )
+  )
+}
+
+export default function VIPSubscriptionPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [promoDate] = useState(getPromoDate)
+  const [pageReady, setPageReady] = useState(false)
+  const [ageVerified, setAgeVerified] = useState(false)
+  const [showContent, setShowContent] = useState(false)
+
+  useEffect(() => {
+    preloadImages(CRITICAL_IMAGES).then(() => {
+      requestAnimationFrame(() => setPageReady(true))
+    })
+  }, [])
+
+  const handleAgeConfirm = () => {
+    setAgeVerified(true)
+  }
+
+  const faqItems = [
+    {
+      question: "É sigiloso? Vai aparecer na minha fatura?",
+      answer: "Sim, é 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
+    },
+    {
+      question: "Tenho acesso imediato aos conteúdos?",
+      answer: "O acesso é imediato! Assim que o pagamento for confirmado, você já pode acessar todos os meus conteúdos exclusivos."
+    },
+    {
+      question: "Posso cancelar quando eu quiser?",
+      answer: "Sim, você pode cancelar a qualquer momento. A assinatura não renova automaticamente, você tem total controle."
+    },
+    {
+      question: "Possuí reembolso ou garantia?",
+      answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
+    },
+    {
+      question: "Como vou acessar os conteúdos?",
+      answer: "Após assinar, você receberá o convite exclusivo via E-mail para o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
+    }
+  ]
+
+  const checkoutLinks = {
+    semanal: 'https://go.fruitfypay.com/xlDVizKCbIcy14Ng',
+    mensal: 'https://go.fruitfypay.com/gep6lH0u8DJlTrRg',
+    anual: 'https://go.fruitfypay.com/hC159wXgr6n94Lzq',
+  }
+
+  return (
+    <>
+      {/* Age verification screen */}
+      {!showContent && (
+        <div 
+          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 py-8 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          onTransitionEnd={() => {
+            if (ageVerified) setShowContent(true)
+          }}
+        >
+          <div className="text-center w-full max-w-sm">
+            {/* Logo */}
+            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-6">
+              <Crown className="w-10 h-10 text-white" />
+            </div>
+            
+            <h1 className="text-2xl font-bold text-foreground mb-2">{'Conteúdos VIP'}</h1>
+            <p className="text-muted-foreground mb-8">Lana Alvarenga</p>
+            
+            {/* Age warning box */}
+            <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-6 h-6 text-primary" />
+              </div>
+              <h2 className="text-lg font-semibold text-foreground mb-2">
+                {'Conteúdo para + de 18 anos'}
+              </h2>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Este site contém conteúdo adulto destinado apenas para pessoas maiores de 18 anos.
+              </p>
+            </div>
+
+            {/* Confirm button */}
+            <Button
+              size="lg"
+              onClick={handleAgeConfirm}
+              className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl"
+            >
+              Tenho 18 anos ou mais
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady && showContent ? 'opacity-100' : 'opacity-0'}`}>
+      {/* Promotional Banner */}
+      <div className="bg-primary text-white text-center py-3 px-4 font-semibold text-sm">
+        ESSA PROMOÇÃO É VÁLIDA ATÉ {promoDate}
+      </div>
+
+      {/* Logo Section */}
+      <div className="bg-background py-2 px-4 flex justify-center border-b">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg">
+            <Crown className="w-5 h-5" />
+          </div>
+          <h1 className="text-xl font-bold text-foreground">{'Conteúdos VIP'}</h1>
+        </div>
+      </div>
+
+      {/* Profile Header Section */}
+      <div className="px-4 py-4 bg-white">
+        <div className="flex items-start gap-4 mb-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] flex-shrink-0 overflow-hidden">
+            <Image
+              src="/images/lana-profile.jpg"
+              alt="Lana Alvarenga"
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <h2 className="text-lg font-bold text-foreground">Lana Alvarenga</h2>
+              <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                <Check className="w-3 h-3 text-white" />
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">@lana.alvarenga</p>
+            
+            <div className="flex items-center gap-4 text-sm">
+              <div className="text-center">
+                <span className="font-bold text-foreground">59</span>
+                <span className="text-muted-foreground ml-1">Fotos</span>
+              </div>
+              <div className="text-center">
+                <span className="font-bold text-foreground">38</span>
+                <span className="text-muted-foreground ml-1">{'Vídeos'}</span>
+              </div>
+              <div className="text-center">
+                <span className="font-bold text-foreground">6.2K</span>
+                <span className="text-muted-foreground ml-1">Likes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <p className="text-sm text-foreground leading-relaxed">
+          {'Quer ver minha 🌸 com vitiligo...? 🙈'}
+          <br />
+          {'Minha pele faz meu corpo ser único — e aqui vou te mostrar tudinho sem censuras. 😈'}
+        </p>
+      </div>
+
+      {/* Divider line */}
+      <div className="h-px bg-zinc-200" />
+
+      {/* Hero Image Section - Preview */}
+      <div className="relative">
+        <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
+          <Image
+            src="/images/locked-1.jpg"
+            alt="Conteúdo Exclusivo"
+            fill
+            className="object-cover object-top"
+            priority
+            sizes="100vw"
+          />
+          
+          {/* Lock Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
+              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-7 h-7 text-zinc-600" />
+              </div>
+              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
+              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
+            </div>
+          </div>
+
+          {/* Engagement Stats Overlay */}
+          <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-4">
+            <div className="flex items-center gap-2 text-white">
+              <Heart className="w-5 h-5" />
+              <span className="font-semibold text-sm">2.5K</span>
+            </div>
+            <div className="flex items-center gap-2 text-white">
+              <MessageCircle className="w-5 h-5" />
+              <span className="font-semibold text-sm">342</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Subscription Section */}
+      <div className="px-4 py-6 bg-zinc-50">
+        <h3 className="text-2xl font-bold text-foreground mb-4">Assinaturas</h3>
+        
+        <div className="flex gap-2 mb-4">
+          <Badge variant="secondary" className="bg-[#fde4cc] text-[#f78f3e] border-0 font-semibold">
+            VEJA TUDO AGORA
+          </Badge>
+          <Badge variant="secondary" className="bg-[#f78f3e] text-white border-0 font-semibold">
+            {'Promoção'}
+          </Badge>
+        </div>
+
+        {/* Plans */}
+        <div className="flex flex-col gap-4 mb-4">
+          {/* Semanal Plan */}
+          <Card className="bg-white border-2 border-zinc-200 p-5 shadow-md">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-lg font-semibold text-foreground mb-0.5">Semanal</p>
+                <p className="text-xs text-muted-foreground">7 dias de acesso</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground line-through">R$ 39,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 13,95</p>
+              </div>
+            </div>
+            <Button 
+              size="lg" 
+              className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
+              onClick={() => window.location.href = checkoutLinks.semanal}
+            >
+              Assinar Semanal
+            </Button>
+          </Card>
+
+          {/* Mensal Plan - Featured */}
+          <Card className="bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] text-white p-5 border-0 shadow-lg relative overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-lg font-semibold mb-0.5">Mensal</p>
+                <p className="text-xs text-white/70">30 dias de acesso</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-white/70 line-through">R$ 89,90</p>
+                <p className="text-2xl font-bold">R$ 19,90</p>
+              </div>
+            </div>
+            <Button 
+              size="lg" 
+              className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
+              onClick={() => window.location.href = checkoutLinks.mensal}
+            >
+              Assinar Mensal
+            </Button>
+          </Card>
+
+          {/* Anual Plan */}
+          <Card className="bg-white border-2 border-zinc-200 p-5 shadow-md">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-lg font-semibold text-foreground mb-0.5">Anual</p>
+                <p className="text-xs text-muted-foreground">365 dias de acesso</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground line-through">R$ 199,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 29,95</p>
+              </div>
+            </div>
+            <Button 
+              size="lg" 
+              className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
+              onClick={() => window.location.href = checkoutLinks.anual}
+            >
+              Assinar Anual
+            </Button>
+          </Card>
+        </div>
+
+        <div className="bg-[#fef0e4] border-2 border-[#f78f3e] rounded-lg p-3 mb-4">
+          <p className="text-sm font-bold text-primary text-center">
+            Acesso imediato via E-mail!
+          </p>
+        </div>
+
+        {/* Security Badges */}
+        <div className="flex items-center justify-center gap-4 text-sm mb-6">
+          <div className="flex items-center gap-1 text-[#f78f3e]">
+            <Lock className="w-4 h-4" />
+            <span className="font-medium">Pagamento 100% seguro</span>
+          </div>
+          <div className="text-muted-foreground">|</div>
+          <div className="flex items-center gap-1 text-primary">
+            <Check className="w-4 h-4" />
+            <span className="font-medium">Acesso imediato</span>
+          </div>
+        </div>
+
+        {/* Locked Content Preview - Portrait */}
+        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
+          <Image
+            src="/images/locked-2.jpg"
+            alt="Conteúdo Exclusivo"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          
+          {/* Lock Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
+              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-7 h-7 text-zinc-600" />
+              </div>
+              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
+              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="px-4 py-6 bg-zinc-50">
+        <h3 className="text-2xl font-bold text-primary mb-4">Perguntas Frequentes</h3>
+        
+        <div className="flex flex-col gap-3">
+          {faqItems.map((item, index) => (
+            <div 
+              key={index}
+              className="bg-white rounded-xl border-2 border-zinc-200 overflow-hidden"
+            >
+              <button
+                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                className="w-full px-4 py-4 flex items-center justify-between text-left"
+              >
+                <span className="font-semibold text-foreground text-sm pr-4">{item.question}</span>
+                <ChevronDown 
+                  className={`w-5 h-5 text-muted-foreground flex-shrink-0 transition-transform duration-200 ${openFaq === index ? 'rotate-180' : ''}`} 
+                />
+              </button>
+              {openFaq === index && (
+                <div className="px-4 pb-4">
+                  <p className="text-muted-foreground text-xs leading-relaxed">{item.answer}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer Links */}
+      <div className="py-6 bg-white border-t">
+        <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
+          <button className="hover:text-primary">Termos de Uso</button>
+          <span>|</span>
+          <button className="hover:text-primary">{'Política de Privacidade'}</button>
+        </div>
+      </div>
+      </div>
+    </>
+  )
+}
