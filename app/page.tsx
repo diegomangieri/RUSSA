@@ -354,9 +354,53 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview - Portrait */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
+        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/42285de4-f01f-4093-ade1-f2aa38a87ca3-DrWXZca3wNkMRdjCPjPEEUJ9gAVtZF.jpg"
+            alt="Conteúdo Exclusivo"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          
+          {/* Lock Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
+              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-7 h-7 text-zinc-600" />
+              </div>
+              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
+              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Locked Content Preview 2 */}
+        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0460%20%281%29.JPEG-gF8pqb2tzKnXHo93pgU7iskMUgpaeE.jpeg"
+            alt="Conteúdo Exclusivo"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          
+          {/* Lock Overlay */}
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
+              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
+                <Lock className="w-7 h-7 text-zinc-600" />
+              </div>
+              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
+              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Locked Content Preview 3 */}
+        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b4364e80-ae3c-498a-bfe4-40b2b1b4a67e-dIRYvA1h6xKpRlPKfp00t1rnRIJziA.jpg"
             alt="Conteúdo Exclusivo"
             fill
             className="object-cover object-center"
