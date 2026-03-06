@@ -121,22 +121,31 @@ export default function VIPSubscriptionPage() {
       {/* Age verification screen */}
       {!showContent && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 py-8 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center px-6 py-8 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           onTransitionEnd={() => {
             if (ageVerified) setShowContent(true)
           }}
         >
+          {/* Background GIF with blur */}
+          <div className="absolute inset-0 -z-10">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/POV%20you%20see%20me%20in%20public%20%F0%9F%91%80.gif-9E02Gs5QTjM0woLb7LPHFHe4QL54uz.jpeg"
+              alt=""
+              className="w-full h-full object-cover blur-[30px]"
+            />
+            <div className="absolute inset-0 bg-black/30" />
+          </div>
+          
           <div className="text-center w-full max-w-sm">
             {/* Logo */}
-            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
               <Crown className="w-10 h-10 text-white" />
             </div>
             
-            <h1 className="text-2xl font-bold text-foreground mb-2">{'Conteúdos VIP'}</h1>
-            <p className="text-muted-foreground mb-8">Nina Lebedeva</p>
+            <h1 className="text-2xl font-bold text-white mb-6">{'Conteúdos VIP'}</h1>
             
             {/* Age warning box */}
-            <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-white/20">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
                 <Lock className="w-6 h-6 text-primary" />
               </div>
