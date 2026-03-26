@@ -127,13 +127,6 @@ export default function VIPSubscriptionPage() {
           }}
         >
           <div className="text-center w-full max-w-sm">
-            {/* Logo */}
-            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
-              <Crown className="w-10 h-10 text-white" />
-            </div>
-            
-            <h1 className="text-2xl font-bold text-foreground mb-6">{'Conteúdos VIP'}</h1>
-            
             {/* Age warning box */}
             <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
