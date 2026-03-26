@@ -230,8 +230,8 @@ export default function VIPSubscriptionPage() {
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cc2c2d6d-02cb-4e29-9c04-71c9535c9f45-hfjdnhziQP5quafnQX62NgKiwQAPpi.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery1.png"
+            alt="Conteudo Exclusivo"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           
@@ -361,8 +361,8 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview - Portrait */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/42285de4-f01f-4093-ade1-f2aa38a87ca3-DrWXZca3wNkMRdjCPjPEEUJ9gAVtZF.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery2.png"
+            alt="Conteudo Exclusivo"
             fill
             className="object-cover object-center"
             sizes="100vw"
@@ -383,8 +383,8 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview 2 */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0460%20%281%29.JPEG-gF8pqb2tzKnXHo93pgU7iskMUgpaeE.jpeg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery3.png"
+            alt="Conteudo Exclusivo"
             fill
             className="object-cover object-center"
             sizes="100vw"
@@ -405,10 +405,10 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview 3 */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b4364e80-ae3c-498a-bfe4-40b2b1b4a67e-dIRYvA1h6xKpRlPKfp00t1rnRIJziA.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery4.png"
+            alt="Conteudo Exclusivo"
             fill
-            className="object-cover object-left-top"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
