@@ -121,12 +121,12 @@ export default function VIPSubscriptionPage() {
       {/* Age verification screen */}
       {!showContent && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 py-8 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           onTransitionEnd={() => {
             if (ageVerified) setShowContent(true)
           }}
         >
-          <div className="text-center w-full max-w-sm">
+          <div className="text-center w-full max-w-sm mx-auto">
             {/* Age warning box */}
             <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
@@ -165,10 +165,10 @@ export default function VIPSubscriptionPage() {
       <div className="w-full bg-zinc-900">
         <div className="relative w-full h-[130px] overflow-hidden">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0447.PNG-73vlhPvb0rUhTgmubSul8fZ6KSJuhd.jpeg"
+            src="/images/banner.png"
             alt="Banner"
             fill
-            className="object-cover object-[center_35%]"
+            className="object-cover object-[center_25%]"
             priority
           />
         </div>
