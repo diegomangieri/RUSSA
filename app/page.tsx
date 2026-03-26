@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Talvez você tenha chegado aqui depois do meu vídeo que viralizou… então vou te mostrar um lado meu que ninguém conhece. Minha bunda grande e redondinha faz meu corpo ser único — e aqui eu mostro tudo sem censura. Ficou curioso…? vem me ver toda! 😈'
+  const bioText = 'Oi, meus amores! 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego... Estou te esperando para um experiência única e irresistível. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -166,15 +166,7 @@ export default function VIPSubscriptionPage() {
         ESSA PROMOÇÃO É VÁLIDA ATÉ {promoDate}
       </div>
 
-      {/* Logo Section */}
-      <div className="bg-background py-2 px-4 flex justify-center border-b">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg">
-            <Crown className="w-5 h-5" />
-          </div>
-          <h1 className="text-xl font-bold text-foreground">{'Conteúdos VIP'}</h1>
-        </div>
-      </div>
+
 
       {/* Banner Section */}
       <div className="w-full bg-zinc-900">
@@ -198,7 +190,7 @@ export default function VIPSubscriptionPage() {
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
                 src="/nina-profile.jpg"
-                alt="Nina Lebedeva"
+                alt="Sydney"
                 width={76}
                 height={76}
                 className="w-full h-full object-cover"
@@ -227,12 +219,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
+            <h2 className="text-lg font-bold text-foreground">Sydney</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@nina.lebedeva</p>
+          <p className="text-sm text-muted-foreground">@sydney</p>
         </div>
         
         <ProfileBio />
@@ -299,7 +291,7 @@ export default function VIPSubscriptionPage() {
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground line-through">R$ 39,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 13,95</p>
+                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
               </div>
             </div>
             <Button 
