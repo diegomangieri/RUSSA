@@ -182,7 +182,7 @@ export default function VIPSubscriptionPage() {
           <div className="-mt-[38px]">
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
-                src="/nina-profile.jpg"
+                src="/images/profile.png"
                 alt="Sydney"
                 width={76}
                 height={76}
