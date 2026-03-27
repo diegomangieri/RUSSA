@@ -589,7 +589,7 @@ export default function VIPSubscriptionPage() {
                 onClick={handleGeneratePix}
                 disabled={!customerName.trim() || !customerEmail.trim()}
               >
-                Gerar PIX
+                Gerar QR Code
               </Button>
 
               {/* Security note */}
