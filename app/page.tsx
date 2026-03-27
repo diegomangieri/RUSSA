@@ -500,13 +500,17 @@ export default function VIPSubscriptionPage() {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/60 z-50 animate-in fade-in duration-300"
+            className="fixed inset-0 bg-black/60 z-50 transition-opacity duration-300"
+            style={{ animation: 'fadeIn 0.3s ease-out' }}
             onClick={closeCheckout}
           />
           
           {/* Modal */}
-          <div className="fixed inset-x-0 bottom-0 z-50 animate-in slide-in-from-bottom fade-in duration-300">
-            <div className="bg-white rounded-t-3xl p-6 max-w-lg mx-auto shadow-2xl">
+          <div 
+            className="fixed inset-x-0 bottom-0 z-50"
+            style={{ animation: 'slideUp 0.3s ease-out' }}
+          >
+            <div className="bg-white rounded-t-3xl p-6 max-w-lg mx-auto shadow-2xl relative">
               {/* Handle bar */}
               <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
               
@@ -585,6 +589,18 @@ export default function VIPSubscriptionPage() {
               </div>
             </div>
           </div>
+
+          {/* Animations */}
+          <style jsx>{`
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes slideUp {
+              from { transform: translateY(100%); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+          `}</style>
         </>
       )}
     </>
