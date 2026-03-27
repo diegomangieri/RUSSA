@@ -80,6 +80,14 @@ export default function VIPSubscriptionPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [customerName, setCustomerName] = useState('')
   const [customerEmail, setCustomerEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [qrCodeData, setQrCodeData] = useState<{
+    qrCode: string
+    qrCodeImage: string
+    transactionId: string
+    amount: number
+  } | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const openCheckout = (plan: string) => {
     setSelectedPlan(plan)
@@ -101,12 +109,47 @@ export default function VIPSubscriptionPage() {
     setSelectedPlan(null)
     setCustomerName('')
     setCustomerEmail('')
+    setQrCodeData(null)
+    setError(null)
   }
 
-  const handleGeneratePix = () => {
-    if (!customerName.trim() || !customerEmail.trim()) return
-    // Aqui vai a integracao com a API da Fruitfy
-    console.log('Gerando PIX para:', { plan: selectedPlan, name: customerName, email: customerEmail })
+  const handleGeneratePix = async () => {
+    if (!customerName.trim() || !customerEmail.trim() || !selectedPlan) return
+    
+    setIsLoading(true)
+    setError(null)
+    
+    const planDetails = getPlanDetails(selectedPlan)
+    const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+    
+    try {
+      const response = await fetch('/api/pix', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount,
+          description: `Assinatura ${planDetails.name} - Sydney VIP`,
+          customerName: customerName.trim(),
+          customerEmail: customerEmail.trim(),
+          plan: selectedPlan,
+        }),
+      })
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        setError(data.error || 'Erro ao gerar QR Code')
+        return
+      }
+      
+      setQrCodeData(data.data)
+    } catch (err) {
+      setError('Erro de conexão. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const getPlanDetails = (plan: string) => {
@@ -547,50 +590,105 @@ export default function VIPSubscriptionPage() {
                 </div>
               )}
 
-              {/* Form */}
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Nome completo
-                  </label>
-                  <input
-                    type="text"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="Digite seu nome completo"
-                    className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                  />
+              {/* QR Code Display */}
+              {qrCodeData ? (
+                <div className="text-center">
+                  <div className="bg-white p-4 rounded-xl border-2 border-zinc-200 mb-4 inline-block">
+                    <img 
+                      src={qrCodeData.qrCodeImage} 
+                      alt="QR Code PIX" 
+                      className="w-48 h-48 mx-auto"
+                    />
+                  </div>
+                  
+                  <p className="text-sm text-foreground font-medium mb-2">
+                    Escaneie o QR Code com seu app de banco
+                  </p>
+                  
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Ou copie o código PIX abaixo:
+                  </p>
+                  
+                  <div className="bg-zinc-100 rounded-xl p-3 mb-4">
+                    <p className="text-xs text-foreground break-all font-mono">
+                      {qrCodeData.qrCode.substring(0, 50)}...
+                    </p>
+                  </div>
+                  
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-all duration-150"
+                    onClick={() => {
+                      navigator.clipboard.writeText(qrCodeData.qrCode)
+                      alert('Código PIX copiado!')
+                    }}
+                  >
+                    Copiar Código PIX
+                  </Button>
+                  
+                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mt-4">
+                    <p className="text-xs text-center text-primary">
+                      Após o pagamento, o acesso será enviado para o seu E-mail em até 5 minutos
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    E-mail
-                  </label>
-                  <input
-                    type="email"
-                    value={customerEmail}
-                    onChange={(e) => setCustomerEmail(e.target.value)}
-                    placeholder="Digite seu E-mail"
-                    className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-              </div>
+              ) : (
+                <>
+                  {/* Form */}
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nome completo
+                      </label>
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Digite seu nome completo"
+                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        E-mail
+                      </label>
+                      <input
+                        type="email"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        placeholder="Digite seu E-mail"
+                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
 
-              {/* Info box */}
-              <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
-                <p className="text-xs text-center text-primary">
-                  O acesso será enviado para este E-mail após a confirmação do pagamento
-                </p>
-              </div>
+                  {/* Error message */}
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
+                      <p className="text-xs text-center text-red-600">{error}</p>
+                    </div>
+                  )}
 
-              {/* Submit button */}
-              <Button 
-                size="lg" 
-                className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handleGeneratePix}
-                disabled={!customerName.trim() || !customerEmail.trim()}
-              >
-                Gerar QR Code
-              </Button>
+                  {/* Info box */}
+                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
+                    <p className="text-xs text-center text-primary">
+                      O acesso será enviado para este E-mail após a confirmação do pagamento
+                    </p>
+                  </div>
+
+                  {/* Submit button */}
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleGeneratePix}
+                    disabled={!customerName.trim() || !customerEmail.trim() || isLoading}
+                  >
+                    {isLoading ? 'Gerando...' : 'Gerar QR Code'}
+                  </Button>
+                </>
+              )}
 
               {/* Security note */}
               <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground">
