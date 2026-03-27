@@ -66,6 +66,10 @@ export async function POST(request: Request) {
     const storeId = process.env.FRUITFY_STORE_ID
     const defaultProductId = process.env.FRUITFY_PRODUCT_ID
 
+    console.log('[v0] Store ID configurado:', storeId)
+    console.log('[v0] Product ID configurado:', defaultProductId)
+    console.log('[v0] API Token existe:', !!apiToken)
+
     if (!apiToken || !storeId) {
       return NextResponse.json(
         { success: false, error: 'Chaves da API não configuradas' },
