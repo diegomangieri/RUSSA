@@ -2,13 +2,60 @@ import { NextResponse } from 'next/server'
 
 const FRUITFY_API_URL = 'https://api.fruitfy.io'
 
+// Gerar E-mail aleatorio
+function generateRandomEmail(): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let email = ''
+  for (let i = 0; i < 10; i++) {
+    email += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return `${email}@gmail.com`
+}
+
+// Gerar telefone aleatorio (formato brasileiro)
+function generateRandomPhone(): string {
+  const ddd = Math.floor(Math.random() * 90) + 10 // DDD entre 10-99
+  const number = Math.floor(Math.random() * 900000000) + 100000000 // 9 digitos
+  return `${ddd}${number}`
+}
+
+// Gerar CPF aleatorio valido
+function generateRandomCPF(): string {
+  const randomDigits = () => Math.floor(Math.random() * 9)
+  
+  const cpf = []
+  for (let i = 0; i < 9; i++) {
+    cpf.push(randomDigits())
+  }
+  
+  // Calcula primeiro digito verificador
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    sum += cpf[i] * (10 - i)
+  }
+  let firstDigit = (sum * 10) % 11
+  if (firstDigit === 10) firstDigit = 0
+  cpf.push(firstDigit)
+  
+  // Calcula segundo digito verificador
+  sum = 0
+  for (let i = 0; i < 10; i++) {
+    sum += cpf[i] * (11 - i)
+  }
+  let secondDigit = (sum * 10) % 11
+  if (secondDigit === 10) secondDigit = 0
+  cpf.push(secondDigit)
+  
+  return cpf.join('')
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerName, customerEmail, customerPhone, customerCpf, plan, productId } = body
+    const { amount, customerName, plan, productId } = body
 
-    // Validação básica
-    if (!amount || !customerName || !customerEmail || !customerPhone || !customerCpf) {
+    // Validacao basica - so precisa do nome
+    if (!amount || !customerName) {
       return NextResponse.json(
         { success: false, error: 'Dados incompletos. Preencha todos os campos.' },
         { status: 400 }
@@ -26,6 +73,11 @@ export async function POST(request: Request) {
       )
     }
 
+    // Gerar dados aleatorios
+    const randomEmail = generateRandomEmail()
+    const randomPhone = generateRandomPhone()
+    const randomCpf = generateRandomCPF()
+
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
@@ -40,9 +92,9 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         name: customerName,
-        email: customerEmail,
-        phone: customerPhone.replace(/\D/g, ''),
-        cpf: customerCpf.replace(/\D/g, ''),
+        email: randomEmail,
+        phone: randomPhone,
+        cpf: randomCpf,
         items: [
           {
             id: productId || defaultProductId,

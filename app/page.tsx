@@ -80,8 +80,6 @@ export default function VIPSubscriptionPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [customerName, setCustomerName] = useState('')
   const [customerEmail, setCustomerEmail] = useState('')
-  const [customerPhone, setCustomerPhone] = useState('')
-  const [customerCpf, setCustomerCpf] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [qrCodeData, setQrCodeData] = useState<{
     qrCode: string
@@ -111,14 +109,12 @@ export default function VIPSubscriptionPage() {
     setSelectedPlan(null)
     setCustomerName('')
     setCustomerEmail('')
-    setCustomerPhone('')
-    setCustomerCpf('')
     setQrCodeData(null)
     setError(null)
   }
 
   const handleGeneratePix = async () => {
-    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !customerCpf.trim() || !selectedPlan) return
+    if (!customerName.trim() || !customerEmail.trim() || !selectedPlan) return
     
     setIsLoading(true)
     setError(null)
@@ -135,9 +131,6 @@ export default function VIPSubscriptionPage() {
         body: JSON.stringify({
           amount,
           customerName: customerName.trim(),
-          customerEmail: customerEmail.trim(),
-          customerPhone: customerPhone.trim(),
-          customerCpf: customerCpf.trim(),
           plan: selectedPlan,
         }),
       })
@@ -667,32 +660,6 @@ export default function VIPSubscriptionPage() {
                         disabled={isLoading}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Telefone
-                      </label>
-                      <input
-                        type="tel"
-                        value={customerPhone}
-                        onChange={(e) => setCustomerPhone(e.target.value)}
-                        placeholder="(00) 00000-0000"
-                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        CPF
-                      </label>
-                      <input
-                        type="text"
-                        value={customerCpf}
-                        onChange={(e) => setCustomerCpf(e.target.value)}
-                        placeholder="000.000.000-00"
-                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                        disabled={isLoading}
-                      />
-                    </div>
                   </div>
 
                   {/* Error message */}
@@ -714,7 +681,7 @@ export default function VIPSubscriptionPage() {
                     size="lg" 
                     className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleGeneratePix}
-                    disabled={!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !customerCpf.trim() || isLoading}
+                    disabled={!customerName.trim() || !customerEmail.trim() || isLoading}
                   >
                     {isLoading ? 'Gerando...' : 'Gerar QR Code'}
                   </Button>
