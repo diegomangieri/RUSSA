@@ -85,14 +85,22 @@ export default function VIPSubscriptionPage() {
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
     document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.width = '100%'
+    document.body.style.top = `-${window.scrollY}px`
   }
 
   const closeCheckout = () => {
+    const scrollY = document.body.style.top
+    document.body.style.overflow = ''
+    document.body.style.position = ''
+    document.body.style.width = ''
+    document.body.style.top = ''
+    window.scrollTo(0, parseInt(scrollY || '0') * -1)
     setShowCheckoutModal(false)
     setSelectedPlan(null)
     setCustomerName('')
     setCustomerEmail('')
-    document.body.style.overflow = ''
   }
 
   const handleGeneratePix = () => {
@@ -543,7 +551,7 @@ export default function VIPSubscriptionPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Seu nome
+                    Nome completo
                   </label>
                   <input
                     type="text"
@@ -555,13 +563,13 @@ export default function VIPSubscriptionPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Seu E-mail
+                    E-mail
                   </label>
                   <input
                     type="email"
                     value={customerEmail}
                     onChange={(e) => setCustomerEmail(e.target.value)}
-                    placeholder="Digite seu melhor E-mail"
+                    placeholder="Digite seu E-mail"
                     className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
