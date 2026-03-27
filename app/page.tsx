@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Talvez você tenha chegado aqui depois do meu vídeo que viralizou… então vou te mostrar um lado meu que ninguém conhece. Minha bunda grande e redondinha faz meu corpo ser único — e aqui eu mostro tudo sem censura. Ficou curioso…? vem me ver toda! 😈'
+  const bioText = 'Oi, meus amores! 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego... Estou te esperando para uma experiência única e irresistível. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -76,6 +76,98 @@ export default function VIPSubscriptionPage() {
   const [pageReady, setPageReady] = useState(false)
   const [ageVerified, setAgeVerified] = useState(false)
   const [showContent, setShowContent] = useState(false)
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [customerName, setCustomerName] = useState('')
+  const [customerEmail, setCustomerEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [qrCodeData, setQrCodeData] = useState<{
+    qrCode: string
+    qrCodeImage: string
+    transactionId: string
+    amount: number
+  } | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const [scrollPosition, setScrollPosition] = useState(0)
+
+  const openCheckout = (plan: string) => {
+    const currentScroll = window.scrollY
+    setScrollPosition(currentScroll)
+    setSelectedPlan(plan)
+    setShowCheckoutModal(true)
+    
+    requestAnimationFrame(() => {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${currentScroll}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
+    })
+  }
+
+  const closeCheckout = () => {
+    document.body.style.overflow = ''
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.left = ''
+    document.body.style.right = ''
+    window.scrollTo(0, scrollPosition)
+    setShowCheckoutModal(false)
+    setSelectedPlan(null)
+    setCustomerName('')
+    setCustomerEmail('')
+    setQrCodeData(null)
+    setError(null)
+    setCopied(false)
+  }
+
+  const handleGeneratePix = async () => {
+    if (!customerName.trim() || !customerEmail.trim() || !selectedPlan) return
+    
+    setIsLoading(true)
+    setError(null)
+    
+    const planDetails = getPlanDetails(selectedPlan)
+    const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+    
+    try {
+      const response = await fetch('/api/pix', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount,
+          customerName: customerName.trim(),
+          plan: selectedPlan,
+        }),
+      })
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        setError(data.error || 'Erro ao gerar QR Code')
+        return
+      }
+      
+      setQrCodeData(data.data)
+    } catch (err) {
+      setError('Erro de conexão. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getPlanDetails = (plan: string) => {
+    switch(plan) {
+      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
+      case 'mensal': return { name: 'Mensal', price: 'R$ 19,90', days: '30 dias' }
+      case 'semestral': return { name: 'Semestral', price: 'R$ 29,95', days: '180 dias' }
+      default: return { name: '', price: '', days: '' }
+    }
+  }
 
   useEffect(() => {
     preloadImages(CRITICAL_IMAGES).then(() => {
@@ -101,7 +193,7 @@ export default function VIPSubscriptionPage() {
       answer: "Sim, você pode cancelar a qualquer momento. A assinatura não renova automaticamente, você tem total controle."
     },
     {
-      question: "Possuí reembolso ou garantia?",
+      question: "Possui reembolso ou garantia?",
       answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
     },
     {
@@ -121,19 +213,12 @@ export default function VIPSubscriptionPage() {
       {/* Age verification screen */}
       {!showContent && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 py-8 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           onTransitionEnd={() => {
             if (ageVerified) setShowContent(true)
           }}
         >
-          <div className="text-center w-full max-w-sm">
-            {/* Logo */}
-            <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
-              <Crown className="w-10 h-10 text-white" />
-            </div>
-            
-            <h1 className="text-2xl font-bold text-foreground mb-6">{'Conteúdos VIP'}</h1>
-            
+          <div className="text-center w-full max-w-sm mx-auto">
             {/* Age warning box */}
             <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
@@ -166,24 +251,16 @@ export default function VIPSubscriptionPage() {
         ESSA PROMOÇÃO É VÁLIDA ATÉ {promoDate}
       </div>
 
-      {/* Logo Section */}
-      <div className="bg-background py-2 px-4 flex justify-center border-b">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg">
-            <Crown className="w-5 h-5" />
-          </div>
-          <h1 className="text-xl font-bold text-foreground">{'Conteúdos VIP'}</h1>
-        </div>
-      </div>
+
 
       {/* Banner Section */}
       <div className="w-full bg-zinc-900">
         <div className="relative w-full h-[130px] overflow-hidden">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0447.PNG-73vlhPvb0rUhTgmubSul8fZ6KSJuhd.jpeg"
+            src="/images/banner.png"
             alt="Banner"
             fill
-            className="object-cover object-[center_35%]"
+            className="object-cover object-[center_25%]"
             priority
           />
         </div>
@@ -197,8 +274,8 @@ export default function VIPSubscriptionPage() {
           <div className="-mt-[38px]">
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
-                src="/nina-profile.jpg"
-                alt="Nina Lebedeva"
+                src="/images/profile.png"
+                alt="Sydney"
                 width={76}
                 height={76}
                 className="w-full h-full object-cover"
@@ -227,12 +304,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Nina Lebedeva</h2>
+            <h2 className="text-lg font-bold text-foreground">Sydney</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@nina.lebedeva</p>
+          <p className="text-sm text-muted-foreground">@sydney</p>
         </div>
         
         <ProfileBio />
@@ -245,8 +322,8 @@ export default function VIPSubscriptionPage() {
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cc2c2d6d-02cb-4e29-9c04-71c9535c9f45-hfjdnhziQP5quafnQX62NgKiwQAPpi.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery1.png"
+            alt="Conteudo Exclusivo"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           
@@ -299,13 +376,13 @@ export default function VIPSubscriptionPage() {
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground line-through">R$ 39,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 13,95</p>
+                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
               </div>
             </div>
             <Button 
               size="lg" 
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => window.location.href = checkoutLinks.semanal}
+              onClick={() => openCheckout('semanal')}
             >
               Assinar Semanal!
             </Button>
@@ -326,7 +403,7 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
-              onClick={() => window.location.href = checkoutLinks.mensal}
+              onClick={() => openCheckout('mensal')}
             >
               Assinar Mensal!
             </Button>
@@ -347,7 +424,7 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => window.location.href = checkoutLinks.semestral}
+              onClick={() => openCheckout('semestral')}
             >
               Assinar Semestral!
             </Button>
@@ -376,8 +453,8 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview - Portrait */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/42285de4-f01f-4093-ade1-f2aa38a87ca3-DrWXZca3wNkMRdjCPjPEEUJ9gAVtZF.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery2.png"
+            alt="Conteudo Exclusivo"
             fill
             className="object-cover object-center"
             sizes="100vw"
@@ -398,8 +475,8 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview 2 */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0460%20%281%29.JPEG-gF8pqb2tzKnXHo93pgU7iskMUgpaeE.jpeg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery3.png"
+            alt="Conteudo Exclusivo"
             fill
             className="object-cover object-center"
             sizes="100vw"
@@ -420,10 +497,10 @@ export default function VIPSubscriptionPage() {
         {/* Locked Content Preview 3 */}
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b4364e80-ae3c-498a-bfe4-40b2b1b4a67e-dIRYvA1h6xKpRlPKfp00t1rnRIJziA.jpg"
-            alt="Conteúdo Exclusivo"
+            src="/images/gallery4.png"
+            alt="Conteudo Exclusivo"
             fill
-            className="object-cover object-left-top"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
@@ -478,6 +555,182 @@ export default function VIPSubscriptionPage() {
         </div>
       </div>
       </div>
+
+      {/* Checkout Modal */}
+      {showCheckoutModal && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 z-50 transition-opacity duration-300"
+            style={{ animation: 'fadeIn 0.3s ease-out' }}
+            onClick={qrCodeData ? undefined : closeCheckout}
+          />
+          
+          {/* Modal */}
+          <div 
+            className="fixed inset-x-0 bottom-0 z-50"
+            style={{ animation: 'slideUp 0.3s ease-out' }}
+          >
+            <div className="bg-white rounded-t-3xl p-6 max-w-lg mx-auto shadow-2xl relative">
+              {/* Handle bar */}
+              <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
+              
+              {/* Close button - only show when QR Code is NOT generated */}
+              {!qrCodeData && (
+                <button 
+                  onClick={closeCheckout}
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+                >
+                  <X className="w-4 h-4 text-zinc-600" />
+                </button>
+              )}
+
+              {/* Plan info */}
+              {selectedPlan && (
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-foreground mb-1">
+                    Plano {getPlanDetails(selectedPlan).name}
+                  </h3>
+                  <p className="text-2xl font-bold text-primary">
+                    {getPlanDetails(selectedPlan).price}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {getPlanDetails(selectedPlan).days} de acesso
+                  </p>
+                </div>
+              )}
+
+              {/* QR Code Display */}
+              {qrCodeData ? (
+                <div className="text-center">
+                  <div className="bg-white p-3 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                    <img 
+                      src={qrCodeData.qrCodeImage} 
+                      alt="QR Code PIX" 
+                      className="w-40 h-40 mx-auto"
+                    />
+                  </div>
+                  
+                  <p className="text-sm text-foreground font-medium mb-2">
+                    Escaneie o QR Code
+                  </p>
+                  
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Ou copie o codigo PIX abaixo:
+                  </p>
+                  
+                  <div className="bg-zinc-100 rounded-xl p-2 mb-3">
+                    <p className="text-xs text-foreground break-all font-mono">
+                      {qrCodeData.qrCode.substring(0, 40)}...
+                    </p>
+                  </div>
+                  
+                  <Button 
+                    size="lg" 
+                    className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
+                    onClick={() => {
+                      if (!copied) {
+                        navigator.clipboard.writeText(qrCodeData.qrCode)
+                        setCopied(true)
+                      }
+                    }}
+                    disabled={copied}
+                  >
+                    {copied ? (
+                      <span className="flex items-center justify-center gap-2">
+                        Copiado <Check className="w-4 h-4" />
+                      </span>
+                    ) : (
+                      'Copiar Codigo PIX'
+                    )}
+                  </Button>
+                  
+                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
+                    <p className="text-xs text-center text-primary">
+                      Após o pagamento, o acesso será enviado<br />
+                      para o seu E-mail em até 2 minutos
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Form */}
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nome completo
+                      </label>
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Digite seu nome completo"
+                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        E-mail
+                      </label>
+                      <input
+                        type="email"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        placeholder="Digite seu E-mail"
+                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Error message */}
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
+                      <p className="text-xs text-center text-red-600">{error}</p>
+                    </div>
+                  )}
+
+                  {/* Info box */}
+                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
+                    <p className="text-xs text-center text-primary">
+                      O acesso será enviado para este E-mail após a confirmação do pagamento
+                    </p>
+                  </div>
+
+                  {/* Submit button */}
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleGeneratePix}
+                    disabled={!customerName.trim() || !customerEmail.includes('@') || isLoading}
+                  >
+                    {isLoading ? 'Gerando...' : 'Gerar QR Code'}
+                  </Button>
+                </>
+              )}
+
+              {/* Security note */}
+              <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground">
+                <Lock className="w-3 h-3" />
+                <span>Pagamento 100% seguro via PIX</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Animations */}
+          <style jsx>{`
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes slideUp {
+              from { transform: translateY(100%); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+          `}</style>
+        </>
+      )}
     </>
   )
 }
