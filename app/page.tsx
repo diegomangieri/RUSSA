@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores! 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego... Estou te esperando para uma experiência única e irresistível. 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego! Estou te esperando para uma experiência única e irresistível. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
