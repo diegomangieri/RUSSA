@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores! 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego... Estou te esperando para um experiência única e irresistível. 😈'
+  const bioText = 'Oi, meus amores! 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego... Estou te esperando para uma experiência única e irresistível. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -84,6 +84,7 @@ export default function VIPSubscriptionPage() {
   const openCheckout = (plan: string) => {
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
+    document.body.style.overflow = 'hidden'
   }
 
   const closeCheckout = () => {
@@ -91,6 +92,7 @@ export default function VIPSubscriptionPage() {
     setSelectedPlan(null)
     setCustomerName('')
     setCustomerEmail('')
+    document.body.style.overflow = ''
   }
 
   const handleGeneratePix = () => {
@@ -132,7 +134,7 @@ export default function VIPSubscriptionPage() {
       answer: "Sim, você pode cancelar a qualquer momento. A assinatura não renova automaticamente, você tem total controle."
     },
     {
-      question: "Possuí reembolso ou garantia?",
+      question: "Possui reembolso ou garantia?",
       answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
     },
     {
@@ -553,13 +555,13 @@ export default function VIPSubscriptionPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Seu e-mail
+                    Seu E-mail
                   </label>
                   <input
                     type="email"
                     value={customerEmail}
                     onChange={(e) => setCustomerEmail(e.target.value)}
-                    placeholder="Digite seu melhor e-mail"
+                    placeholder="Digite seu melhor E-mail"
                     className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
@@ -568,7 +570,7 @@ export default function VIPSubscriptionPage() {
               {/* Info box */}
               <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                 <p className="text-xs text-center text-primary">
-                  O acesso sera enviado para este e-mail apos a confirmacao do pagamento
+                  O acesso será enviado para este E-mail após a confirmação do pagamento
                 </p>
               </div>
 
@@ -579,7 +581,7 @@ export default function VIPSubscriptionPage() {
                 onClick={handleGeneratePix}
                 disabled={!customerName.trim() || !customerEmail.trim()}
               >
-                Gerar PIX para Pagamento
+                Gerar PIX
               </Button>
 
               {/* Security note */}
