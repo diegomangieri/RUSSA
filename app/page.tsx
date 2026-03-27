@@ -89,22 +89,30 @@ export default function VIPSubscriptionPage() {
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  const [scrollPosition, setScrollPosition] = useState(0)
+
   const openCheckout = (plan: string) => {
+    const currentScroll = window.scrollY
+    setScrollPosition(currentScroll)
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
-    document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.width = '100%'
-    document.body.style.top = `-${window.scrollY}px`
+    
+    requestAnimationFrame(() => {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${currentScroll}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
+    })
   }
 
   const closeCheckout = () => {
-    const scrollY = document.body.style.top
     document.body.style.overflow = ''
     document.body.style.position = ''
-    document.body.style.width = ''
     document.body.style.top = ''
-    window.scrollTo(0, parseInt(scrollY || '0') * -1)
+    document.body.style.left = ''
+    document.body.style.right = ''
+    window.scrollTo(0, scrollPosition)
     setShowCheckoutModal(false)
     setSelectedPlan(null)
     setCustomerName('')
