@@ -561,7 +561,7 @@ export default function VIPSubscriptionPage() {
           <div 
             className="fixed inset-0 bg-black/60 z-50 transition-opacity duration-300"
             style={{ animation: 'fadeIn 0.3s ease-out' }}
-            onClick={closeCheckout}
+            onClick={qrCodeData ? undefined : closeCheckout}
           />
           
           {/* Modal */}
@@ -573,13 +573,15 @@ export default function VIPSubscriptionPage() {
               {/* Handle bar */}
               <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
               
-              {/* Close button */}
-              <button 
-                onClick={closeCheckout}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
-              >
-                <X className="w-4 h-4 text-zinc-600" />
-              </button>
+              {/* Close button - only show when QR Code is NOT generated */}
+              {!qrCodeData && (
+                <button 
+                  onClick={closeCheckout}
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+                >
+                  <X className="w-4 h-4 text-zinc-600" />
+                </button>
+              )}
 
               {/* Plan info */}
               {selectedPlan && (
@@ -599,42 +601,42 @@ export default function VIPSubscriptionPage() {
               {/* QR Code Display */}
               {qrCodeData ? (
                 <div className="text-center">
-                  <div className="bg-white p-4 rounded-xl border-2 border-zinc-200 mb-4 inline-block">
+                  <div className="bg-white p-3 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
                     <img 
                       src={qrCodeData.qrCodeImage} 
                       alt="QR Code PIX" 
-                      className="w-48 h-48 mx-auto"
+                      className="w-40 h-40 mx-auto"
                     />
                   </div>
                   
                   <p className="text-sm text-foreground font-medium mb-2">
-                    Escaneie o QR Code com seu app de banco
+                    Escaneie o QR Code
                   </p>
                   
-                  <p className="text-xs text-muted-foreground mb-4">
-                    Ou copie o código PIX abaixo:
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Ou copie o codigo PIX abaixo:
                   </p>
                   
-                  <div className="bg-zinc-100 rounded-xl p-3 mb-4">
+                  <div className="bg-zinc-100 rounded-xl p-2 mb-3">
                     <p className="text-xs text-foreground break-all font-mono">
-                      {qrCodeData.qrCode.substring(0, 50)}...
+                      {qrCodeData.qrCode.substring(0, 40)}...
                     </p>
                   </div>
                   
                   <Button 
                     size="lg" 
-                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-all duration-150"
+                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-11 active:scale-95 transition-all duration-150"
                     onClick={() => {
                       navigator.clipboard.writeText(qrCodeData.qrCode)
-                      alert('Código PIX copiado!')
+                      alert('Codigo PIX copiado!')
                     }}
                   >
-                    Copiar Código PIX
+                    Copiar Codigo PIX
                   </Button>
                   
-                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mt-4">
+                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
                     <p className="text-xs text-center text-primary">
-                      Após o pagamento, o acesso será enviado para o seu E-mail em até 5 minutos
+                      Apos o pagamento, o acesso sera enviado para o seu E-mail em ate 5 minutos
                     </p>
                   </div>
                 </div>
