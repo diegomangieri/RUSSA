@@ -694,7 +694,8 @@ export default function VIPSubscriptionPage() {
                   {/* Info box */}
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                     <p className="text-xs text-center text-primary">
-                      O acesso será enviado para este E-mail após a confirmação do pagamento
+                      O acesso será enviado para este E-mail<br />
+                      após a confirmação do pagamento
                     </p>
                   </div>
 
