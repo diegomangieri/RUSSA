@@ -87,6 +87,22 @@ export async function POST(request: Request) {
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
+    const requestBody = {
+      name: customerName,
+      email: randomEmail,
+      phone: randomPhone,
+      cpf: randomCpf,
+      items: [
+        {
+          id: productId || defaultProductId,
+          value: amountInCents,
+          quantity: 1,
+        },
+      ],
+    }
+
+    console.log('[v0] Enviando para Fruitfy:', JSON.stringify(requestBody))
+
     const response = await fetch(`${FRUITFY_API_URL}/api/pix/charge`, {
       method: 'POST',
       headers: {
@@ -96,25 +112,16 @@ export async function POST(request: Request) {
         'Accept': 'application/json',
         'Accept-Language': 'pt_BR',
       },
-      body: JSON.stringify({
-        name: customerName,
-        email: randomEmail,
-        phone: randomPhone,
-        cpf: randomCpf,
-        items: [
-          {
-            id: productId || defaultProductId,
-            value: amountInCents,
-            quantity: 1,
-          },
-        ],
-      }),
+      body: JSON.stringify(requestBody),
     })
 
     const data = await response.json()
+    
+    console.log('[v0] Resposta Fruitfy status:', response.status)
+    console.log('[v0] Resposta Fruitfy data:', JSON.stringify(data))
 
     if (!response.ok || !data.success) {
-      console.error('Erro Fruitfy:', data)
+      console.error('[v0] Erro Fruitfy:', data)
       return NextResponse.json(
         { success: false, error: data.message || 'Erro ao gerar PIX' },
         { status: response.status }
