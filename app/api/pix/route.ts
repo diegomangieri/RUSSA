@@ -1,69 +1,77 @@
 import { NextResponse } from 'next/server'
 
-const EXPFY_API_URL = 'https://expfypay.com/api/v1'
+const FRUITFY_API_URL = 'https://api.fruitfy.io'
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, description, customerName, customerEmail, plan } = body
+    const { amount, customerName, customerEmail, customerPhone, customerCpf, plan, productId } = body
 
     // Validação básica
-    if (!amount || !customerName || !customerEmail) {
+    if (!amount || !customerName || !customerEmail || !customerPhone || !customerCpf) {
       return NextResponse.json(
-        { success: false, error: 'Dados incompletos' },
+        { success: false, error: 'Dados incompletos. Preencha todos os campos.' },
         { status: 400 }
       )
     }
 
-    const publicKey = process.env.EXPFY_PUBLIC_KEY
-    const secretKey = process.env.EXPFY_SECRET_KEY
+    const apiToken = process.env.FRUITFY_API_TOKEN
+    const storeId = process.env.FRUITFY_STORE_ID
+    const defaultProductId = process.env.FRUITFY_PRODUCT_ID
 
-    if (!publicKey || !secretKey) {
+    if (!apiToken || !storeId) {
       return NextResponse.json(
         { success: false, error: 'Chaves da API não configuradas' },
         { status: 500 }
       )
     }
 
-    // Gerar ID externo único
-    const externalId = `sydney_${plan}_${Date.now()}`
+    // Valor em centavos (a API da Fruitfy espera centavos)
+    const amountInCents = Math.round(amount * 100)
 
-    const response = await fetch(`${EXPFY_API_URL}/payments`, {
+    const response = await fetch(`${FRUITFY_API_URL}/api/pix/charge`, {
       method: 'POST',
       headers: {
-        'X-Public-Key': publicKey,
-        'X-Secret-Key': secretKey,
+        'Authorization': `Bearer ${apiToken}`,
+        'Store-Id': storeId,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Language': 'pt_BR',
       },
       body: JSON.stringify({
-        amount: parseFloat(amount),
-        description: description || `Assinatura ${plan} - Sydney VIP`,
-        customer: {
-          name: customerName,
-          email: customerEmail,
-        },
-        external_id: externalId,
-        callback_url: process.env.WEBHOOK_URL || '',
+        name: customerName,
+        email: customerEmail,
+        phone: customerPhone.replace(/\D/g, ''),
+        cpf: customerCpf.replace(/\D/g, ''),
+        items: [
+          {
+            id: productId || defaultProductId,
+            value: amountInCents,
+            quantity: 1,
+          },
+        ],
       }),
     })
 
     const data = await response.json()
 
-    if (!response.ok) {
+    if (!response.ok || !data.success) {
+      console.error('Erro Fruitfy:', data)
       return NextResponse.json(
         { success: false, error: data.message || 'Erro ao gerar PIX' },
         { status: response.status }
       )
     }
 
+    // A resposta da Fruitfy vem no formato { success: true, data: { ... } }
     return NextResponse.json({
       success: true,
       data: {
-        transactionId: data.data.transaction_id,
-        qrCode: data.data.qr_code,
-        qrCodeImage: data.data.qr_code_image,
-        amount: data.data.amount,
-        status: data.data.status,
+        orderId: data.data.order_uuid || data.data.id,
+        qrCode: data.data.pix_qr_code || data.data.qr_code,
+        qrCodeImage: data.data.pix_qr_code_base64 || data.data.qr_code_image,
+        amount: amountInCents,
+        status: data.data.status || 'waiting_payment',
       },
     })
   } catch (error) {
