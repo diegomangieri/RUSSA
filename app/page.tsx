@@ -689,7 +689,7 @@ export default function VIPSubscriptionPage() {
                     size="lg" 
                     className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleGeneratePix}
-                    disabled={!customerName.trim() || !customerEmail.trim() || isLoading}
+                    disabled={!customerName.trim() || !customerEmail.includes('@') || isLoading}
                   >
                     {isLoading ? 'Gerando...' : 'Gerar QR Code'}
                   </Button>
