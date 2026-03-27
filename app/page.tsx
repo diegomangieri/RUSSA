@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -76,6 +76,37 @@ export default function VIPSubscriptionPage() {
   const [pageReady, setPageReady] = useState(false)
   const [ageVerified, setAgeVerified] = useState(false)
   const [showContent, setShowContent] = useState(false)
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [customerName, setCustomerName] = useState('')
+  const [customerEmail, setCustomerEmail] = useState('')
+
+  const openCheckout = (plan: string) => {
+    setSelectedPlan(plan)
+    setShowCheckoutModal(true)
+  }
+
+  const closeCheckout = () => {
+    setShowCheckoutModal(false)
+    setSelectedPlan(null)
+    setCustomerName('')
+    setCustomerEmail('')
+  }
+
+  const handleGeneratePix = () => {
+    if (!customerName.trim() || !customerEmail.trim()) return
+    // Aqui vai a integracao com a API da Fruitfy
+    console.log('Gerando PIX para:', { plan: selectedPlan, name: customerName, email: customerEmail })
+  }
+
+  const getPlanDetails = (plan: string) => {
+    switch(plan) {
+      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
+      case 'mensal': return { name: 'Mensal', price: 'R$ 19,90', days: '30 dias' }
+      case 'semestral': return { name: 'Semestral', price: 'R$ 29,95', days: '180 dias' }
+      default: return { name: '', price: '', days: '' }
+    }
+  }
 
   useEffect(() => {
     preloadImages(CRITICAL_IMAGES).then(() => {
@@ -290,7 +321,7 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => window.location.href = checkoutLinks.semanal}
+              onClick={() => openCheckout('semanal')}
             >
               Assinar Semanal!
             </Button>
@@ -311,7 +342,7 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
-              onClick={() => window.location.href = checkoutLinks.mensal}
+              onClick={() => openCheckout('mensal')}
             >
               Assinar Mensal!
             </Button>
@@ -332,7 +363,7 @@ export default function VIPSubscriptionPage() {
             <Button 
               size="lg" 
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => window.location.href = checkoutLinks.semestral}
+              onClick={() => openCheckout('semestral')}
             >
               Assinar Semestral!
             </Button>
@@ -463,6 +494,99 @@ export default function VIPSubscriptionPage() {
         </div>
       </div>
       </div>
+
+      {/* Checkout Modal */}
+      {showCheckoutModal && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 z-50 animate-in fade-in duration-300"
+            onClick={closeCheckout}
+          />
+          
+          {/* Modal */}
+          <div className="fixed inset-x-0 bottom-0 z-50 animate-in slide-in-from-bottom fade-in duration-300">
+            <div className="bg-white rounded-t-3xl p-6 max-w-lg mx-auto shadow-2xl">
+              {/* Handle bar */}
+              <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
+              
+              {/* Close button */}
+              <button 
+                onClick={closeCheckout}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+              >
+                <X className="w-4 h-4 text-zinc-600" />
+              </button>
+
+              {/* Plan info */}
+              {selectedPlan && (
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold text-foreground mb-1">
+                    Plano {getPlanDetails(selectedPlan).name}
+                  </h3>
+                  <p className="text-2xl font-bold text-primary">
+                    {getPlanDetails(selectedPlan).price}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {getPlanDetails(selectedPlan).days} de acesso
+                  </p>
+                </div>
+              )}
+
+              {/* Form */}
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Seu nome
+                  </label>
+                  <input
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="Digite seu nome completo"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Seu e-mail
+                  </label>
+                  <input
+                    type="email"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    placeholder="Digite seu melhor e-mail"
+                    className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                  />
+                </div>
+              </div>
+
+              {/* Info box */}
+              <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
+                <p className="text-xs text-center text-primary">
+                  O acesso sera enviado para este e-mail apos a confirmacao do pagamento
+                </p>
+              </div>
+
+              {/* Submit button */}
+              <Button 
+                size="lg" 
+                className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleGeneratePix}
+                disabled={!customerName.trim() || !customerEmail.trim()}
+              >
+                Gerar PIX para Pagamento
+              </Button>
+
+              {/* Security note */}
+              <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground">
+                <Lock className="w-3 h-3" />
+                <span>Pagamento 100% seguro via PIX</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }
