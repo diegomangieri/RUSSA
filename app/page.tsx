@@ -88,6 +88,7 @@ export default function VIPSubscriptionPage() {
     amount: number
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -119,6 +120,7 @@ export default function VIPSubscriptionPage() {
     setCustomerEmail('')
     setQrCodeData(null)
     setError(null)
+    setCopied(false)
   }
 
   const handleGeneratePix = async () => {
@@ -625,13 +627,22 @@ export default function VIPSubscriptionPage() {
                   
                   <Button 
                     size="lg" 
-                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-11 active:scale-95 transition-all duration-150"
+                    className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
                     onClick={() => {
-                      navigator.clipboard.writeText(qrCodeData.qrCode)
-                      alert('Codigo PIX copiado!')
+                      if (!copied) {
+                        navigator.clipboard.writeText(qrCodeData.qrCode)
+                        setCopied(true)
+                      }
                     }}
+                    disabled={copied}
                   >
-                    Copiar Codigo PIX
+                    {copied ? (
+                      <span className="flex items-center justify-center gap-2">
+                        Copiado <Check className="w-4 h-4" />
+                      </span>
+                    ) : (
+                      'Copiar Codigo PIX'
+                    )}
                   </Button>
                   
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
