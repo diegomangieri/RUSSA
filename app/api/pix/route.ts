@@ -68,10 +68,6 @@ export async function POST(request: Request) {
     const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
     const defaultProductId = process.env.FRUITFY_PRODUCT_ID
 
-    console.log('[v0] Raw Store ID:', rawStoreId)
-    console.log('[v0] Store ID limpo:', storeId)
-    console.log('[v0] Product ID:', defaultProductId)
-
     if (!apiToken || !storeId) {
       return NextResponse.json(
         { success: false, error: 'Chaves da API não configuradas' },
@@ -101,8 +97,6 @@ export async function POST(request: Request) {
       ],
     }
 
-    console.log('[v0] Enviando para Fruitfy:', JSON.stringify(requestBody))
-
     const response = await fetch(`${FRUITFY_API_URL}/api/pix/charge`, {
       method: 'POST',
       headers: {
@@ -116,25 +110,23 @@ export async function POST(request: Request) {
     })
 
     const data = await response.json()
-    
-    console.log('[v0] Resposta Fruitfy status:', response.status)
-    console.log('[v0] Resposta Fruitfy data:', JSON.stringify(data))
 
     if (!response.ok || !data.success) {
-      console.error('[v0] Erro Fruitfy:', data)
       return NextResponse.json(
         { success: false, error: data.message || 'Erro ao gerar PIX' },
         { status: response.status }
       )
     }
 
-    // A resposta da Fruitfy vem no formato { success: true, data: { ... } }
+    // A resposta da Fruitfy vem no formato { success: true, data: { pix: { code, qr_code_base64 } } }
+    const pixData = data.data.pix || {}
+    
     return NextResponse.json({
       success: true,
       data: {
-        orderId: data.data.order_uuid || data.data.id,
-        qrCode: data.data.pix_qr_code || data.data.qr_code,
-        qrCodeImage: data.data.pix_qr_code_base64 || data.data.qr_code_image,
+        orderId: data.data.order_id,
+        qrCode: pixData.code,
+        qrCodeImage: pixData.qr_code_base64,
         amount: amountInCents,
         status: data.data.status || 'waiting_payment',
       },
