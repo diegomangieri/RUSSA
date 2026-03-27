@@ -63,12 +63,10 @@ export async function POST(request: Request) {
     }
 
     const apiToken = process.env.FRUITFY_API_TOKEN
-    const storeId = process.env.FRUITFY_STORE_ID
+    // Limpa o Store ID caso tenha vindo com prefixo "Store-Id: "
+    const rawStoreId = process.env.FRUITFY_STORE_ID || ''
+    const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
     const defaultProductId = process.env.FRUITFY_PRODUCT_ID
-
-    console.log('[v0] Store ID configurado:', storeId)
-    console.log('[v0] Product ID configurado:', defaultProductId)
-    console.log('[v0] API Token existe:', !!apiToken)
 
     if (!apiToken || !storeId) {
       return NextResponse.json(
