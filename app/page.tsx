@@ -260,8 +260,7 @@ export default function VIPSubscriptionPage() {
             src="/images/banner.png"
             alt="Banner"
             fill
-            className="object-cover object-[center_15%] scale-110"
-            style={{ transform: 'rotate(-90deg) scale(1.8)', transformOrigin: 'center center' }}
+            className="object-cover object-[center_30%]"
             priority
           />
         </div>
