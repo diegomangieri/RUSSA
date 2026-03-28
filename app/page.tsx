@@ -260,7 +260,8 @@ export default function VIPSubscriptionPage() {
             src="/images/banner.png"
             alt="Banner"
             fill
-            className="object-cover object-[center_25%]"
+            className="object-cover object-[center_15%] scale-110"
+            style={{ transform: 'rotate(-90deg) scale(1.8)', transformOrigin: 'center center' }}
             priority
           />
         </div>
@@ -324,7 +325,7 @@ export default function VIPSubscriptionPage() {
           <img
             src="/images/gallery1.png"
             alt="Conteudo Exclusivo"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110"
           />
           
           {/* Lock Overlay */}
@@ -456,7 +457,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery2.png"
             alt="Conteudo Exclusivo"
             fill
-            className="object-cover object-center"
+            className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
           />
           
@@ -478,7 +479,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery3.png"
             alt="Conteudo Exclusivo"
             fill
-            className="object-cover object-center"
+            className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
           />
           
@@ -500,7 +501,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery4.png"
             alt="Conteudo Exclusivo"
             fill
-            className="object-cover object-center"
+            className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
           />
           
