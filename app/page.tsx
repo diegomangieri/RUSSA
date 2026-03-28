@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Sydney, e hoje vou revelar um lado meu que vai te deixar sem fôlego! Estou te esperando para uma experiência única e irresistível. 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Bella Angel, e hoje vou revelar um lado meu que vai te deixar sem folego! Estou te esperando para uma experiencia unica e irresistivel. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -275,7 +275,7 @@ export default function VIPSubscriptionPage() {
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
                 src="/images/profile.png"
-                alt="Sydney"
+                alt="Bella Angel"
                 width={76}
                 height={76}
                 className="w-full h-full object-cover"
@@ -304,12 +304,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Sydney</h2>
+            <h2 className="text-lg font-bold text-foreground">Bella Angel</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@sydney</p>
+          <p className="text-sm text-muted-foreground">@bellaangeloficial</p>
         </div>
         
         <ProfileBio />
