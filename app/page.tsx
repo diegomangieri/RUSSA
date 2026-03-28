@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Bella Angel, e hoje vou revelar um lado meu que vai te deixar sem folego! Estou te esperando para uma experiencia unica e irresistivel. 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Bella Angel, e hoje vou revelar um lado meu que vai te deixar sem fôlego! Estou te esperando para uma experiência única e irresistível. 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -323,7 +323,7 @@ export default function VIPSubscriptionPage() {
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
           <img
             src="/images/gallery1.png"
-            alt="Conteudo Exclusivo"
+            alt="Conteúdo Exclusivo"
             className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110"
           />
           
@@ -454,7 +454,7 @@ export default function VIPSubscriptionPage() {
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="/images/gallery2.png"
-            alt="Conteudo Exclusivo"
+            alt="Conteúdo Exclusivo"
             fill
             className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
@@ -476,7 +476,7 @@ export default function VIPSubscriptionPage() {
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="/images/gallery3.png"
-            alt="Conteudo Exclusivo"
+            alt="Conteúdo Exclusivo"
             fill
             className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
@@ -498,7 +498,7 @@ export default function VIPSubscriptionPage() {
         <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
             src="/images/gallery4.png"
-            alt="Conteudo Exclusivo"
+            alt="Conteúdo Exclusivo"
             fill
             className="object-cover object-center blur-[30px] scale-110"
             sizes="100vw"
@@ -616,7 +616,7 @@ export default function VIPSubscriptionPage() {
                   </p>
                   
                   <p className="text-xs text-muted-foreground mb-3">
-                    Ou copie o codigo PIX abaixo:
+                    Ou copie o código PIX abaixo:
                   </p>
                   
                   <div className="bg-zinc-100 rounded-xl p-2 mb-3">
@@ -641,7 +641,7 @@ export default function VIPSubscriptionPage() {
                         Copiado <Check className="w-4 h-4" />
                       </span>
                     ) : (
-                      'Copiar Codigo PIX'
+                      'Copiar Código PIX'
                     )}
                   </Button>
                   
