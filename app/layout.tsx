@@ -7,8 +7,8 @@ import './globals.css'
 const _inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Conteudos Bella Angel',
-  description: 'Acesse os conteudos exclusivos da Bella Angel. Fotos, videos e muito mais.',
+  title: 'Conteúdos Bella Angel',
+  description: 'Acesse os conteúdos exclusivos da Bella Angel. Fotos, vídeos e muito mais.',
   generator: 'v0.app',
   icons: {
     icon: [
