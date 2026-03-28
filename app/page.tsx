@@ -260,7 +260,7 @@ export default function VIPSubscriptionPage() {
             src="/images/banner.png"
             alt="Banner"
             fill
-            className="object-cover object-[center_30%]"
+            className="object-cover object-center"
             priority
           />
         </div>
