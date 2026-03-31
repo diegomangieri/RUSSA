@@ -20,7 +20,7 @@ function getPromoDate() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Lana Mangieri, e hoje vou revelar um lado meu que vai te deixar sem fôlego! Estou te esperando para uma experiência única e irresistível. 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Lana Mangieri e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -50,9 +50,12 @@ function ProfileBio() {
 }
 
 const CRITICAL_IMAGES = [
-  '/images/locked-1.jpg',
-  '/images/locked-2.jpg',
-  '/nina-profile.jpg',
+  '/images/profile.png',
+  '/images/banner.png',
+  '/images/gallery1.png',
+  '/images/gallery2.png',
+  '/images/gallery4.png',
+  '/videos/preview-locked.mp4',
 ]
 
 function preloadImages(srcs: string[]): Promise<void[]> {
@@ -162,9 +165,9 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
-      case 'mensal': return { name: 'Mensal', price: 'R$ 19,90', days: '30 dias' }
-      case 'semestral': return { name: 'Semestral', price: 'R$ 29,95', days: '180 dias' }
+      case 'semanal': return { name: 'Semanal', price: 'R$ 9,95', days: '7 dias' }
+      case 'mensal': return { name: 'Mensal', price: 'R$ 17,95', days: '30 dias' }
+      case 'semestral': return { name: 'Semestral', price: 'R$ 27,95', days: '180 dias' }
       default: return { name: '', price: '', days: '' }
     }
   }
@@ -198,7 +201,7 @@ export default function VIPSubscriptionPage() {
     },
     {
       question: "Como vou acessar os conteúdos?",
-      answer: "Após assinar, você receberá o convite exclusivo via E-mail para o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
+      answer: "Após assinar, você receberá o acesso exclusivo via E-mail + o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
     }
   ]
 
@@ -309,7 +312,7 @@ export default function VIPSubscriptionPage() {
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@bellaangeloficial</p>
+          <p className="text-sm text-muted-foreground">@lana.mangieri</p>
         </div>
         
         <ProfileBio />
@@ -378,8 +381,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">7 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 39,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 29,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 9,95</p>
               </div>
             </div>
             <Button 
@@ -387,7 +390,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => openCheckout('semanal')}
             >
-              Assinar Semanal!
+              Assinar o plano Semanal!
             </Button>
           </Card>
 
@@ -399,8 +402,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-white/70">30 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-white/70 line-through">R$ 89,90</p>
-                <p className="text-2xl font-bold">R$ 19,90</p>
+                <p className="text-xs text-white/70 line-through">R$ 59,90</p>
+                <p className="text-2xl font-bold">R$ 17,95</p>
               </div>
             </div>
             <Button 
@@ -408,7 +411,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
               onClick={() => openCheckout('mensal')}
             >
-              Assinar Mensal!
+              Assinar o plano Mensal!
             </Button>
           </Card>
 
@@ -420,8 +423,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">180 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 199,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 29,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 99,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 27,95</p>
               </div>
             </div>
             <Button 
@@ -429,7 +432,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => openCheckout('semestral')}
             >
-              Assinar Semestral!
+              Assinar o plano Semestral!
             </Button>
           </Card>
         </div>
@@ -476,28 +479,6 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview 2 */}
-        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
-          <Image
-            src="/images/gallery3.png"
-            alt="Conteúdo Exclusivo"
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          
-          {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                <Lock className="w-7 h-7 text-zinc-600" />
-              </div>
-              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
-              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Locked Content Preview 3 */}
         <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
             src="/images/gallery4.png"
