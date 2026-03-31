@@ -83,7 +83,12 @@ function TestimonialsCarousel() {
                 <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[180px] flex flex-col justify-between">
                   <p className="text-sm text-foreground leading-relaxed">{`"${testimonial.text}"`}</p>
                   <div className="flex items-center justify-between mt-3">
-                    <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">{testimonial.user.charAt(0)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                    </div>
                     <p className="text-xs text-muted-foreground">{testimonial.time}</p>
                   </div>
                 </div>
