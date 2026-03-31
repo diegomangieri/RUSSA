@@ -152,7 +152,12 @@ export default function VIPSubscriptionPage() {
   const [promoDate] = useState(getPromoDate)
   const [pageReady, setPageReady] = useState(false)
   const [ageVerified, setAgeVerified] = useState(false)
+  const [showEmailCheck, setShowEmailCheck] = useState(false)
+  const [emailCheckDone, setEmailCheckDone] = useState(false)
   const [showContent, setShowContent] = useState(false)
+  const [loginEmail, setLoginEmail] = useState('')
+  const [showEmailError, setShowEmailError] = useState(false)
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [showCheckoutModal, setShowCheckoutModal] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [customerName, setCustomerName] = useState('')
@@ -252,6 +257,24 @@ export default function VIPSubscriptionPage() {
 
   const handleAgeConfirm = () => {
     setAgeVerified(true)
+    setShowEmailCheck(true)
+  }
+
+  const handleEmailCheck = () => {
+    if (!loginEmail.trim() || !loginEmail.includes('@')) return
+    
+    setIsCheckingEmail(true)
+    
+    // Simula verificação e sempre mostra erro
+    setTimeout(() => {
+      setIsCheckingEmail(false)
+      setShowEmailError(true)
+    }, 1500)
+  }
+
+  const handleContinueWithoutLogin = () => {
+    setShowEmailCheck(false)
+    setEmailCheckDone(true)
     setShowContent(true)
   }
 
@@ -287,9 +310,9 @@ export default function VIPSubscriptionPage() {
   return (
     <>
       {/* Age verification screen */}
-      {!showContent && (
+      {!ageVerified && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-300 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-300 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="text-center w-full max-w-sm mx-auto">
             {/* Age warning box */}
@@ -313,6 +336,89 @@ export default function VIPSubscriptionPage() {
             >
               Tenho 18 anos ou mais
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Email verification screen */}
+      {showEmailCheck && !emailCheckDone && (
+        <div 
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-300 ease-out`}
+        >
+          <div className="text-center w-full max-w-sm mx-auto">
+            {/* Login box */}
+            <div className="bg-zinc-50 rounded-2xl p-6 mb-6 border border-zinc-200">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-6 h-6 text-primary" />
+              </div>
+              <h2 className="text-lg font-semibold text-foreground mb-2">
+                Acessar Minha Conta
+              </h2>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                Digite o e-mail usado na compra para acessar seus conteúdos exclusivos.
+              </p>
+
+              {/* Email input */}
+              <div className="mb-4">
+                <input
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={loginEmail}
+                  onChange={(e) => {
+                    setLoginEmail(e.target.value)
+                    setShowEmailError(false)
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-zinc-300 bg-white text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+              </div>
+
+              {/* Error message */}
+              {showEmailError && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="w-4 h-4 text-red-500" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-semibold text-red-700 mb-1">
+                        Compra não encontrada
+                      </p>
+                      <p className="text-xs text-red-600 leading-relaxed">
+                        Não encontramos nenhuma compra associada a este e-mail. Verifique se digitou corretamente ou assine para ter acesso.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Login button */}
+              <Button
+                size="lg"
+                onClick={handleEmailCheck}
+                disabled={!loginEmail.trim() || !loginEmail.includes('@') || isCheckingEmail}
+                className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-all duration-150 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isCheckingEmail ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Verificando...
+                  </span>
+                ) : (
+                  'Entrar'
+                )}
+              </Button>
+            </div>
+
+            {/* Continue without login */}
+            <button
+              onClick={handleContinueWithoutLogin}
+              className="text-muted-foreground text-sm hover:text-foreground transition-colors underline underline-offset-2"
+            >
+              Ainda não tenho assinatura
+            </button>
           </div>
         </div>
       )}
