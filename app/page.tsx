@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown, X } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,19 +21,23 @@ function getPromoDate() {
 const testimonials = [
   {
     text: "Foi a melhor punheta que já bati! A buceta dela cheia de manchas é muito diferente, tava curioso pra ver como era 😂",
-    user: "Lucas M."
+    user: "Lucas M.",
+    time: "3 horas atrás"
   },
   {
     text: "Assinei sem esperar muito… mas quando vi os vídeos dela, pqp… que mulher absurda. Aquele vídeo dela pagando boquete é papo de loucura kkkkk",
-    user: "Pedro R."
+    user: "Pedro R.",
+    time: "1 dia atrás"
   },
   {
     text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
-    user: "Matheus S."
+    user: "Matheus S.",
+    time: "2 dias atrás"
   },
   {
     text: "Corpo diferente e muito gostoso. Não consigo parar de ver os vídeos slkk",
-    user: "Gabriel F."
+    user: "Gabriel F.",
+    time: "5 dias atrás"
   }
 ]
 
@@ -50,21 +54,42 @@ function TestimonialsCarousel() {
 
   return (
     <div className="px-4 py-6 bg-white">
-      <h3 className="text-xl font-bold text-foreground mb-4">O que estão falando 🤭</h3>
+      <h3 className="text-2xl font-bold text-foreground mb-4">{"O que estão falando 🤭"}</h3>
       
-      <div className="relative overflow-hidden">
-        <div 
-          className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      <div className="relative">
+        {/* Left Arrow */}
+        <button 
+          onClick={prevSlide}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center"
         >
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="w-full flex-shrink-0 px-1">
-              <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
-                <p className="text-sm text-foreground mb-3 leading-relaxed">{`"${testimonial.text}"`}</p>
-                <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+          <ChevronLeft className="w-5 h-5 text-zinc-600" />
+        </button>
+
+        {/* Right Arrow */}
+        <button 
+          onClick={nextSlide}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center"
+        >
+          <ChevronRight className="w-5 h-5 text-zinc-600" />
+        </button>
+
+        <div className="overflow-hidden mx-8">
+          <div 
+            className="flex transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="w-full flex-shrink-0 px-1">
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[140px] flex flex-col justify-between">
+                  <p className="text-sm text-foreground leading-relaxed line-clamp-4">{`"${testimonial.text}"`}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                    <p className="text-xs text-muted-foreground">{testimonial.time}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
