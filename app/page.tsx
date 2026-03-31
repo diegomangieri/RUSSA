@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, Lock, Check, Crown, X } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,9 +18,100 @@ function getPromoDate() {
   })
 }
 
+const testimonials = [
+  {
+    text: "Foi a melhor punheta que já bati! A buceta dela cheia de manchas é muito diferente, tava curioso pra ver como era 😂",
+    user: "Lucas M.",
+    time: "3 horas atrás"
+  },
+  {
+    text: "Assinei sem esperar muito… mas quando vi os vídeos dela, pqp… que mulher absurda. Aquele vídeo dela pagando boquete é papo de loucura kkkkk",
+    user: "Pedro R.",
+    time: "1 dia atrás"
+  },
+  {
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
+    user: "Matheus S.",
+    time: "2 dias atrás"
+  },
+  {
+    text: "Corpo diferente e muito gostoso. Não consigo parar de ver os vídeos slkk",
+    user: "Gabriel F.",
+    time: "5 dias atrás"
+  }
+]
+
+function TestimonialsCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  return (
+    <div className="px-4 py-6 bg-white">
+      <h3 className="text-2xl font-bold text-foreground mb-4">{"O que estão falando 🤭"}</h3>
+      
+      <div className="relative">
+        {/* Left Arrow */}
+        <button 
+          onClick={prevSlide}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center"
+        >
+          <ChevronLeft className="w-5 h-5 text-zinc-600" />
+        </button>
+
+        {/* Right Arrow */}
+        <button 
+          onClick={nextSlide}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center"
+        >
+          <ChevronRight className="w-5 h-5 text-zinc-600" />
+        </button>
+
+        <div className="overflow-hidden mx-8">
+          <div 
+            className="flex transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="w-full flex-shrink-0 px-1">
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[140px] flex flex-col justify-between">
+                  <p className="text-sm text-foreground leading-relaxed line-clamp-4">{`"${testimonial.text}"`}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                    <p className="text-xs text-muted-foreground">{testimonial.time}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center gap-2 mt-4">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-colors ${
+              index === currentIndex ? 'bg-primary' : 'bg-zinc-300'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Bella Angel, e hoje vou revelar um lado meu que vai te deixar sem fôlego! Estou te esperando para uma experiência única e irresistível. 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Lana Mangieri e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -50,9 +141,12 @@ function ProfileBio() {
 }
 
 const CRITICAL_IMAGES = [
-  '/images/locked-1.jpg',
-  '/images/locked-2.jpg',
-  '/nina-profile.jpg',
+  '/images/profile.png',
+  '/images/banner.png',
+  '/images/gallery1.png',
+  '/images/gallery2.png',
+  '/images/gallery4.png',
+  '/videos/preview-locked.mp4',
 ]
 
 function preloadImages(srcs: string[]): Promise<void[]> {
@@ -162,9 +256,9 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
-      case 'mensal': return { name: 'Mensal', price: 'R$ 19,90', days: '30 dias' }
-      case 'semestral': return { name: 'Semestral', price: 'R$ 29,95', days: '180 dias' }
+      case 'semanal': return { name: 'Semanal', price: 'R$ 9,95', days: '7 dias' }
+      case 'mensal': return { name: 'Mensal', price: 'R$ 17,95', days: '30 dias' }
+      case 'semestral': return { name: 'Semestral', price: 'R$ 27,95', days: '180 dias' }
       default: return { name: '', price: '', days: '' }
     }
   }
@@ -198,7 +292,7 @@ export default function VIPSubscriptionPage() {
     },
     {
       question: "Como vou acessar os conteúdos?",
-      answer: "Após assinar, você receberá o convite exclusivo via E-mail para o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
+      answer: "Após assinar, você receberá o acesso exclusivo via E-mail + o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
     }
   ]
 
@@ -275,7 +369,7 @@ export default function VIPSubscriptionPage() {
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
                 src="/images/profile.png"
-                alt="Bella Angel"
+                alt="Lana Mangieri"
                 width={76}
                 height={76}
                 className="w-full h-full object-cover"
@@ -304,12 +398,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Bella Angel</h2>
+            <h2 className="text-lg font-bold text-foreground">Lana Mangieri</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@bellaangeloficial</p>
+          <p className="text-sm text-muted-foreground">@lana.mangieri</p>
         </div>
         
         <ProfileBio />
@@ -318,17 +412,20 @@ export default function VIPSubscriptionPage() {
       {/* Divider line */}
       <div className="h-px bg-zinc-200" />
 
-      {/* Hero Image Section - Preview */}
+      {/* Hero Video Section - Preview */}
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-          <img
-            src="/images/gallery1.png"
-            alt="Conteúdo Exclusivo"
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110"
+          <video
+            src="/videos/preview-locked.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
           />
           
           {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
             <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
               <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
                 <Lock className="w-7 h-7 text-zinc-600" />
@@ -351,6 +448,9 @@ export default function VIPSubscriptionPage() {
           </div>
         </div>
       </div>
+
+      {/* Testimonials Section */}
+      <TestimonialsCarousel />
 
       {/* Subscription Section */}
       <div className="px-4 py-6 bg-zinc-50">
@@ -375,8 +475,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">7 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 39,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 29,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 9,95</p>
               </div>
             </div>
             <Button 
@@ -384,7 +484,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => openCheckout('semanal')}
             >
-              Assinar Semanal!
+              Assinar o plano Semanal!
             </Button>
           </Card>
 
@@ -396,8 +496,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-white/70">30 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-white/70 line-through">R$ 89,90</p>
-                <p className="text-2xl font-bold">R$ 19,90</p>
+                <p className="text-xs text-white/70 line-through">R$ 59,90</p>
+                <p className="text-2xl font-bold">R$ 17,95</p>
               </div>
             </div>
             <Button 
@@ -405,7 +505,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
               onClick={() => openCheckout('mensal')}
             >
-              Assinar Mensal!
+              Assinar o plano Mensal!
             </Button>
           </Card>
 
@@ -417,8 +517,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">180 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 199,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 29,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 99,90</p>
+                <p className="text-2xl font-bold text-foreground">R$ 27,95</p>
               </div>
             </div>
             <Button 
@@ -426,7 +526,7 @@ export default function VIPSubscriptionPage() {
               className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
               onClick={() => openCheckout('semestral')}
             >
-              Assinar Semestral!
+              Assinar o plano Semestral!
             </Button>
           </Card>
         </div>
@@ -451,12 +551,12 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview - Portrait */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
+        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="/images/gallery2.png"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center blur-[30px] scale-110"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
@@ -473,34 +573,12 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview 2 */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
-          <Image
-            src="/images/gallery3.png"
-            alt="Conteúdo Exclusivo"
-            fill
-            className="object-cover object-center blur-[30px] scale-110"
-            sizes="100vw"
-          />
-          
-          {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                <Lock className="w-7 h-7 text-zinc-600" />
-              </div>
-              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
-              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Locked Content Preview 3 */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
+        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
             src="/images/gallery4.png"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center blur-[30px] scale-110"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
