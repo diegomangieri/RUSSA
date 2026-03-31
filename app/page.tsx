@@ -327,7 +327,7 @@ export default function VIPSubscriptionPage() {
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110 pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
           />
           
           {/* Lock Overlay */}
@@ -459,7 +459,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery2.png"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center blur-[30px] scale-110"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
@@ -481,7 +481,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery3.png"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center blur-[30px] scale-110"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
@@ -503,7 +503,7 @@ export default function VIPSubscriptionPage() {
             src="/images/gallery4.png"
             alt="Conteúdo Exclusivo"
             fill
-            className="object-cover object-center blur-[30px] scale-110"
+            className="object-cover object-center"
             sizes="100vw"
           />
           
