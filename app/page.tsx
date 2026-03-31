@@ -18,6 +18,72 @@ function getPromoDate() {
   })
 }
 
+const testimonials = [
+  {
+    text: "Foi a melhor punheta que já bati! A buceta dela cheia de manchas é muito diferente, tava curioso pra ver como era 😂",
+    user: "Lucas M."
+  },
+  {
+    text: "Assinei sem esperar muito… mas quando vi os vídeos dela, pqp… que mulher absurda. Aquele vídeo dela pagando boquete é papo de loucura kkkkk",
+    user: "Pedro R."
+  },
+  {
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
+    user: "Matheus S."
+  },
+  {
+    text: "Corpo diferente e muito gostoso. Não consigo parar de ver os vídeos slkk",
+    user: "Gabriel F."
+  }
+]
+
+function TestimonialsCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  return (
+    <div className="px-4 py-6 bg-white">
+      <h3 className="text-xl font-bold text-foreground mb-4">O que estão falando 🤭</h3>
+      
+      <div className="relative overflow-hidden">
+        <div 
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="w-full flex-shrink-0 px-1">
+              <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
+                <p className="text-sm text-foreground mb-3 leading-relaxed">{`"${testimonial.text}"`}</p>
+                <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center gap-2 mt-4">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-colors ${
+              index === currentIndex ? 'bg-primary' : 'bg-zinc-300'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
   const bioText = 'Oi, meus amores 🔥 Sou a Lana Mangieri e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
@@ -357,6 +423,9 @@ export default function VIPSubscriptionPage() {
           </div>
         </div>
       </div>
+
+      {/* Testimonials Section */}
+      <TestimonialsCarousel />
 
       {/* Subscription Section */}
       <div className="px-4 py-6 bg-zinc-50">
