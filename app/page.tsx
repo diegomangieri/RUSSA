@@ -80,7 +80,7 @@ function TestimonialsCarousel() {
           >
             {testimonials.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-1">
-                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 min-h-[140px] flex flex-col justify-between">
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[180px] flex flex-col justify-between">
                   <p className="text-sm text-foreground leading-relaxed">{`"${testimonial.text}"`}</p>
                   <div className="flex items-center justify-between mt-3">
                     <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
@@ -140,29 +140,7 @@ function ProfileBio() {
   )
 }
 
-const CRITICAL_IMAGES = [
-  '/images/profile.png',
-  '/images/banner.png',
-  '/images/gallery1.png',
-  '/images/gallery2.png',
-  '/images/gallery4.png',
-  '/videos/preview-locked.mp4',
-]
 
-function preloadImages(srcs: string[]): Promise<void[]> {
-  return Promise.all(
-    srcs.map(
-      (src) =>
-        new Promise<void>((resolve) => {
-          const img = new window.Image()
-          img.crossOrigin = 'anonymous'
-          img.onload = () => resolve()
-          img.onerror = () => resolve()
-          img.src = src
-        })
-    )
-  )
-}
 
 export default function VIPSubscriptionPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -264,9 +242,7 @@ export default function VIPSubscriptionPage() {
   }
 
   useEffect(() => {
-    preloadImages(CRITICAL_IMAGES).then(() => {
-      requestAnimationFrame(() => setPageReady(true))
-    })
+    setPageReady(true)
   }, [])
 
   const handleAgeConfirm = () => {
