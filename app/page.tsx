@@ -80,9 +80,9 @@ function TestimonialsCarousel() {
           >
             {testimonials.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-1">
-                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[140px] flex flex-col justify-between">
-                  <p className="text-sm text-foreground leading-relaxed line-clamp-4">{`"${testimonial.text}"`}</p>
-                  <div className="flex items-center justify-between mt-2">
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 min-h-[140px] flex flex-col justify-between">
+                  <p className="text-sm text-foreground leading-relaxed">{`"${testimonial.text}"`}</p>
+                  <div className="flex items-center justify-between mt-3">
                     <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
                     <p className="text-xs text-muted-foreground">{testimonial.time}</p>
                   </div>
@@ -271,6 +271,7 @@ export default function VIPSubscriptionPage() {
 
   const handleAgeConfirm = () => {
     setAgeVerified(true)
+    setShowContent(true)
   }
 
   const faqItems = [
@@ -307,10 +308,7 @@ export default function VIPSubscriptionPage() {
       {/* Age verification screen */}
       {!showContent && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-          onTransitionEnd={() => {
-            if (ageVerified) setShowContent(true)
-          }}
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-300 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <div className="text-center w-full max-w-sm mx-auto">
             {/* Age warning box */}
