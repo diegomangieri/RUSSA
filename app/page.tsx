@@ -80,7 +80,7 @@ function TestimonialsCarousel() {
           >
             {testimonials.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-1">
-                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 min-h-[140px] flex flex-col justify-between">
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[180px] flex flex-col justify-between">
                   <p className="text-sm text-foreground leading-relaxed">{`"${testimonial.text}"`}</p>
                   <div className="flex items-center justify-between mt-3">
                     <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
