@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Mail, AlertCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
