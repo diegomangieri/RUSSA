@@ -454,7 +454,7 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview - Portrait */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
+        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="/images/gallery2.png"
             alt="Conteúdo Exclusivo"
@@ -476,7 +476,7 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview 2 */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden mb-4">
+        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
           <Image
             src="/images/gallery3.png"
             alt="Conteúdo Exclusivo"
@@ -498,7 +498,7 @@ export default function VIPSubscriptionPage() {
         </div>
 
         {/* Locked Content Preview 3 */}
-        <div className="relative aspect-[3/4] bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
+        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
           <Image
             src="/images/gallery4.png"
             alt="Conteúdo Exclusivo"
