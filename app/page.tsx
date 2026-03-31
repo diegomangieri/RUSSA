@@ -318,17 +318,20 @@ export default function VIPSubscriptionPage() {
       {/* Divider line */}
       <div className="h-px bg-zinc-200" />
 
-      {/* Hero Image Section - Preview */}
+      {/* Hero Video Section - Preview */}
       <div className="relative">
         <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-          <img
-            src="/images/gallery1.png"
-            alt="Conteúdo Exclusivo"
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110"
+          <video
+            src="/videos/preview-locked.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center blur-[30px] scale-110 pointer-events-none"
           />
           
           {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
             <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
               <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
                 <Lock className="w-7 h-7 text-zinc-600" />
