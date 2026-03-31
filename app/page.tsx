@@ -140,29 +140,7 @@ function ProfileBio() {
   )
 }
 
-const CRITICAL_IMAGES = [
-  '/images/profile.png',
-  '/images/banner.png',
-  '/images/gallery1.png',
-  '/images/gallery2.png',
-  '/images/gallery4.png',
-  '/videos/preview-locked.mp4',
-]
 
-function preloadImages(srcs: string[]): Promise<void[]> {
-  return Promise.all(
-    srcs.map(
-      (src) =>
-        new Promise<void>((resolve) => {
-          const img = new window.Image()
-          img.crossOrigin = 'anonymous'
-          img.onload = () => resolve()
-          img.onerror = () => resolve()
-          img.src = src
-        })
-    )
-  )
-}
 
 export default function VIPSubscriptionPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -264,9 +242,7 @@ export default function VIPSubscriptionPage() {
   }
 
   useEffect(() => {
-    preloadImages(CRITICAL_IMAGES).then(() => {
-      requestAnimationFrame(() => setPageReady(true))
-    })
+    setPageReady(true)
   }, [])
 
   const handleAgeConfirm = () => {
