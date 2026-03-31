@@ -80,10 +80,15 @@ function TestimonialsCarousel() {
           >
             {testimonials.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-1">
-                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[140px] flex flex-col justify-between">
-                  <p className="text-sm text-foreground leading-relaxed line-clamp-4">{`"${testimonial.text}"`}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                <div className="bg-zinc-50 rounded-2xl p-4 border border-zinc-200 h-[180px] flex flex-col justify-between">
+                  <p className="text-sm text-foreground leading-relaxed">{`"${testimonial.text}"`}</p>
+                  <div className="flex items-center justify-between mt-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">{testimonial.user.charAt(0)}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-medium">{testimonial.user}</p>
+                    </div>
                     <p className="text-xs text-muted-foreground">{testimonial.time}</p>
                   </div>
                 </div>
@@ -140,29 +145,7 @@ function ProfileBio() {
   )
 }
 
-const CRITICAL_IMAGES = [
-  '/images/profile.png',
-  '/images/banner.png',
-  '/images/gallery1.png',
-  '/images/gallery2.png',
-  '/images/gallery4.png',
-  '/videos/preview-locked.mp4',
-]
 
-function preloadImages(srcs: string[]): Promise<void[]> {
-  return Promise.all(
-    srcs.map(
-      (src) =>
-        new Promise<void>((resolve) => {
-          const img = new window.Image()
-          img.crossOrigin = 'anonymous'
-          img.onload = () => resolve()
-          img.onerror = () => resolve()
-          img.src = src
-        })
-    )
-  )
-}
 
 export default function VIPSubscriptionPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -264,13 +247,12 @@ export default function VIPSubscriptionPage() {
   }
 
   useEffect(() => {
-    preloadImages(CRITICAL_IMAGES).then(() => {
-      requestAnimationFrame(() => setPageReady(true))
-    })
+    setPageReady(true)
   }, [])
 
   const handleAgeConfirm = () => {
     setAgeVerified(true)
+    setShowContent(true)
   }
 
   const faqItems = [
@@ -307,10 +289,7 @@ export default function VIPSubscriptionPage() {
       {/* Age verification screen */}
       {!showContent && (
         <div 
-          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-500 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-          onTransitionEnd={() => {
-            if (ageVerified) setShowContent(true)
-          }}
+          className={`fixed inset-0 z-50 bg-white flex items-center justify-center px-6 transition-opacity duration-300 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'} ${ageVerified ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <div className="text-center w-full max-w-sm mx-auto">
             {/* Age warning box */}
