@@ -635,11 +635,11 @@ export default function VIPSubscriptionPage() {
               {/* QR Code Display */}
               {qrCodeData ? (
                 <div className="text-center">
-                  <div className="bg-white p-3 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                  <div className="mb-3 inline-block">
                     <img 
                       src={qrCodeData.qrCodeImage} 
                       alt="QR Code PIX" 
-                      className="w-40 h-40 mx-auto"
+                      className="w-56 h-56 mx-auto"
                     />
                   </div>
                   
