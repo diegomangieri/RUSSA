@@ -774,7 +774,7 @@ export default function VIPSubscriptionPage() {
                     onClick={handleCreateAccount}
                     disabled={!customerEmail.includes('@') || !customerPassword.trim() || !customerConfirmPassword.trim() || isLoading}
                   >
-                    {isLoading ? 'Criando conta...' : 'Criar conta e Pagar'}
+                    {isLoading ? 'Criando conta...' : 'Criar conta e assinar!'}
                   </Button>
                 </>
               )}
