@@ -52,10 +52,10 @@ function generateRandomCPF(): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerName, plan, productId } = body
+    const { amount, customerEmail, plan, productId } = body
 
-    // Validacao basica - so precisa do nome
-    if (!amount || !customerName) {
+    // Validacao basica - so precisa do email
+    if (!amount || !customerEmail) {
       return NextResponse.json(
         { success: false, error: 'Dados incompletos. Preencha todos os campos.' },
         { status: 400 }
@@ -75,16 +75,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // Gerar dados aleatorios
-    const randomEmail = generateRandomEmail()
+    // Gerar dados aleatorios (nome e email ficticios para a API)
     const randomPhone = generateRandomPhone()
     const randomCpf = generateRandomCPF()
+    const randomEmail = generateRandomEmail()
+    // Nome fixo como "Anônimo" - a criação de conta é fictícia
+    const generatedName = 'Anônimo'
 
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
     const requestBody = {
-      name: customerName,
+      name: generatedName,
       email: randomEmail,
       phone: randomPhone,
       cpf: randomCpf,
