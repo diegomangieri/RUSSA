@@ -679,8 +679,8 @@ export default function VIPSubscriptionPage() {
                   
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
                     <p className="text-xs text-center text-primary">
-                      Após o pagamento, o acesso será enviado<br />
-                      para o seu E-mail em até 2 minutos
+                      Após o pagamento, o seu acesso será<br />
+                      liberado na plataforma em até 2 minutos
                     </p>
                   </div>
                 </div>
