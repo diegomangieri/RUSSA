@@ -622,15 +622,12 @@ export default function VIPSubscriptionPage() {
 
               {/* Plan info */}
               {selectedPlan && (
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-bold text-foreground">
                     Plano {getPlanDetails(selectedPlan).name}
                   </h3>
-                  <p className="text-2xl font-bold text-primary">
+                  <p className="text-xl font-bold text-primary">
                     {getPlanDetails(selectedPlan).price}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {getPlanDetails(selectedPlan).days} de acesso
                   </p>
                 </div>
               )}
