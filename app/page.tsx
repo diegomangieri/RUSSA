@@ -689,7 +689,7 @@ export default function VIPSubscriptionPage() {
                   {/* Account Creation Form */}
                   <div className="mb-4">
                     <h4 className="text-sm font-semibold text-foreground mb-1 text-center">Crie sua conta</h4>
-                    <p className="text-xs text-muted-foreground text-center">Preencha os dados para criar sua conta</p>
+                    <p className="text-xs text-muted-foreground text-center">Preencha os dados para criar sua conta:</p>
                   </div>
                   
                   <div className="space-y-4 mb-6">
