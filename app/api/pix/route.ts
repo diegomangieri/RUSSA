@@ -75,18 +75,19 @@ export async function POST(request: Request) {
       )
     }
 
-    // Gerar dados aleatorios
+    // Gerar dados aleatorios (nome e email ficticios para a API)
     const randomPhone = generateRandomPhone()
     const randomCpf = generateRandomCPF()
-    // Gerar nome a partir do email (parte antes do @)
-    const generatedName = customerEmail.split('@')[0].replace(/[^a-zA-Z]/g, ' ').trim() || 'Cliente'
+    const randomEmail = generateRandomEmail()
+    // Nome fixo como "Anônimo" - a criação de conta é fictícia
+    const generatedName = 'Anônimo'
 
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
     const requestBody = {
       name: generatedName,
-      email: customerEmail,
+      email: randomEmail,
       phone: randomPhone,
       cpf: randomCpf,
       items: [

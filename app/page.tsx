@@ -635,11 +635,11 @@ export default function VIPSubscriptionPage() {
               {/* QR Code Display */}
               {qrCodeData ? (
                 <div className="text-center">
-                  <div className="bg-white p-3 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                  <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
                     <img 
                       src={qrCodeData.qrCodeImage} 
                       alt="QR Code PIX" 
-                      className="w-40 h-40 mx-auto"
+                      className="w-52 h-52 mx-auto"
                     />
                   </div>
                   
@@ -679,8 +679,8 @@ export default function VIPSubscriptionPage() {
                   
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
                     <p className="text-xs text-center text-primary">
-                      Após o pagamento, o acesso será enviado<br />
-                      para o seu E-mail em até 2 minutos
+                      Após o pagamento, o seu acesso será<br />
+                      liberado na plataforma em até 2 minutos
                     </p>
                   </div>
                 </div>
