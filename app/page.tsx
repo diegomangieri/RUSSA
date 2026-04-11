@@ -817,7 +817,7 @@ export default function VIPSubscriptionPage() {
                       <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
                         <p className="text-xs text-center text-primary">
                           Aguardando pagamento...<br />
-                          A tela atualizará automaticamente
+                          Seu acesso será liberado automaticamente!
                         </p>
                       </div>
                     </>
@@ -902,7 +902,7 @@ export default function VIPSubscriptionPage() {
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                     <p className="text-xs text-center text-primary">
                       Guarde bem seus dados de acesso!<br />
-                      Você usar�� para entrar na plataforma
+                      Você usará para entrar na plataforma
                     </p>
                   </div>
 
