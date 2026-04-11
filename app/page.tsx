@@ -187,16 +187,6 @@ export default function VIPSubscriptionPage() {
       })
     }
     
-    // TikTok Pixel tracking
-    if (typeof window !== 'undefined' && (window as any).ttq) {
-      (window as any).ttq.track('InitiateCheckout', {
-        content_name: `Plano ${plan}`,
-        content_category: 'subscription',
-        value: plan === 'semanal' ? 12.95 : plan === 'mensal' ? 17.95 : 27.95,
-        currency: 'BRL'
-      })
-    }
-    
     requestAnimationFrame(() => {
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
@@ -328,9 +318,9 @@ export default function VIPSubscriptionPage() {
         })
       }
       
-      // TikTok Pixel tracking - Lead/PIX generated
+      // TikTok Pixel tracking - AddToCart (QR Code gerado)
       if (typeof window !== 'undefined' && (window as any).ttq) {
-        (window as any).ttq.track('SubmitForm', {
+        (window as any).ttq.track('AddToCart', {
           content_name: `Plano ${selectedPlan}`,
           content_category: 'subscription',
           value: amount,
@@ -799,6 +789,18 @@ export default function VIPSubscriptionPage() {
                           if (!copied) {
                             navigator.clipboard.writeText(qrCodeData.qrCode)
                             setCopied(true)
+                            
+                            // TikTok Pixel tracking - InitiateCheckout (copiou PIX)
+                            if (typeof window !== 'undefined' && (window as any).ttq) {
+                              const planDetails = getPlanDetails(selectedPlan || 'semanal')
+                              const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+                              ;(window as any).ttq.track('InitiateCheckout', {
+                                content_name: `Plano ${selectedPlan}`,
+                                content_category: 'subscription',
+                                value: amount,
+                                currency: 'BRL'
+                              })
+                            }
                           }
                         }}
                         disabled={copied}
