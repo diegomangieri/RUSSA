@@ -176,6 +176,26 @@ export default function VIPSubscriptionPage() {
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
     
+    // Facebook Pixel tracking
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'InitiateCheckout', {
+        content_name: `Plano ${plan}`,
+        content_category: 'subscription',
+        value: plan === 'semanal' ? 12.95 : plan === 'mensal' ? 17.95 : 27.95,
+        currency: 'BRL'
+      })
+    }
+    
+    // TikTok Pixel tracking
+    if (typeof window !== 'undefined' && (window as any).ttq) {
+      (window as any).ttq.track('InitiateCheckout', {
+        content_name: `Plano ${plan}`,
+        content_category: 'subscription',
+        value: plan === 'semanal' ? 12.95 : plan === 'mensal' ? 17.95 : 27.95,
+        currency: 'BRL'
+      })
+    }
+    
     requestAnimationFrame(() => {
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
@@ -243,6 +263,26 @@ export default function VIPSubscriptionPage() {
         return
       }
       
+      // Facebook Pixel tracking - Lead/PIX generated
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: `Plano ${selectedPlan}`,
+          content_category: 'subscription',
+          value: amount,
+          currency: 'BRL'
+        })
+      }
+      
+      // TikTok Pixel tracking - Lead/PIX generated
+      if (typeof window !== 'undefined' && (window as any).ttq) {
+        (window as any).ttq.track('SubmitForm', {
+          content_name: `Plano ${selectedPlan}`,
+          content_category: 'subscription',
+          value: amount,
+          currency: 'BRL'
+        })
+      }
+      
       setQrCodeData(data.data)
     } catch (err) {
       setError('Erro de conexão. Tente novamente.')
@@ -253,7 +293,7 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case 'semanal': return { name: 'Semanal', price: 'R$ 9,95', days: '7 dias' }
+      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
       case 'mensal': return { name: 'Mensal', price: 'R$ 17,95', days: '30 dias' }
       case 'semestral': return { name: 'Semestral', price: 'R$ 27,95', days: '180 dias' }
       default: return { name: '', price: '', days: '' }
@@ -432,8 +472,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">7 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 29,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 9,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 29,95</p>
+                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
               </div>
             </div>
             <Button 
@@ -453,7 +493,7 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-white/70">30 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-white/70 line-through">R$ 59,90</p>
+                <p className="text-xs text-white/70 line-through">R$ 49,95</p>
                 <p className="text-2xl font-bold">R$ 17,95</p>
               </div>
             </div>
@@ -474,7 +514,7 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">180 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 99,90</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 89,95</p>
                 <p className="text-2xl font-bold text-foreground">R$ 27,95</p>
               </div>
             </div>
@@ -763,7 +803,7 @@ export default function VIPSubscriptionPage() {
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                     <p className="text-xs text-center text-primary">
                       Guarde bem seus dados de acesso!<br />
-                      Você usará para entrar na plataforma
+                      Você usar�� para entrar na plataforma
                     </p>
                   </div>
 
