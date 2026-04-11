@@ -162,11 +162,12 @@ export default function VIPSubscriptionPage() {
   const [qrCodeData, setQrCodeData] = useState<{
     qrCode: string
     qrCodeImage: string
-    transactionId: string
+    orderId: string
     amount: number
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [isPaid, setIsPaid] = useState(false)
 
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -175,6 +176,16 @@ export default function VIPSubscriptionPage() {
     setScrollPosition(currentScroll)
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
+    
+    // Facebook Pixel tracking
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'InitiateCheckout', {
+        content_name: `Plano ${plan}`,
+        content_category: 'subscription',
+        value: plan === 'semanal' ? 12.95 : plan === 'mensal' ? 17.95 : 27.95,
+        currency: 'BRL'
+      })
+    }
     
     requestAnimationFrame(() => {
       document.body.style.overflow = 'hidden'
@@ -202,7 +213,61 @@ export default function VIPSubscriptionPage() {
     setQrCodeData(null)
     setError(null)
     setCopied(false)
+    setIsPaid(false)
   }
+
+  // Polling para verificar status do pagamento
+  useEffect(() => {
+    if (!qrCodeData?.orderId || isPaid) return
+
+    const checkPaymentStatus = async () => {
+      try {
+        const response = await fetch('/api/pix/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: qrCodeData.orderId }),
+        })
+        const data = await response.json()
+        
+        if (data.success && data.data.isPaid) {
+          setIsPaid(true)
+          
+          const planDetails = getPlanDetails(selectedPlan || 'semanal')
+          const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+          
+          // Facebook Pixel tracking - Purchase
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'Purchase', {
+              content_name: `Plano ${selectedPlan}`,
+              content_category: 'subscription',
+              value: amount,
+              currency: 'BRL'
+            })
+          }
+          
+          // TikTok Pixel tracking - Purchase
+          if (typeof window !== 'undefined' && (window as any).ttq) {
+            (window as any).ttq.track('CompletePayment', {
+              content_name: `Plano ${selectedPlan}`,
+              content_category: 'subscription',
+              value: amount,
+              currency: 'BRL'
+            })
+          }
+        }
+      } catch (error) {
+        // Silently ignore check errors
+      }
+    }
+
+    // Verifica a cada 3 segundos
+    const interval = setInterval(checkPaymentStatus, 3000)
+    
+    // Verifica imediatamente na primeira vez
+    checkPaymentStatus()
+
+    return () => clearInterval(interval)
+  }, [qrCodeData?.orderId, isPaid, selectedPlan])
 
   const handleCreateAccount = async () => {
     if (!customerEmail.trim() || !customerPassword.trim() || !customerConfirmPassword.trim() || !selectedPlan) return
@@ -243,6 +308,26 @@ export default function VIPSubscriptionPage() {
         return
       }
       
+      // Facebook Pixel tracking - Lead/PIX generated
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: `Plano ${selectedPlan}`,
+          content_category: 'subscription',
+          value: amount,
+          currency: 'BRL'
+        })
+      }
+      
+      // TikTok Pixel tracking - AddToCart (QR Code gerado)
+      if (typeof window !== 'undefined' && (window as any).ttq) {
+        (window as any).ttq.track('AddToCart', {
+          content_name: `Plano ${selectedPlan}`,
+          content_category: 'subscription',
+          value: amount,
+          currency: 'BRL'
+        })
+      }
+      
       setQrCodeData(data.data)
     } catch (err) {
       setError('Erro de conexão. Tente novamente.')
@@ -253,7 +338,7 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case 'semanal': return { name: 'Semanal', price: 'R$ 9,95', days: '7 dias' }
+      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
       case 'mensal': return { name: 'Mensal', price: 'R$ 17,95', days: '30 dias' }
       case 'semestral': return { name: 'Semestral', price: 'R$ 27,95', days: '180 dias' }
       default: return { name: '', price: '', days: '' }
@@ -432,8 +517,8 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">7 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 29,90</p>
-                <p className="text-2xl font-bold text-foreground">R$ 9,95</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 29,95</p>
+                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
               </div>
             </div>
             <Button 
@@ -453,7 +538,7 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-white/70">30 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-white/70 line-through">R$ 59,90</p>
+                <p className="text-xs text-white/70 line-through">R$ 49,95</p>
                 <p className="text-2xl font-bold">R$ 17,95</p>
               </div>
             </div>
@@ -474,7 +559,7 @@ export default function VIPSubscriptionPage() {
                 <p className="text-xs text-muted-foreground">180 dias de acesso</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 99,90</p>
+                <p className="text-xs text-muted-foreground line-through">R$ 89,95</p>
                 <p className="text-2xl font-bold text-foreground">R$ 27,95</p>
               </div>
             </div>
@@ -635,54 +720,108 @@ export default function VIPSubscriptionPage() {
               {/* QR Code Display */}
               {qrCodeData ? (
                 <div className="text-center">
-                  <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
-                    <img 
-                      src={qrCodeData.qrCodeImage} 
-                      alt="QR Code PIX" 
-                      className="w-52 h-52 mx-auto"
-                    />
-                  </div>
-                  
-                  <p className="text-sm text-foreground font-medium mb-2">
-                    Escaneie o QR Code
-                  </p>
-                  
-                  <p className="text-xs text-muted-foreground mb-3">
-                    Ou copie o código PIX abaixo:
-                  </p>
-                  
-                  <div className="bg-zinc-100 rounded-xl p-2 mb-3">
-                    <p className="text-xs text-foreground break-all font-mono">
-                      {qrCodeData.qrCode.substring(0, 40)}...
-                    </p>
-                  </div>
-                  
-                  <Button 
-                    size="lg" 
-                    className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
-                    onClick={() => {
-                      if (!copied) {
-                        navigator.clipboard.writeText(qrCodeData.qrCode)
-                        setCopied(true)
-                      }
-                    }}
-                    disabled={copied}
-                  >
-                    {copied ? (
-                      <span className="flex items-center justify-center gap-2">
-                        Copiado <Check className="w-4 h-4" />
-                      </span>
-                    ) : (
-                      'Copiar Código PIX'
-                    )}
-                  </Button>
-                  
-                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
-                    <p className="text-xs text-center text-primary">
-                      Após o pagamento, o seu acesso será<br />
-                      liberado na plataforma em até 2 minutos
-                    </p>
-                  </div>
+                  {isPaid ? (
+                    <>
+                      {/* Pagamento Confirmado */}
+                      <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
+                        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Check className="w-10 h-10 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-green-700 mb-2">
+                          Pagamento Confirmado!
+                        </h3>
+                        <p className="text-sm text-green-600">
+                          Seu acesso foi liberado com sucesso.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-zinc-100 rounded-xl p-4 mb-4">
+                        <p className="text-sm text-foreground font-medium mb-1">
+                          Acesse a plataforma:
+                        </p>
+                        <a 
+                          href="https://russa.live/login" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary font-bold hover:underline"
+                        >
+                          russa.live/login
+                        </a>
+                      </div>
+                      
+                      <Button 
+                        size="lg" 
+                        className="w-full font-bold text-base h-11 bg-primary text-white hover:bg-[#e07520] active:scale-95"
+                        onClick={() => window.open('https://russa.live/login', '_blank')}
+                      >
+                        Acessar Plataforma
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {/* QR Code aguardando pagamento */}
+                      <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                        <img 
+                          src={qrCodeData.qrCodeImage} 
+                          alt="QR Code PIX" 
+                          className="w-52 h-52 mx-auto"
+                        />
+                      </div>
+                      
+                      <p className="text-sm text-foreground font-medium mb-2">
+                        Escaneie o QR Code
+                      </p>
+                      
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Ou copie o código PIX abaixo:
+                      </p>
+                      
+                      <div className="bg-zinc-100 rounded-xl p-2 mb-3">
+                        <p className="text-xs text-foreground break-all font-mono">
+                          {qrCodeData.qrCode.substring(0, 40)}...
+                        </p>
+                      </div>
+                      
+                      <Button 
+                        size="lg" 
+                        className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
+                        onClick={() => {
+                          if (!copied) {
+                            navigator.clipboard.writeText(qrCodeData.qrCode)
+                            setCopied(true)
+                            
+                            // TikTok Pixel tracking - InitiateCheckout (copiou PIX)
+                            if (typeof window !== 'undefined' && (window as any).ttq) {
+                              const planDetails = getPlanDetails(selectedPlan || 'semanal')
+                              const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+                              ;(window as any).ttq.track('InitiateCheckout', {
+                                content_name: `Plano ${selectedPlan}`,
+                                content_category: 'subscription',
+                                value: amount,
+                                currency: 'BRL'
+                              })
+                            }
+                          }
+                        }}
+                        disabled={copied}
+                      >
+                        {copied ? (
+                          <span className="flex items-center justify-center gap-2">
+                            Copiado <Check className="w-4 h-4" />
+                          </span>
+                        ) : (
+                          'Copiar Código PIX'
+                        )}
+                      </Button>
+                      
+                      <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
+                        <p className="text-xs text-center text-primary">
+                          Aguardando pagamento...<br />
+                          A tela atualizará automaticamente
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               ) : (
                 <>
@@ -763,7 +902,7 @@ export default function VIPSubscriptionPage() {
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                     <p className="text-xs text-center text-primary">
                       Guarde bem seus dados de acesso!<br />
-                      Você usará para entrar na plataforma
+                      Você usar�� para entrar na plataforma
                     </p>
                   </div>
 
