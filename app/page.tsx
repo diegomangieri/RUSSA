@@ -817,7 +817,7 @@ export default function VIPSubscriptionPage() {
                       <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
                         <p className="text-xs text-center text-primary">
                           Aguardando pagamento...<br />
-                          A tela atualizará automaticamente
+                          Seu acesso será liberado automaticamente!
                         </p>
                       </div>
                     </>
@@ -863,7 +863,7 @@ export default function VIPSubscriptionPage() {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
                         </button>
                       </div>
                     </div>
@@ -885,7 +885,7 @@ export default function VIPSubscriptionPage() {
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showConfirmPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
                         </button>
                       </div>
                     </div>
@@ -902,7 +902,7 @@ export default function VIPSubscriptionPage() {
                   <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
                     <p className="text-xs text-center text-primary">
                       Guarde bem seus dados de acesso!<br />
-                      Você usar�� para entrar na plataforma
+                      Você usará para entrar na plataforma
                     </p>
                   </div>
 
