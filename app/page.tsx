@@ -162,11 +162,12 @@ export default function VIPSubscriptionPage() {
   const [qrCodeData, setQrCodeData] = useState<{
     qrCode: string
     qrCodeImage: string
-    transactionId: string
+    orderId: string
     amount: number
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [isPaid, setIsPaid] = useState(false)
 
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -222,7 +223,61 @@ export default function VIPSubscriptionPage() {
     setQrCodeData(null)
     setError(null)
     setCopied(false)
+    setIsPaid(false)
   }
+
+  // Polling para verificar status do pagamento
+  useEffect(() => {
+    if (!qrCodeData?.orderId || isPaid) return
+
+    const checkPaymentStatus = async () => {
+      try {
+        const response = await fetch('/api/pix/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: qrCodeData.orderId }),
+        })
+        const data = await response.json()
+        
+        if (data.success && data.data.isPaid) {
+          setIsPaid(true)
+          
+          const planDetails = getPlanDetails(selectedPlan || 'semanal')
+          const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+          
+          // Facebook Pixel tracking - Purchase
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'Purchase', {
+              content_name: `Plano ${selectedPlan}`,
+              content_category: 'subscription',
+              value: amount,
+              currency: 'BRL'
+            })
+          }
+          
+          // TikTok Pixel tracking - Purchase
+          if (typeof window !== 'undefined' && (window as any).ttq) {
+            (window as any).ttq.track('CompletePayment', {
+              content_name: `Plano ${selectedPlan}`,
+              content_category: 'subscription',
+              value: amount,
+              currency: 'BRL'
+            })
+          }
+        }
+      } catch (error) {
+        // Silently ignore check errors
+      }
+    }
+
+    // Verifica a cada 3 segundos
+    const interval = setInterval(checkPaymentStatus, 3000)
+    
+    // Verifica imediatamente na primeira vez
+    checkPaymentStatus()
+
+    return () => clearInterval(interval)
+  }, [qrCodeData?.orderId, isPaid, selectedPlan])
 
   const handleCreateAccount = async () => {
     if (!customerEmail.trim() || !customerPassword.trim() || !customerConfirmPassword.trim() || !selectedPlan) return
@@ -675,54 +730,96 @@ export default function VIPSubscriptionPage() {
               {/* QR Code Display */}
               {qrCodeData ? (
                 <div className="text-center">
-                  <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
-                    <img 
-                      src={qrCodeData.qrCodeImage} 
-                      alt="QR Code PIX" 
-                      className="w-52 h-52 mx-auto"
-                    />
-                  </div>
-                  
-                  <p className="text-sm text-foreground font-medium mb-2">
-                    Escaneie o QR Code
-                  </p>
-                  
-                  <p className="text-xs text-muted-foreground mb-3">
-                    Ou copie o código PIX abaixo:
-                  </p>
-                  
-                  <div className="bg-zinc-100 rounded-xl p-2 mb-3">
-                    <p className="text-xs text-foreground break-all font-mono">
-                      {qrCodeData.qrCode.substring(0, 40)}...
-                    </p>
-                  </div>
-                  
-                  <Button 
-                    size="lg" 
-                    className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
-                    onClick={() => {
-                      if (!copied) {
-                        navigator.clipboard.writeText(qrCodeData.qrCode)
-                        setCopied(true)
-                      }
-                    }}
-                    disabled={copied}
-                  >
-                    {copied ? (
-                      <span className="flex items-center justify-center gap-2">
-                        Copiado <Check className="w-4 h-4" />
-                      </span>
-                    ) : (
-                      'Copiar Código PIX'
-                    )}
-                  </Button>
-                  
-                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
-                    <p className="text-xs text-center text-primary">
-                      Após o pagamento, o seu acesso será<br />
-                      liberado na plataforma em até 2 minutos
-                    </p>
-                  </div>
+                  {isPaid ? (
+                    <>
+                      {/* Pagamento Confirmado */}
+                      <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
+                        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Check className="w-10 h-10 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-green-700 mb-2">
+                          Pagamento Confirmado!
+                        </h3>
+                        <p className="text-sm text-green-600">
+                          Seu acesso foi liberado com sucesso.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-zinc-100 rounded-xl p-4 mb-4">
+                        <p className="text-sm text-foreground font-medium mb-1">
+                          Acesse a plataforma:
+                        </p>
+                        <a 
+                          href="https://russa.live/login" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary font-bold hover:underline"
+                        >
+                          russa.live/login
+                        </a>
+                      </div>
+                      
+                      <Button 
+                        size="lg" 
+                        className="w-full font-bold text-base h-11 bg-primary text-white hover:bg-[#e07520] active:scale-95"
+                        onClick={() => window.open('https://russa.live/login', '_blank')}
+                      >
+                        Acessar Plataforma
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {/* QR Code aguardando pagamento */}
+                      <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                        <img 
+                          src={qrCodeData.qrCodeImage} 
+                          alt="QR Code PIX" 
+                          className="w-52 h-52 mx-auto"
+                        />
+                      </div>
+                      
+                      <p className="text-sm text-foreground font-medium mb-2">
+                        Escaneie o QR Code
+                      </p>
+                      
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Ou copie o código PIX abaixo:
+                      </p>
+                      
+                      <div className="bg-zinc-100 rounded-xl p-2 mb-3">
+                        <p className="text-xs text-foreground break-all font-mono">
+                          {qrCodeData.qrCode.substring(0, 40)}...
+                        </p>
+                      </div>
+                      
+                      <Button 
+                        size="lg" 
+                        className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
+                        onClick={() => {
+                          if (!copied) {
+                            navigator.clipboard.writeText(qrCodeData.qrCode)
+                            setCopied(true)
+                          }
+                        }}
+                        disabled={copied}
+                      >
+                        {copied ? (
+                          <span className="flex items-center justify-center gap-2">
+                            Copiado <Check className="w-4 h-4" />
+                          </span>
+                        ) : (
+                          'Copiar Código PIX'
+                        )}
+                      </Button>
+                      
+                      <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
+                        <p className="text-xs text-center text-primary">
+                          Aguardando pagamento...<br />
+                          A tela atualizará automaticamente
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               ) : (
                 <>
