@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const apiToken = process.env.FRUITFY_API_TOKEN
+    const apiToken = process.env.FRUITFY_API_KEY
     // Limpa o Store ID caso tenha vindo com prefixo "Store-Id: "
     const rawStoreId = process.env.FRUITFY_STORE_ID || ''
     const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
