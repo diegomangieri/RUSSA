@@ -383,6 +383,7 @@ export default function VIPSubscriptionPage() {
             muted
             playsInline
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover"
+            style={{ objectPosition: 'center 25%' }}
           />
         </div>
       </div>
