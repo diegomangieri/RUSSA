@@ -157,6 +157,7 @@ export default function VIPSubscriptionPage() {
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
+  const [showPayment, setShowPayment] = useState(false)
 
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -184,9 +185,6 @@ export default function VIPSubscriptionPage() {
       document.body.style.left = '0'
       document.body.style.right = '0'
     })
-
-    // Gera o PIX automaticamente ao abrir o checkout
-    generatePix(plan)
   }
 
   const closeCheckout = () => {
@@ -207,6 +205,7 @@ export default function VIPSubscriptionPage() {
     setError(null)
     setCopied(false)
     setIsPaid(false)
+    setShowPayment(false)
   }
 
   // Polling para verificar status do pagamento
@@ -265,6 +264,7 @@ export default function VIPSubscriptionPage() {
   const generatePix = async (plan: string) => {
     if (!plan) return
 
+    setShowPayment(true)
     setIsLoading(true)
     setError(null)
 
@@ -551,36 +551,26 @@ export default function VIPSubscriptionPage() {
               </button>
 
               {/* Creator profile header */}
-              <div className="-mx-6 -mt-6 mb-4">
-                <div className="relative h-24 w-full overflow-hidden rounded-t-3xl">
-                  <Image
-                    src="/images/banner.png"
-                    alt="Capa"
-                    fill
-                    className="object-cover object-center"
-                  />
-                </div>
-                <div className="flex flex-col items-center -mt-10 px-6">
-                  <div className="relative">
-                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
-                      <Image
-                        src="/images/profile.jpg"
-                        alt="LANA OFICIAL"
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
+              <div className="flex flex-col items-center mb-4 mt-2">
+                <div className="relative">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
+                    <Image
+                      src="/images/profile.jpg"
+                      alt="LANA OFICIAL"
+                      width={80}
+                      height={80}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <div className="flex items-center gap-1.5 mt-2">
-                    <h3 className="text-lg font-bold text-foreground">LANA OFICIAL</h3>
-                    <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check className="w-3 h-3 text-white" />
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+                  <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
                 </div>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <h3 className="text-lg font-bold text-foreground">LANA OFICIAL</h3>
+                  <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                    <Check className="w-3 h-3 text-white" />
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
               </div>
 
               {/* Benefits */}
@@ -605,7 +595,15 @@ export default function VIPSubscriptionPage() {
               </div>
 
               {/* Payment section */}
-              {isPaid ? (
+              {!showPayment ? (
+                <Button 
+                  size="lg" 
+                  className="w-full font-bold text-base h-14 text-white shadow-md active:scale-95 transition-all duration-150 rounded-full bg-gradient-to-r from-[#f7561e] to-[#f9a531] hover:opacity-90"
+                  onClick={() => selectedPlan && generatePix(selectedPlan)}
+                >
+                  ASSINAR AGORA!
+                </Button>
+              ) : isPaid ? (
                 <div className="text-center">
                   <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
                     <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
