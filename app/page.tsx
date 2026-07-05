@@ -21,7 +21,7 @@ const testimonials = [
     time: "1 dia atrás"
   },
   {
-    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Thayse é diferente de todas, gostosa demais! 😮‍💨",
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
     user: "Matheus S.",
     time: "2 dias atrás"
   },
@@ -105,7 +105,7 @@ function TestimonialsCarousel() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'LOIRINHA GOSTOSA E SAFADA 💗🤪🔥 NÃO SOU ATRIZ, SOU PUT* DE VERDADE. 🔞🔥 E eu não vim pra brincar. Vim pra ser a melhor. 👑 Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais me esperando por você...'
+  const bioText = 'LOIRINHA, GOSTOSA E SAFADA 💗🤪🔥 NÃO SOU ATRIZ, SOU PUTA DE VERDADE. E eu não vim pra brincar, vim pra ser a melhor. 👑 Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais...'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -358,8 +358,8 @@ export default function VIPSubscriptionPage() {
       answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
     },
     {
-      question: "Como vou acessar os conteúdos?",
-      answer: "Após assinar, você receberá o acesso exclusivo via E-mail + o Grupo VIP com conteúdos extras, interação direta e atualizações diárias."
+    question: "Como funciona a chamada de vídeo?",
+    answer: "Basta mandar uma mensagem no chat da criadora de conteúdo e combinar o horário."
     }
   ]
 
@@ -400,7 +400,7 @@ export default function VIPSubscriptionPage() {
               <div className="w-full h-full rounded-full overflow-hidden border-2 border-white">
                 <Image
                   src="/images/profile.jpg"
-                  alt="Eduarda Oficial"
+                  alt="Lana Oficial"
                   width={84}
                   height={84}
                   className="w-full h-full object-cover rounded-full"
@@ -409,8 +409,7 @@ export default function VIPSubscriptionPage() {
               </div>
             </div>
             {/* AO VIVO badge */}
-            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-red-500 rounded-full px-2 py-0.5 shadow-md whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 flex items-center justify-center bg-red-500 rounded-full px-2.5 py-0.5 shadow-md whitespace-nowrap">
               <span className="text-[9px] font-bold text-white tracking-wide leading-none">AO VIVO</span>
             </div>
           </div>
@@ -439,12 +438,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">EDUARDA OFICIAL</h2>
+              <h2 className="text-lg font-bold text-foreground">LANA OFICIAL</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@eduardaoficial1_</p>
+              <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
         </div>
         
         <ProfileBio />

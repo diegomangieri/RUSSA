@@ -7,8 +7,8 @@ import './globals.css'
 const _inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Conteúdos Eduarda Oficial',
-  description: 'Acesse os conteúdos exclusivos da Eduarda Oficial. Fotos, vídeos e muito mais.',
+  title: 'Conteúdos Lana Oficial',
+  description: 'Acesse os conteúdos exclusivos da Lana Oficial. Fotos, vídeos e muito mais.',
   generator: 'v0.app',
   icons: {
     icon: [

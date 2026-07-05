@@ -83,7 +83,7 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
         <div className="w-9 h-9 rounded-full overflow-hidden border border-zinc-200 shrink-0">
           <Image
             src="/images/profile.jpg"
-            alt="Eduarda Oficial"
+            alt="Lana Oficial"
             width={36}
             height={36}
             className="w-full h-full object-cover"
@@ -91,12 +91,12 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-sm text-foreground truncate">EDUARDA OFICIAL</span>
+            <span className="font-semibold text-sm text-foreground truncate">LANA OFICIAL</span>
             <span className="w-4 h-4 rounded-full bg-primary flex items-center justify-center shrink-0">
               <Check className="w-2.5 h-2.5 text-white" />
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">@eduardaoficial1_</p>
+          <p className="text-xs text-muted-foreground">@lanaoficial1_</p>
         </div>
         <MoreVertical className="w-5 h-5 text-muted-foreground shrink-0" />
       </div>
@@ -140,13 +140,13 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
 
       {/* Actions */}
       <div className="flex items-center gap-5 px-4 py-3">
-        <button aria-label="Curtir" onClick={onUnlock}>
+        <button aria-label="Curtir">
           <Heart className="w-6 h-6 text-foreground" />
         </button>
-        <button aria-label="Comentar" onClick={onUnlock}>
+        <button aria-label="Comentar">
           <MessageCircle className="w-6 h-6 text-foreground" />
         </button>
-        <button aria-label="Salvar" onClick={onUnlock} className="ml-auto">
+        <button aria-label="Salvar" className="ml-auto">
           <Bookmark className="w-6 h-6 text-foreground" />
         </button>
       </div>
