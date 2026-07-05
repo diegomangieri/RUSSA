@@ -143,6 +143,20 @@ function getCookie(name: string): string | undefined {
   return match ? match[2] : undefined
 }
 
+// Captura os parâmetros UTM da URL atual para enviar à Fruitfy (e assim a
+// UTMify rastrear a origem das vendas). Retorna null se não houver nenhum.
+function getUtmParams(): Record<string, string> | null {
+  if (typeof window === 'undefined') return null
+  const params = new URLSearchParams(window.location.search)
+  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+  const utm: Record<string, string> = {}
+  keys.forEach((k) => {
+    const v = params.get(k)
+    if (v) utm[k] = v
+  })
+  return Object.keys(utm).length > 0 ? utm : null
+}
+
 export default function VIPSubscriptionPage() {
   const [showQuiz, setShowQuiz] = useState(true)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -288,6 +302,7 @@ export default function VIPSubscriptionPage() {
           amount,
           customerEmail: randomEmail,
           plan: plan,
+          utm: getUtmParams(),
         }),
       })
       

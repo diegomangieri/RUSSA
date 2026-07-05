@@ -59,7 +59,7 @@ function generateRandomCPF(): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerEmail, plan, productId } = body
+    const { amount, customerEmail, plan, productId, utm } = body
 
     // Validacao basica - so precisa do email
     if (!amount || !customerEmail) {
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
-    const requestBody = {
+    const requestBody: Record<string, unknown> = {
       name: generatedName,
       email: randomEmail,
       phone: randomPhone,
@@ -104,6 +104,12 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
+    }
+
+    // Repassa as UTMs capturadas no site para a Fruitfy, para que a UTMify
+    // rastreie corretamente a origem das vendas. A API espera uma string JSON.
+    if (utm && typeof utm === 'object' && Object.keys(utm).length > 0) {
+      requestBody.utm = JSON.stringify(utm)
     }
 
     const response = await fetch(`${FRUITFY_API_URL}/api/pix/charge`, {
