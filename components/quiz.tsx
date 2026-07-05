@@ -33,7 +33,7 @@ const STEPS: QuizStep[] = [
     type: 'question',
     emoji: '😍',
     title: 'Você gosta de conteúdo exclusivo?',
-    subtitle: 'Conteúdo que ela não posta em nenhum outro lugar...',
+    subtitle: 'Conteúdo que eu não posto em nenhum outro lugar...',
     options: ['Sim, muito!', 'Depende.'],
   },
   {
