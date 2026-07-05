@@ -24,7 +24,7 @@ export function ContentTabs({ children, onUnlock }: ContentTabsProps) {
           }`}
         >
           <LayoutGrid className="w-4 h-4" />
-          734 POSTAGENS
+          754 POSTAGENS
         </button>
         <button
           onClick={() => setTab('media')}
@@ -35,7 +35,7 @@ export function ContentTabs({ children, onUnlock }: ContentTabsProps) {
           }`}
         >
           <PlaySquare className="w-4 h-4" />
-          363 MÍDIAS
+          371 MÍDIAS
         </button>
       </div>
 
@@ -60,7 +60,7 @@ function MediaGrid({ onUnlock }: { onUnlock: () => void }) {
         ))}
       </div>
       <p className="text-center text-xs text-muted-foreground pt-3">
-        Mostrando 12 de 754 mídias
+        Mostrando 12 de 371 mídias
       </p>
     </div>
   )

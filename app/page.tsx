@@ -45,8 +45,6 @@ function TestimonialsCarousel() {
 
   return (
     <div className="px-4 py-6 bg-white">
-      <h3 className="text-2xl font-bold text-foreground mb-4">{"O que estão falando 🤭"}</h3>
-      
       <div className="relative">
         {/* Left Arrow */}
         <button 
@@ -330,7 +328,7 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case '30dias': return { name: '30 Dias', price: 'R$ 9,97', days: '30 dias' }
+      case '30dias': return { name: '30 Dias', price: 'R$ 9,99', days: '30 dias' }
       case '3meses': return { name: '3 Meses', price: 'R$ 14,90', days: '90 dias' }
       case '1ano': return { name: '1 Ano', price: 'R$ 19,90', days: '365 dias' }
       case 'vitalicio': return { name: 'Vitalício', price: 'R$ 24,90', days: 'Acesso vitalício' }

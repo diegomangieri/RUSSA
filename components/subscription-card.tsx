@@ -12,7 +12,7 @@ type PromoPlan = {
 }
 
 const promoPlans: PromoPlan[] = [
-  { key: '3meses', label: '3 Meses', price: 'R$ 14,90', badge: 'Mais popular', badgeColor: 'green', icon: true },
+  { key: '3meses', label: '3 Meses', price: 'R$ 14,90', badge: 'Mais popular', badgeColor: 'green' },
   { key: '1ano', label: '1 Ano', price: 'R$ 19,90', badge: 'Melhor oferta', badgeColor: 'green' },
   { key: 'vitalicio', label: 'Vitalício', price: 'R$ 24,90', badge: 'Exclusivo', badgeColor: 'orange' },
 ]
@@ -21,7 +21,7 @@ export default function SubscriptionCard({ onSubscribe }: { onSubscribe: (plan: 
   return (
     <div className="px-4 py-4">
       <div className="bg-white rounded-2xl shadow-md border border-zinc-100 p-5 max-w-md mx-auto">
-        <h3 className="text-center text-lg font-bold text-foreground mb-4">Assinaturas</h3>
+        <h3 className="text-center text-xl font-bold text-foreground mb-4">Assinaturas</h3>
 
         {/* Tabs */}
         <div className="flex items-center justify-center gap-2 mb-5">
@@ -40,7 +40,7 @@ export default function SubscriptionCard({ onSubscribe }: { onSubscribe: (plan: 
         >
           <span>30 Dias</span>
           <span className="flex items-center gap-1">
-            R$ 9,97 <ArrowRight className="w-4 h-4" />
+            R$ 9,99 <ArrowRight className="w-4 h-4" />
           </span>
         </button>
 
