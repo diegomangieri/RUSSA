@@ -44,7 +44,7 @@ export default function Quiz({ onComplete }: QuizProps) {
 function StartStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center text-center">
-      <div className="text-6xl mb-6" role="img" aria-label="fogo">
+      <div className="text-6xl mb-6 animate-fire origin-bottom" role="img" aria-label="fogo">
         🔥
       </div>
 
@@ -54,7 +54,7 @@ function StartStep({ onNext }: { onNext: () => void }) {
 
       <p className="mt-3 text-base text-muted-foreground">
         {'Descubra o conteúdo exclusivo da '}
-        <span className="text-primary font-semibold">dudinha</span>
+        <span className="text-primary font-semibold">Laninha</span>
       </p>
 
       <button
