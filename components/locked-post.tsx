@@ -118,6 +118,7 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
             loop
             muted
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover blur-[4px] scale-105 pointer-events-none"
           />
         ) : imageSrc ? (

@@ -136,6 +136,13 @@ function ProfileBio() {
 
 
 
+// Lê um cookie pelo nome (usado para pegar os cookies do Facebook _fbp/_fbc)
+function getCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? match[2] : undefined
+}
+
 export default function VIPSubscriptionPage() {
   const [showQuiz, setShowQuiz] = useState(true)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -212,19 +219,37 @@ export default function VIPSubscriptionPage() {
         
         if (data.success && data.data.isPaid) {
           setIsPaid(true)
-          
+
           const planDetails = getPlanDetails(selectedPlan || 'semanal')
           const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
-          
-          // Facebook Pixel tracking - Purchase
+          const orderId = qrCodeData.orderId
+
+          // Facebook Pixel (navegador) - Purchase. event_id = orderId para
+          // deduplicar com o disparo server-side (CAPI).
           if (typeof window !== 'undefined' && (window as any).fbq) {
             (window as any).fbq('track', 'Purchase', {
               content_name: `Plano ${selectedPlan}`,
               content_category: 'subscription',
               value: amount,
-              currency: 'BRL'
-            })
+              currency: 'BRL',
+            }, { eventID: orderId })
           }
+
+          // Disparo server-side (Conversions API) para garantir que a venda
+          // apareça no Gerenciador de Eventos. Envia os cookies do Facebook
+          // do navegador para melhor correspondência.
+          fetch('/api/capi/purchase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orderId,
+              value: amount,
+              contentName: `Plano ${selectedPlan}`,
+              fbp: getCookie('_fbp'),
+              fbc: getCookie('_fbc'),
+              eventSourceUrl: window.location.href,
+            }),
+          }).catch(() => {})
         }
       } catch (error) {
         // Silently ignore check errors
@@ -361,16 +386,17 @@ export default function VIPSubscriptionPage() {
       {/* Main content with fade-in effect */}
       <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
       {/* Banner Section */}
-      <div className="w-full bg-zinc-900">
-        <div className="relative w-full h-[180px] overflow-hidden">
+      <div className="w-full bg-white">
+        <div className="relative w-full h-[180px] overflow-hidden bg-white">
           <video
             src="/videos/banner.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="absolute left-1/2 top-1/2 w-full h-full object-cover"
-            style={{ transform: 'translate(-50%, -50%) scale(1.15)', objectPosition: 'center 62%' }}
+            preload="auto"
+            className="absolute left-1/2 top-1/2 min-w-full min-h-full w-auto h-auto object-cover"
+            style={{ transform: 'translate(-50%, -50%) scale(1.3)', objectPosition: 'center 62%' }}
           />
         </div>
       </div>
