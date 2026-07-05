@@ -93,7 +93,7 @@ function StartStep({
 }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center text-center">
-      <div className="text-6xl mb-6 animate-fire origin-bottom" role="img" aria-label="fogo">
+      <div className="text-6xl mb-6 emoji-fire origin-bottom" role="img" aria-label="fogo">
         {step.emoji}
       </div>
 
@@ -123,7 +123,7 @@ function QuestionStep({
 }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center text-center">
-      <div className="text-6xl mb-6 animate-wiggle origin-bottom" role="img" aria-label="emoji">
+      <div className="text-6xl mb-6 emoji-wiggle origin-bottom" role="img" aria-label="emoji">
         {step.emoji}
       </div>
 

@@ -147,7 +147,7 @@
   }
 }
 
-.animate-fire {
+.emoji-fire {
   animation: fire 1.2s ease-in-out infinite;
 }
 
@@ -169,6 +169,6 @@
   }
 }
 
-.animate-wiggle {
+.emoji-wiggle {
   animation: wiggle 1.4s ease-in-out infinite;
 }
