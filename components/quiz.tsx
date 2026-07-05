@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Etapas do quiz. Basta adicionar novos objetos aqui conforme as próximas telas.
 type QuizStep =
@@ -66,15 +66,45 @@ interface QuizProps {
 export default function Quiz({ onComplete }: QuizProps) {
   // step é 0-indexed. step 0 = tela inicial "Você está pronto?"
   const [step, setStep] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [fadeOut, setFadeOut] = useState(false)
 
   const progress = ((step + 1) / STEPS.length) * 100
 
   const goNext = () => {
     if (step >= STEPS.length - 1) {
-      onComplete()
+      setLoading(true)
       return
     }
     setStep((prev) => prev + 1)
+  }
+
+  // Tela de carregamento: aguarda ~2.5s, faz o fade e vai para os conteúdos.
+  useEffect(() => {
+    if (!loading) return
+    const fadeTimer = setTimeout(() => setFadeOut(true), 2200)
+    const doneTimer = setTimeout(() => onComplete(), 2900)
+    return () => {
+      clearTimeout(fadeTimer)
+      clearTimeout(doneTimer)
+    }
+  }, [loading, onComplete])
+
+  if (loading) {
+    return (
+      <div
+        className={`min-h-screen bg-background flex flex-col items-center justify-center gap-6 px-6 transition-opacity duration-700 ease-out ${
+          fadeOut ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
+        <div
+          className="h-12 w-12 rounded-full border-4 border-secondary border-t-primary animate-spin"
+          role="status"
+          aria-label="Carregando"
+        />
+        <p className="text-lg font-semibold text-foreground">Carregando conteúdos...</p>
+      </div>
+    )
   }
 
   const current = STEPS[step]
