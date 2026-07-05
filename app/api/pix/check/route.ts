@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 
 const FRUITFY_API_URL = 'https://api.fruitfy.io'
 
+// Credenciais fixas da Fruitfy (fallback). A env var, se existir, tem prioridade.
+const FRUITFY_API_TOKEN = '660|jLrPe5uzD89kronETfMwOpEGSOk1ZjCjdbMaoEDk2198c93c'
+const FRUITFY_STORE_ID = 'a129010c-16ca-455d-9ee1-5c3b16a18b16'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -14,8 +18,8 @@ export async function POST(request: Request) {
       )
     }
 
-    const apiToken = process.env.FRUITFY_API_TOKEN
-    const rawStoreId = process.env.FRUITFY_STORE_ID || ''
+    const apiToken = process.env.FRUITFY_API_TOKEN || FRUITFY_API_TOKEN
+    const rawStoreId = process.env.FRUITFY_STORE_ID || FRUITFY_STORE_ID
     const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
 
     if (!apiToken || !storeId) {

@@ -136,6 +136,27 @@ function ProfileBio() {
 
 
 
+// Lê um cookie pelo nome (usado para pegar os cookies do Facebook _fbp/_fbc)
+function getCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? match[2] : undefined
+}
+
+// Captura os parâmetros UTM da URL atual para enviar à Fruitfy (e assim a
+// UTMify rastrear a origem das vendas). Retorna null se não houver nenhum.
+function getUtmParams(): Record<string, string> | null {
+  if (typeof window === 'undefined') return null
+  const params = new URLSearchParams(window.location.search)
+  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+  const utm: Record<string, string> = {}
+  keys.forEach((k) => {
+    const v = params.get(k)
+    if (v) utm[k] = v
+  })
+  return Object.keys(utm).length > 0 ? utm : null
+}
+
 export default function VIPSubscriptionPage() {
   const [showQuiz, setShowQuiz] = useState(true)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -212,19 +233,37 @@ export default function VIPSubscriptionPage() {
         
         if (data.success && data.data.isPaid) {
           setIsPaid(true)
-          
+
           const planDetails = getPlanDetails(selectedPlan || 'semanal')
           const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
-          
-          // Facebook Pixel tracking - Purchase
+          const orderId = qrCodeData.orderId
+
+          // Facebook Pixel (navegador) - Purchase. event_id = orderId para
+          // deduplicar com o disparo server-side (CAPI).
           if (typeof window !== 'undefined' && (window as any).fbq) {
             (window as any).fbq('track', 'Purchase', {
               content_name: `Plano ${selectedPlan}`,
               content_category: 'subscription',
               value: amount,
-              currency: 'BRL'
-            })
+              currency: 'BRL',
+            }, { eventID: orderId })
           }
+
+          // Disparo server-side (Conversions API) para garantir que a venda
+          // apareça no Gerenciador de Eventos. Envia os cookies do Facebook
+          // do navegador para melhor correspondência.
+          fetch('/api/capi/purchase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orderId,
+              value: amount,
+              contentName: `Plano ${selectedPlan}`,
+              fbp: getCookie('_fbp'),
+              fbc: getCookie('_fbc'),
+              eventSourceUrl: window.location.href,
+            }),
+          }).catch(() => {})
         }
       } catch (error) {
         // Silently ignore check errors
@@ -263,6 +302,7 @@ export default function VIPSubscriptionPage() {
           amount,
           customerEmail: randomEmail,
           plan: plan,
+          utm: getUtmParams(),
         }),
       })
       
@@ -305,45 +345,24 @@ export default function VIPSubscriptionPage() {
     setPageReady(true)
   }, [])
 
-  // Pré-carrega todas as imagens e vídeos da página real enquanto o usuário
-  // ainda está no quiz, para que ao terminar não haja delay de carregamento.
+  // Trava o scroll do body enquanto o quiz (overlay) estiver ativo.
+  // A página real fica renderizada por baixo, carregando vídeos e imagens,
+  // de modo que ao concluir o quiz tudo já esteja 100% pronto.
   useEffect(() => {
-    const imagesToPreload = ['/images/profile.jpg']
-    imagesToPreload.forEach((src) => {
-      const img = new window.Image()
-      img.decoding = 'async'
-      img.src = src
-    })
-
-    const videosToPreload = [
-      '/videos/banner.mp4',
-      '/videos/video1.mp4',
-      '/videos/video2.mp4',
-      '/videos/video3.mp4',
-    ]
-    const videoEls: HTMLVideoElement[] = []
-    videosToPreload.forEach((src) => {
-      const v = document.createElement('video')
-      v.preload = 'auto'
-      v.muted = true
-      v.playsInline = true
-      v.src = src
-      v.load()
-      videoEls.push(v)
-    })
-
-    return () => {
-      videoEls.forEach((v) => {
-        v.src = ''
-        v.load()
-      })
+    if (showQuiz) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
-  }, [])
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [showQuiz])
 
   const faqItems = [
     {
       question: "É sigiloso? Vai aparecer na minha fatura?",
-      answer: "Sim, é 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
+      answer: "Sim, �� 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
     },
     {
       question: "Tenho acesso imediato aos conteúdos?",
@@ -369,25 +388,30 @@ export default function VIPSubscriptionPage() {
     semestral: 'https://go.fruitfypay.com/9gbJc3tfUXvv634Z',
   }
 
-  if (showQuiz) {
-    return <Quiz onComplete={() => setShowQuiz(false)} />
-  }
-
   return (
     <>
+      {/* Quiz como overlay por cima: a página real (abaixo) já renderiza
+          seus vídeos e imagens durante o quiz, eliminando o delay ao concluir. */}
+      {showQuiz && (
+        <div className="fixed inset-0 z-[100] bg-background overflow-y-auto">
+          <Quiz onComplete={() => setShowQuiz(false)} />
+        </div>
+      )}
+
       {/* Main content with fade-in effect */}
       <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
       {/* Banner Section */}
-      <div className="w-full bg-zinc-900">
-        <div className="relative w-full h-[180px] overflow-hidden">
+      <div className="w-full bg-white">
+        <div className="relative w-full h-[180px] overflow-hidden bg-white">
           <video
             src="/videos/banner.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="absolute left-1/2 top-1/2 w-full h-full object-cover"
-            style={{ transform: 'translate(-50%, -50%) scale(1.15)', objectPosition: 'center 62%' }}
+            preload="auto"
+            className="absolute left-1/2 top-1/2 min-w-full min-h-full w-auto h-auto object-cover"
+            style={{ transform: 'translate(-50%, -50%) scale(1.3)', objectPosition: 'center 62%' }}
           />
         </div>
       </div>

@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server'
 
 const FRUITFY_API_URL = 'https://api.fruitfy.io'
 
+// Credenciais fixas da Fruitfy (fallback). Assim não precisa reconfigurar
+// as variáveis de ambiente toda vez que gerar/duplicar o projeto.
+// A env var, se existir, tem prioridade sobre esses valores.
+const FRUITFY_API_TOKEN = '660|jLrPe5uzD89kronETfMwOpEGSOk1ZjCjdbMaoEDk2198c93c'
+const FRUITFY_STORE_ID = 'a129010c-16ca-455d-9ee1-5c3b16a18b16'
+const FRUITFY_PRODUCT_ID = 'a1dd8dc7-f491-4fa7-a495-96f57f3e10de'
+
 // Gerar E-mail aleatorio
 function generateRandomEmail(): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
@@ -52,7 +59,7 @@ function generateRandomCPF(): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerEmail, plan, productId } = body
+    const { amount, customerEmail, plan, productId, utm } = body
 
     // Validacao basica - so precisa do email
     if (!amount || !customerEmail) {
@@ -62,11 +69,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const apiToken = process.env.FRUITFY_API_TOKEN
+    const apiToken = process.env.FRUITFY_API_TOKEN || FRUITFY_API_TOKEN
     // Limpa o Store ID caso tenha vindo com prefixo "Store-Id: "
-    const rawStoreId = process.env.FRUITFY_STORE_ID || ''
+    const rawStoreId = process.env.FRUITFY_STORE_ID || FRUITFY_STORE_ID
     const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
-    const defaultProductId = process.env.FRUITFY_PRODUCT_ID
+    const defaultProductId = process.env.FRUITFY_PRODUCT_ID || FRUITFY_PRODUCT_ID
 
     if (!apiToken || !storeId) {
       return NextResponse.json(
@@ -85,7 +92,7 @@ export async function POST(request: Request) {
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
-    const requestBody = {
+    const requestBody: Record<string, unknown> = {
       name: generatedName,
       email: randomEmail,
       phone: randomPhone,
@@ -97,6 +104,12 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
+    }
+
+    // Repassa as UTMs capturadas no site para a Fruitfy, para que a UTMify
+    // rastreie corretamente a origem das vendas. A API espera uma string JSON.
+    if (utm && typeof utm === 'object' && Object.keys(utm).length > 0) {
+      requestBody.utm = JSON.stringify(utm)
     }
 
     const response = await fetch(`${FRUITFY_API_URL}/api/pix/charge`, {
