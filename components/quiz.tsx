@@ -33,8 +33,15 @@ const STEPS: QuizStep[] = [
     type: 'question',
     emoji: '😍',
     title: 'Você gosta de conteúdo exclusivo?',
-    subtitle: 'Conteúdo que ela não posta em nenhum outro lugar',
-    options: ['Sim, muito!', 'Depende...'],
+    subtitle: 'Conteúdo que ela não posta em nenhum outro lugar...',
+    options: ['Sim, muito!', 'Depende.'],
+  },
+  {
+    type: 'question',
+    emoji: '📱',
+    title: 'Você me acompanha nas redes sociais?',
+    subtitle: 'Já viu alguma coisa no meu Instagram ou Privacy?',
+    options: ['Sim, acompanho.', 'Nunca vi.'],
   },
 ]
 
@@ -116,7 +123,7 @@ function QuestionStep({
 }) {
   return (
     <div className="w-full max-w-md flex flex-col items-center text-center">
-      <div className="text-6xl mb-6" role="img" aria-label="emoji">
+      <div className="text-6xl mb-6 animate-wiggle origin-bottom" role="img" aria-label="emoji">
         {step.emoji}
       </div>
 
