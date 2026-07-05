@@ -396,20 +396,22 @@ export default function VIPSubscriptionPage() {
         <div className="flex items-end justify-between">
           {/* Profile picture - half overlapping banner */}
           <div className="-mt-[42px] relative">
-            <div className="w-[84px] h-[84px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg p-[3px]">
-              <Image
-                src="/images/profile.png"
-                alt="Eduarda Oficial"
-                width={84}
-                height={84}
-                className="w-full h-full object-cover rounded-full"
-                priority
-              />
+            <div className="w-[84px] h-[84px] rounded-full bg-red-500 overflow-hidden shadow-lg p-[3px]">
+              <div className="w-full h-full rounded-full overflow-hidden border-2 border-white">
+                <Image
+                  src="/images/profile.jpg"
+                  alt="Eduarda Oficial"
+                  width={84}
+                  height={84}
+                  className="w-full h-full object-cover rounded-full"
+                  priority
+                />
+              </div>
             </div>
             {/* AO VIVO badge */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-zinc-900 rounded-md px-2 py-0.5 shadow-md">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-white tracking-wide">AO VIVO</span>
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-red-500 rounded-full px-2 py-0.5 shadow-md whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
+              <span className="text-[9px] font-bold text-white tracking-wide leading-none">AO VIVO</span>
             </div>
           </div>
           
