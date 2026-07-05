@@ -117,10 +117,10 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover blur-xl scale-125 pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover blur-[2px] scale-105 pointer-events-none"
           />
         ) : imageSrc ? (
-          <Image src={imageSrc} alt="" fill className="object-cover blur-xl scale-125" sizes="100vw" />
+          <Image src={imageSrc} alt="" fill className="object-cover blur-[2px] scale-105" sizes="100vw" />
         ) : null}
 
         <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-4">
