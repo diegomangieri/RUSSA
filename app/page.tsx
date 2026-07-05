@@ -143,15 +143,68 @@ function getCookie(name: string): string | undefined {
   return match ? match[2] : undefined
 }
 
-// Captura os parâmetros UTM da URL atual para enviar à Fruitfy (e assim a
-// UTMify rastrear a origem das vendas). Retorna null se não houver nenhum.
+// Chaves de rastreamento que queremos capturar e persistir.
+const TRACKING_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_term',
+  'utm_content',
+  // Parâmetros de clique / UTMify (ajudam no match da origem)
+  'src',
+  'sck',
+  'fbclid',
+  'gclid',
+  'ttclid',
+]
+
+const UTM_STORAGE_KEY = 'russa_tracking_params'
+
+// Captura os parâmetros de rastreamento da URL atual e os persiste em
+// localStorage. Deve rodar assim que a pessoa entra no site (com os parâmetros
+// do anúncio na URL), para não perder a origem caso a URL mude depois.
+function captureTrackingParams(): void {
+  if (typeof window === 'undefined') return
+  try {
+    const params = new URLSearchParams(window.location.search)
+    const captured: Record<string, string> = {}
+    TRACKING_KEYS.forEach((k) => {
+      const v = params.get(k)
+      if (v) captured[k] = v
+    })
+    // Só sobrescreve o storage se a URL atual trouxe algum parâmetro novo.
+    if (Object.keys(captured).length > 0) {
+      const existing = getStoredTrackingParams() || {}
+      const merged = { ...existing, ...captured }
+      localStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(merged))
+    }
+  } catch {
+    // ignora erros de storage
+  }
+}
+
+function getStoredTrackingParams(): Record<string, string> | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(UTM_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+// Retorna apenas os parâmetros utm_* (formato esperado pela Fruitfy), lendo
+// primeiro da URL atual e caindo para o que foi persistido no storage.
 function getUtmParams(): Record<string, string> | null {
   if (typeof window === 'undefined') return null
   const params = new URLSearchParams(window.location.search)
-  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+  const stored = getStoredTrackingParams() || {}
+  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
   const utm: Record<string, string> = {}
-  keys.forEach((k) => {
-    const v = params.get(k)
+  utmKeys.forEach((k) => {
+    const v = params.get(k) || stored[k]
     if (v) utm[k] = v
   })
   return Object.keys(utm).length > 0 ? utm : null
@@ -343,6 +396,9 @@ export default function VIPSubscriptionPage() {
 
   useEffect(() => {
     setPageReady(true)
+    // Captura e persiste as UTMs/parâmetros de rastreamento assim que a pessoa
+    // entra no site, antes de qualquer navegação que possa limpar a URL.
+    captureTrackingParams()
   }, [])
 
   // Trava o scroll do body enquanto o quiz (overlay) estiver ativo.
