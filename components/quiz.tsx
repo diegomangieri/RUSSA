@@ -43,6 +43,13 @@ const STEPS: QuizStep[] = [
     subtitle: 'Já viu alguma coisa no meu Instagram ou Privacy?',
     options: ['Sim, acompanho.', 'Nunca vi.'],
   },
+  {
+    type: 'question',
+    emoji: '🙈',
+    title: 'Você quer ver tudo sem filtro?',
+    subtitle: 'Conteúdo pesado que não mostro pra ninguém.',
+    options: ['Sim, quero tudo.', 'Só o mais quente!'],
+  },
 ]
 
 interface QuizProps {
