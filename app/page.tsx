@@ -382,8 +382,8 @@ export default function VIPSubscriptionPage() {
             loop
             muted
             playsInline
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 object-cover"
-            style={{ width: '130px', height: '100vw' }}
+            className="absolute top-1/2 left-1/2 object-cover"
+            style={{ width: '130px', height: '100vw', transform: 'translate(-50%, calc(-50% - 60px)) rotate(90deg)' }}
           />
         </div>
       </div>
@@ -580,7 +580,7 @@ export default function VIPSubscriptionPage() {
               {/* Benefits */}
               <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-4 mb-5">
                 <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-1.5">
-                  <span className="text-primary">★</span> BENEFÍCIOS EXCLUSIVOS
+                  <span className="text-primary">���</span> BENEFÍCIOS EXCLUSIVOS
                 </p>
                 <ul className="flex flex-col gap-2.5">
                   {[
