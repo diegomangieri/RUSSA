@@ -1,80 +1,96 @@
 import { NextResponse } from 'next/server'
-import { sendPurchaseEvent } from '@/lib/meta-capi'
+import { sendPurchaseEvent, getClientIp } from '@/lib/meta-capi'
 
 // ============================================================================
 // Webhook da Fruitfy.
 //
-// Configure este endpoint no painel da Fruitfy como URL de notificação:
+// Configure este endpoint no painel da Fruitfy em Integrações > Webhooks,
+// cadastrando a URL de notificação:
 //   https://SEU-DOMINIO/api/webhook/fruitfy
 //
-// Ele dispara SOMENTE quando a venda é paga e envia o evento de Purchase
-// server-side (Conversions API) para o Meta, garantindo que a venda apareça
-// no Gerenciador de Eventos. Usa event_id = order_id para deduplicar com o
+// Ele dispara SOMENTE quando a venda é paga (evento "order_paid" /
+// order.status === "paid") e envia o evento de Purchase server-side
+// (Conversions API) para o Meta, garantindo que a venda apareça no
+// Gerenciador de Eventos. Usa event_id = order.id para deduplicar com o
 // evento disparado pelo navegador (fbq) e pelo /api/capi/purchase.
 // ============================================================================
 
-// Considera pago qualquer um destes status
-const PAID_STATUSES = ['paid', 'approved', 'completed', 'confirmed', 'success']
+// Eventos/statuses que representam pagamento confirmado
+const PAID_EVENTS = ['order_paid']
+const PAID_STATUSES = ['paid', 'approved', 'completed', 'confirmed']
 
-// Procura recursivamente uma chave (case-insensitive) dentro do payload,
-// já que o formato exato do webhook da Fruitfy pode variar.
-function findValue(obj: unknown, keys: string[]): unknown {
-  if (!obj || typeof obj !== 'object') return undefined
-  const lowerKeys = keys.map((k) => k.toLowerCase())
-  for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
-    if (lowerKeys.includes(k.toLowerCase()) && v != null && typeof v !== 'object') {
-      return v
-    }
-  }
-  for (const v of Object.values(obj as Record<string, unknown>)) {
-    if (v && typeof v === 'object') {
-      const found = findValue(v, keys)
-      if (found !== undefined) return found
-    }
-  }
-  return undefined
-}
+// Evita reprocessar o mesmo pedido (idempotência em memória).
+// Para produção com múltiplas instâncias, o Meta já deduplica pelo event_id,
+// então mesmo que dispare 2x a venda só é contada uma vez.
+const processedOrders = new Set<string>()
 
 export async function POST(request: Request) {
   try {
     const payload = await request.json().catch(() => ({}))
 
-    const status = String(
-      findValue(payload, ['status', 'payment_status', 'order_status']) || '',
-    ).toLowerCase()
+    const event = String(payload?.event || '').toLowerCase()
+    const order = payload?.order || {}
+    const status = String(order?.status || payload?.status || '').toLowerCase()
+
+    const isPaid = PAID_EVENTS.includes(event) || PAID_STATUSES.includes(status)
 
     // Só dispara quando estiver pago
-    if (!PAID_STATUSES.includes(status)) {
-      return NextResponse.json({ received: true, ignored: true, status })
+    if (!isPaid) {
+      return NextResponse.json({ received: true, ignored: true, event, status })
     }
 
-    const orderId = String(
-      findValue(payload, ['order_id', 'orderId', 'id', 'transaction_id']) || '',
-    )
-
-    // Valor pode vir em centavos ou em reais — normaliza para reais
-    const rawAmount = Number(
-      findValue(payload, ['amount', 'value', 'total', 'paid_amount']) || 0,
-    )
-    const value = rawAmount > 1000 ? rawAmount / 100 : rawAmount
-
-    const email = findValue(payload, ['email', 'customer_email']) as string | undefined
-    const phone = findValue(payload, ['phone', 'customer_phone', 'telephone']) as string | undefined
+    const orderId = String(order?.id || payload?.order_id || payload?.id || '')
 
     if (!orderId) {
-      return NextResponse.json({ received: true, error: 'order_id ausente' }, { status: 200 })
+      return NextResponse.json(
+        { received: true, error: 'order.id ausente no payload' },
+        { status: 200 },
+      )
     }
+
+    // Idempotência: se já processamos este pedido, não dispara de novo
+    if (processedOrders.has(orderId)) {
+      return NextResponse.json({ received: true, duplicated: true, orderId })
+    }
+    processedOrders.add(orderId)
+
+    // Valor pago vem em centavos -> converte para reais
+    const rawAmount = Number(
+      order?.total_paid_amount ??
+        order?.total_gross_amount ??
+        order?.total_net_amount ??
+        payload?.amount ??
+        0,
+    )
+    const value = rawAmount / 100
+
+    const customer = order?.customer || {}
+    const email = customer?.email as string | undefined
+    const phone = customer?.phone as string | undefined
+    const fullName = customer?.name as string | undefined
+    const document = customer?.document as string | undefined
+    const contentName =
+      order?.main_product?.name || order?.main_product_offer?.name || 'Assinatura'
 
     const result = await sendPurchaseEvent({
       eventId: orderId,
       value,
-      currency: 'BRL',
+      currency: order?.currency || 'BRL',
       email,
       phone,
-      contentName: 'Assinatura',
+      fullName,
+      document,
+      clientIp: getClientIp(request),
+      contentName,
     })
 
-    return NextResponse.json({ received: true, sent: result.ok, meta: result.body })
+    return NextResponse.json({
+      received: true,
+      sent: result.ok,
+      orderId,
+      value,
+      meta: result.body,
+    })
   } catch (error) {
     console.error('Erro no webhook da Fruitfy:', error)
     // Retorna 200 para a Fruitfy não ficar reenviando indefinidamente
@@ -82,7 +98,7 @@ export async function POST(request: Request) {
   }
 }
 
-// Alguns provedores validam o webhook com um GET antes de ativar
+// A Fruitfy/alguns provedores podem validar o webhook com um GET antes de ativar
 export async function GET() {
   return NextResponse.json({ ok: true, webhook: 'fruitfy' })
 }

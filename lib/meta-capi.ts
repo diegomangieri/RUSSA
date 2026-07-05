@@ -27,6 +27,10 @@ export type PurchaseEventInput = {
   currency?: string
   email?: string | null
   phone?: string | null
+  /** Nome completo do cliente (será separado em first/last name) */
+  fullName?: string | null
+  /** CPF/documento do cliente (usado como external_id) */
+  document?: string | null
   clientIp?: string | null
   userAgent?: string | null
   /** cookie _fbp do navegador */
@@ -55,6 +59,21 @@ export async function sendPurchaseEvent(input: PurchaseEventInput): Promise<{
 
   const phHash = hashSHA256(input.phone?.replace(/\D/g, ''))
   if (phHash) userData.ph = [phHash]
+
+  // Nome completo -> primeiro e último nome (hasheados)
+  if (input.fullName) {
+    const parts = input.fullName.trim().split(/\s+/)
+    const fnHash = hashSHA256(parts[0])
+    if (fnHash) userData.fn = [fnHash]
+    if (parts.length > 1) {
+      const lnHash = hashSHA256(parts[parts.length - 1])
+      if (lnHash) userData.ln = [lnHash]
+    }
+  }
+
+  // CPF/documento como external_id (hasheado)
+  const extHash = hashSHA256(input.document?.replace(/\D/g, ''))
+  if (extHash) userData.external_id = [extHash]
 
   if (input.clientIp) userData.client_ip_address = input.clientIp
   if (input.userAgent) userData.client_user_agent = input.userAgent
