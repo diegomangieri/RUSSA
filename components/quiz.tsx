@@ -15,7 +15,6 @@ type QuizStep =
   | {
       type: 'question'
       emoji: string
-      label?: string
       title: string
       subtitle: string
       options: string[]
@@ -54,9 +53,8 @@ const STEPS: QuizStep[] = [
   {
     type: 'question',
     emoji: '👀',
-    label: 'Última pergunta!',
-    title: 'Você já viu uma bucetinha inchada com manchinhas?',
-    subtitle: '',
+    title: 'Última pergunta!',
+    subtitle: 'Você já viu uma bucetinha inchada com manchinhas?',
     options: ['Nunca vi.', 'Quero ver agora!'],
   },
 ]
@@ -143,17 +141,9 @@ function QuestionStep({
         {step.emoji}
       </div>
 
-      {step.label && (
-        <p className="mb-2 text-sm font-bold uppercase tracking-wide text-primary">
-          {step.label}
-        </p>
-      )}
-
       <h1 className="text-3xl font-bold text-foreground text-balance">{step.title}</h1>
 
-      {step.subtitle && (
-        <p className="mt-3 text-base text-muted-foreground text-pretty">{step.subtitle}</p>
-      )}
+      <p className="mt-3 text-base text-muted-foreground text-pretty">{step.subtitle}</p>
 
       <div className="mt-8 w-full max-w-sm flex flex-col gap-4">
         {step.options.map((option) => (
