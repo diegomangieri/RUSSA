@@ -375,15 +375,14 @@ export default function VIPSubscriptionPage() {
       <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
       {/* Banner Section */}
       <div className="w-full bg-zinc-900">
-        <div className="relative w-full h-[130px] overflow-hidden">
+        <div className="relative w-full h-[180px] overflow-hidden">
           <video
             src="/videos/banner.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 object-cover"
-            style={{ width: '130px', height: '100vw' }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover"
           />
         </div>
       </div>
