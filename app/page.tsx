@@ -456,7 +456,7 @@ export default function VIPSubscriptionPage() {
       <ContentTabs onUnlock={() => openCheckout('30dias')}>
         {/* Publication - locked video post */}
         <LockedPost
-          caption="Amor... imagina eu montada em cima de um pau, gemendo alto... no meio de um local cheio de gente 😏 Gravei tudinho, rebolando até gozar forte 😈💦"
+          caption="Amor... imagina eu brincando com a minha buceta gordinha, gemendo alto... na casa do meu primo e cheio de gente na sala 😈💦"
           likes="97,7K"
           comments="2.523"
           videoSrc="/videos/video1.mp4"
@@ -464,7 +464,7 @@ export default function VIPSubscriptionPage() {
         />
 
         <LockedPost
-          caption="Fiz um vídeo novo só de calcinha me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
+          caption="Fiz um vídeo novo me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
           likes="84,2K"
           comments="1.907"
           videoSrc="/videos/video2.mp4"
