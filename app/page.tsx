@@ -453,37 +453,36 @@ export default function VIPSubscriptionPage() {
       {/* Subscription Card - right after bio */}
       <SubscriptionCard onSubscribe={openCheckout} />
 
-      {/* Content Tabs */}
-      <ContentTabs />
+      {/* Content Tabs + feed / media grid */}
+      <ContentTabs onUnlock={() => openCheckout('30dias')}>
+        {/* Publication - locked video post */}
+        <LockedPost
+          caption="Amor... imagina eu montada em cima de um pau, gemendo alto... no meio de um local cheio de gente 😏 Gravei tudinho, rebolando até gozar forte 😈💦"
+          likes="97,7K"
+          comments="2.523"
+          videoSrc="/videos/preview-locked.mp4"
+          onUnlock={() => openCheckout('30dias')}
+        />
 
-      {/* Publication - locked video post */}
-      <LockedPost
-        caption="Amor... imagina eu montada em cima de um pau, gemendo alto... no meio de um local cheio de gente 😏 Gravei tudinho, rebolando até gozar forte 😈💦"
-        likes="97,7K"
-        comments="2.523"
-        videoSrc="/videos/preview-locked.mp4"
-        onUnlock={() => openCheckout('30dias')}
-      />
+        <LockedPost
+          caption="Fiz um vídeo novo só de calcinha me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
+          likes="84,2K"
+          comments="1.907"
+          imageSrc="/images/gallery2.png"
+          onUnlock={() => openCheckout('30dias')}
+        />
+
+        <LockedPost
+          caption="Acordei com muito tesão e resolvi gravar tudo pra vocês... 😈 vem ver o que eu fiz sozinha na cama 💦"
+          likes="112K"
+          comments="3.148"
+          imageSrc="/images/gallery4.png"
+          onUnlock={() => openCheckout('30dias')}
+        />
+      </ContentTabs>
 
       {/* Testimonials Section */}
       <TestimonialsCarousel />
-
-      {/* More publications */}
-      <LockedPost
-        caption="Fiz um vídeo novo só de calcinha me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
-        likes="84,2K"
-        comments="1.907"
-        imageSrc="/images/gallery2.png"
-        onUnlock={() => openCheckout('30dias')}
-      />
-
-      <LockedPost
-        caption="Acordei com muito tesão e resolvi gravar tudo pra vocês... 😈 vem ver o que eu fiz sozinha na cama 💦"
-        likes="112K"
-        comments="3.148"
-        imageSrc="/images/gallery4.png"
-        onUnlock={() => openCheckout('30dias')}
-      />
 
       {/* Lower subscription CTA */}
       <div className="bg-zinc-50 py-2">

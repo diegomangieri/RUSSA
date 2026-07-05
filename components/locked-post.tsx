@@ -1,19 +1,67 @@
 'use client'
 
 import Image from 'next/image'
+import { useState, type ReactNode } from 'react'
 import { Check, Lock, Heart, MessageCircle, Bookmark, MoreVertical, LayoutGrid, PlaySquare } from 'lucide-react'
 
-export function ContentTabs() {
+type ContentTabsProps = {
+  children: ReactNode
+  onUnlock: () => void
+}
+
+export function ContentTabs({ children, onUnlock }: ContentTabsProps) {
+  const [tab, setTab] = useState<'posts' | 'media'>('posts')
+
   return (
-    <div className="flex border-y border-zinc-200 bg-white">
-      <button className="flex-1 flex items-center justify-center gap-2 py-3 text-xs font-bold tracking-wide text-foreground border-b-2 border-[#f78f3e]">
-        <LayoutGrid className="w-4 h-4" />
-        734 POSTAGENS
-      </button>
-      <button className="flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-wide text-muted-foreground">
-        <PlaySquare className="w-4 h-4" />
-        363 MÍDIAS
-      </button>
+    <>
+      <div className="flex border-y border-zinc-200 bg-white sticky top-0 z-10">
+        <button
+          onClick={() => setTab('posts')}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs tracking-wide transition-colors ${
+            tab === 'posts'
+              ? 'font-bold text-foreground border-b-2 border-[#f78f3e]'
+              : 'font-semibold text-muted-foreground'
+          }`}
+        >
+          <LayoutGrid className="w-4 h-4" />
+          734 POSTAGENS
+        </button>
+        <button
+          onClick={() => setTab('media')}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs tracking-wide transition-colors ${
+            tab === 'media'
+              ? 'font-bold text-[#f78f3e] border-b-2 border-[#f78f3e]'
+              : 'font-semibold text-muted-foreground'
+          }`}
+        >
+          <PlaySquare className="w-4 h-4" />
+          363 MÍDIAS
+        </button>
+      </div>
+
+      {tab === 'posts' ? children : <MediaGrid onUnlock={onUnlock} />}
+    </>
+  )
+}
+
+function MediaGrid({ onUnlock }: { onUnlock: () => void }) {
+  return (
+    <div className="bg-white pb-4">
+      <div className="grid grid-cols-3 gap-1 p-1">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <button
+            key={i}
+            onClick={onUnlock}
+            aria-label="Desbloquear mídia"
+            className="relative aspect-square bg-zinc-100 flex items-center justify-center active:scale-95 transition-transform"
+          >
+            <Lock className="w-6 h-6 text-zinc-500" />
+          </button>
+        ))}
+      </div>
+      <p className="text-center text-xs text-muted-foreground pt-3">
+        Mostrando 12 de 754 mídias
+      </p>
     </div>
   )
 }
