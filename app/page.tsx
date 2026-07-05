@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff, Images, Video } from 'lucide-react'
+import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff, Images, Video } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import Quiz from "@/components/quiz"
+import SubscriptionCard from "@/components/subscription-card"
+import LockedPost, { ContentTabs } from "@/components/locked-post"
 
 
 const testimonials = [
@@ -170,10 +170,11 @@ export default function VIPSubscriptionPage() {
     
     // Facebook Pixel tracking
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'InitiateCheckout', {
+      const planValue = parseFloat(getPlanDetails(plan).price.replace('R$ ', '').replace(',', '.'))
+      ;(window as any).fbq('track', 'InitiateCheckout', {
         content_name: `Plano ${plan}`,
         content_category: 'subscription',
-        value: plan === 'semanal' ? 12.95 : plan === 'mensal' ? 17.95 : 27.95,
+        value: planValue,
         currency: 'BRL'
       })
     }
@@ -329,9 +330,10 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case 'semanal': return { name: 'Semanal', price: 'R$ 12,95', days: '7 dias' }
-      case 'mensal': return { name: 'Mensal', price: 'R$ 17,95', days: '30 dias' }
-      case 'semestral': return { name: 'Semestral', price: 'R$ 27,95', days: '180 dias' }
+      case '30dias': return { name: '30 Dias', price: 'R$ 9,97', days: '30 dias' }
+      case '3meses': return { name: '3 Meses', price: 'R$ 14,90', days: '90 dias' }
+      case '1ano': return { name: '1 Ano', price: 'R$ 19,90', days: '365 dias' }
+      case 'vitalicio': return { name: 'Vitalício', price: 'R$ 24,90', days: 'Acesso vitalício' }
       default: return { name: '', price: '', days: '' }
     }
   }
@@ -448,190 +450,44 @@ export default function VIPSubscriptionPage() {
         <ProfileBio />
       </div>
 
-      {/* Divider line */}
-      <div className="h-px bg-zinc-200" />
+      {/* Subscription Card - right after bio */}
+      <SubscriptionCard onSubscribe={openCheckout} />
 
-      {/* Hero Video Section - Preview */}
-      <div className="relative">
-        <div className="w-full h-[400px] bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-          <video
-            src="/videos/preview-locked.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
-          />
-          
-          {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
-            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                <Lock className="w-7 h-7 text-zinc-600" />
-              </div>
-              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
-              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
-            </div>
-          </div>
+      {/* Content Tabs */}
+      <ContentTabs />
 
-          {/* Engagement Stats Overlay */}
-          <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-4">
-            <div className="flex items-center gap-2 text-white">
-              <Heart className="w-5 h-5" />
-              <span className="font-semibold text-sm">22.4K</span>
-            </div>
-            <div className="flex items-center gap-2 text-white">
-              <MessageCircle className="w-5 h-5" />
-              <span className="font-semibold text-sm">342</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Publication - locked video post */}
+      <LockedPost
+        caption="Amor... imagina eu montada em cima de um pau, gemendo alto... no meio de um local cheio de gente 😏 Gravei tudinho, rebolando até gozar forte 😈💦"
+        likes="97,7K"
+        comments="2.523"
+        videoSrc="/videos/preview-locked.mp4"
+        onUnlock={() => openCheckout('30dias')}
+      />
 
       {/* Testimonials Section */}
       <TestimonialsCarousel />
 
-      {/* Subscription Section */}
-      <div className="px-4 py-6 bg-zinc-50">
-        <h3 className="text-2xl font-bold text-foreground mb-4">Assinaturas</h3>
-        
-        <div className="flex gap-2 mb-4">
-          <Badge variant="secondary" className="bg-[#fde4cc] text-[#f78f3e] border-0 font-semibold">
-            VEJA TUDO AGORA
-          </Badge>
-          <Badge variant="secondary" className="bg-[#f78f3e] text-white border-0 font-semibold">
-            {'Promoção'}
-          </Badge>
-        </div>
+      {/* More publications */}
+      <LockedPost
+        caption="Fiz um vídeo novo só de calcinha me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
+        likes="84,2K"
+        comments="1.907"
+        imageSrc="/images/gallery2.png"
+        onUnlock={() => openCheckout('30dias')}
+      />
 
-        {/* Plans */}
-        <div className="flex flex-col gap-4 mb-4">
-          {/* Semanal Plan */}
-          <Card className="bg-white border-2 border-zinc-200 p-5 shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-lg font-semibold text-foreground mb-0.5">Semanal</p>
-                <p className="text-xs text-muted-foreground">7 dias de acesso</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 29,95</p>
-                <p className="text-2xl font-bold text-foreground">R$ 12,95</p>
-              </div>
-            </div>
-            <Button 
-              size="lg" 
-              className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => openCheckout('semanal')}
-            >
-              Assinar o plano Semanal!
-            </Button>
-          </Card>
+      <LockedPost
+        caption="Acordei com muito tesão e resolvi gravar tudo pra vocês... 😈 vem ver o que eu fiz sozinha na cama 💦"
+        likes="112K"
+        comments="3.148"
+        imageSrc="/images/gallery4.png"
+        onUnlock={() => openCheckout('30dias')}
+      />
 
-          {/* Mensal Plan - Featured */}
-          <Card className="bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] text-white p-5 border-0 shadow-lg relative overflow-hidden">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-lg font-semibold mb-0.5">Mensal</p>
-                <p className="text-xs text-white/70">30 dias de acesso</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-white/70 line-through">R$ 49,95</p>
-                <p className="text-2xl font-bold">R$ 17,95</p>
-              </div>
-            </div>
-            <Button 
-              size="lg" 
-              className="w-full bg-[#e07520] text-white hover:bg-[#c96a1c] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-lg hover:shadow-xl"
-              onClick={() => openCheckout('mensal')}
-            >
-              Assinar o plano Mensal!
-            </Button>
-          </Card>
-
-          {/* Semestral Plan */}
-          <Card className="bg-white border-2 border-zinc-200 p-5 shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-lg font-semibold text-foreground mb-0.5">Semestral</p>
-                <p className="text-xs text-muted-foreground">180 dias de acesso</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-muted-foreground line-through">R$ 89,95</p>
-                <p className="text-2xl font-bold text-foreground">R$ 27,95</p>
-              </div>
-            </div>
-            <Button 
-              size="lg" 
-              className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-12 active:scale-95 transition-transform duration-150 shadow-md hover:shadow-lg"
-              onClick={() => openCheckout('semestral')}
-            >
-              Assinar o plano Semestral!
-            </Button>
-          </Card>
-        </div>
-
-        <div className="bg-[#fef0e4] border-2 border-[#f78f3e] rounded-lg p-3 mb-4">
-          <p className="text-sm font-bold text-primary text-center">
-            Acesso imediato via E-mail!
-          </p>
-        </div>
-
-        {/* Security Badges */}
-        <div className="flex items-center justify-center gap-4 text-sm mb-6">
-          <div className="flex items-center gap-1 text-[#f78f3e]">
-            <Lock className="w-4 h-4" />
-            <span className="font-medium">Pagamento 100% seguro</span>
-          </div>
-          <div className="text-muted-foreground">|</div>
-          <div className="flex items-center gap-1 text-primary">
-            <Check className="w-4 h-4" />
-            <span className="font-medium">Acesso imediato</span>
-          </div>
-        </div>
-
-        {/* Locked Content Preview - Portrait */}
-        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
-          <Image
-            src="/images/gallery2.png"
-            alt="Conteúdo Exclusivo"
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          
-          {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                <Lock className="w-7 h-7 text-zinc-600" />
-              </div>
-              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
-              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Locked Content Preview 2 */}
-        <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
-          <Image
-            src="/images/gallery4.png"
-            alt="Conteúdo Exclusivo"
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          
-          {/* Lock Overlay */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-              <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                <Lock className="w-7 h-7 text-zinc-600" />
-              </div>
-              <p className="text-foreground font-semibold mb-1">{'Conteúdo Exclusivo'}</p>
-              <p className="text-muted-foreground text-sm">Assine para desbloquear</p>
-            </div>
-          </div>
-        </div>
+      {/* Lower subscription CTA */}
+      <div className="bg-zinc-50 py-2">
+        <SubscriptionCard onSubscribe={openCheckout} />
       </div>
 
       {/* FAQ Section */}
