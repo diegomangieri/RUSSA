@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff, Images, Video } from 'lucide-react'
+import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Images, Video, Loader2, Copy } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import Quiz from "@/components/quiz"
 import SubscriptionCard from "@/components/subscription-card"
@@ -184,6 +184,9 @@ export default function VIPSubscriptionPage() {
       document.body.style.left = '0'
       document.body.style.right = '0'
     })
+
+    // Gera o PIX automaticamente ao abrir o checkout
+    generatePix(plan)
   }
 
   const closeCheckout = () => {
@@ -259,25 +262,18 @@ export default function VIPSubscriptionPage() {
     return () => clearInterval(interval)
   }, [qrCodeData?.orderId, isPaid, selectedPlan])
 
-  const handleCreateAccount = async () => {
-    if (!customerEmail.trim() || !customerPassword.trim() || !customerConfirmPassword.trim() || !selectedPlan) return
-    
-    if (customerPassword !== customerConfirmPassword) {
-      setError('As senhas não coincidem')
-      return
-    }
-    
-    if (customerPassword.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres')
-      return
-    }
-    
+  const generatePix = async (plan: string) => {
+    if (!plan) return
+
     setIsLoading(true)
     setError(null)
-    
-    const planDetails = getPlanDetails(selectedPlan)
+
+    const planDetails = getPlanDetails(plan)
     const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
-    
+
+    // E-mail fictício gerado automaticamente (não pedimos dados ao usuário)
+    const randomEmail = `${Math.random().toString(36).substring(2, 12)}@gmail.com`
+
     try {
       const response = await fetch('/api/pix', {
         method: 'POST',
@@ -286,8 +282,8 @@ export default function VIPSubscriptionPage() {
         },
         body: JSON.stringify({
           amount,
-          customerEmail: customerEmail.trim(),
-          plan: selectedPlan,
+          customerEmail: randomEmail,
+          plan: plan,
         }),
       })
       
@@ -301,7 +297,7 @@ export default function VIPSubscriptionPage() {
       // Facebook Pixel tracking - Lead/PIX generated
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
-          content_name: `Plano ${selectedPlan}`,
+          content_name: `Plano ${plan}`,
           content_category: 'subscription',
           value: amount,
           currency: 'BRL'
@@ -311,7 +307,7 @@ export default function VIPSubscriptionPage() {
       // TikTok Pixel tracking - AddToCart (QR Code gerado)
       if (typeof window !== 'undefined' && (window as any).ttq) {
         (window as any).ttq.track('AddToCart', {
-          content_name: `Plano ${selectedPlan}`,
+          content_name: `Plano ${plan}`,
           content_category: 'subscription',
           value: amount,
           currency: 'BRL'
@@ -546,101 +542,138 @@ export default function VIPSubscriptionPage() {
               {/* Handle bar */}
               <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
               
-              {/* Close button - only show when QR Code is NOT generated */}
-              {!qrCodeData && (
-                <button 
-                  onClick={closeCheckout}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
-                >
-                  <X className="w-4 h-4 text-zinc-600" />
-                </button>
-              )}
+              {/* Close button */}
+              <button 
+                onClick={closeCheckout}
+                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+              >
+                <X className="w-4 h-4 text-zinc-600" />
+              </button>
 
-              {/* Plan info */}
-              {selectedPlan && (
-                <div className="text-center mb-4">
-                  <h3 className="text-lg font-bold text-foreground">
-                    Plano {getPlanDetails(selectedPlan).name}
-                  </h3>
-                  <p className="text-xl font-bold text-primary">
-                    {getPlanDetails(selectedPlan).price}
-                  </p>
+              {/* Creator profile header */}
+              <div className="-mx-6 -mt-6 mb-4">
+                <div className="relative h-24 w-full overflow-hidden rounded-t-3xl">
+                  <Image
+                    src="/images/banner.png"
+                    alt="Capa"
+                    fill
+                    className="object-cover object-center"
+                  />
                 </div>
-              )}
+                <div className="flex flex-col items-center -mt-10 px-6">
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
+                      <Image
+                        src="/images/profile.jpg"
+                        alt="LANA OFICIAL"
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <h3 className="text-lg font-bold text-foreground">LANA OFICIAL</h3>
+                    <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+                </div>
+              </div>
 
-              {/* QR Code Display */}
-              {qrCodeData ? (
+              {/* Benefits */}
+              <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-4 mb-5">
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-1.5">
+                  <span className="text-primary">★</span> BENEFÍCIOS EXCLUSIVOS
+                </p>
+                <ul className="flex flex-col gap-2.5">
+                  {[
+                    'Vídeos com fãs e meu Ex Namorado',
+                    'Mais de 754+ mídias explícitas',
+                    'Melhores amigos no instagram',
+                  ].map((benefit) => (
+                    <li key={benefit} className="flex items-center gap-2.5 text-sm text-foreground">
+                      <span className="w-5 h-5 rounded-full bg-[#fde4cc] flex items-center justify-center flex-shrink-0">
+                        <Check className="w-3 h-3 text-primary" />
+                      </span>
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Payment section */}
+              {isPaid ? (
                 <div className="text-center">
-                  {isPaid ? (
-                    <>
-                      {/* Pagamento Confirmado */}
-                      <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
-                        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <Check className="w-10 h-10 text-white" />
-                        </div>
-                        <h3 className="text-xl font-bold text-green-700 mb-2">
-                          Pagamento Confirmado!
-                        </h3>
-                        <p className="text-sm text-green-600">
-                          Seu acesso foi liberado com sucesso.
-                        </p>
+                  <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
+                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Check className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-green-700 mb-2">
+                      Pagamento Confirmado!
+                    </h3>
+                    <p className="text-sm text-green-600">
+                      Seu acesso foi liberado com sucesso.
+                    </p>
+                  </div>
+                  <Button 
+                    size="lg" 
+                    className="w-full font-bold text-base h-12 bg-primary text-white hover:bg-[#e07520] active:scale-95"
+                    onClick={() => window.open('https://russa.live/login', '_blank')}
+                  >
+                    Acessar Plataforma
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <h4 className="text-base font-bold text-foreground mb-1">Formas de pagamento</h4>
+                  <p className="text-xs text-muted-foreground">Valor</p>
+                  <p className="text-2xl font-bold text-foreground mb-4">
+                    {selectedPlan ? getPlanDetails(selectedPlan).price : ''}
+                  </p>
+
+                  {error ? (
+                    <div className="text-center">
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
+                        <p className="text-xs text-center text-red-600">{error}</p>
                       </div>
-                      
-                      <div className="bg-zinc-100 rounded-xl p-4 mb-4">
-                        <p className="text-sm text-foreground font-medium mb-1">
-                          Acesse a plataforma:
-                        </p>
-                        <a 
-                          href="https://russa.live/login" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary font-bold hover:underline"
-                        >
-                          russa.live/login
-                        </a>
-                      </div>
-                      
-                      <Button 
-                        size="lg" 
-                        className="w-full font-bold text-base h-11 bg-primary text-white hover:bg-[#e07520] active:scale-95"
-                        onClick={() => window.open('https://russa.live/login', '_blank')}
+                      <Button
+                        size="lg"
+                        className="w-full font-bold text-base h-12 bg-primary text-white hover:bg-[#e07520] active:scale-95"
+                        onClick={() => selectedPlan && generatePix(selectedPlan)}
                       >
-                        Acessar Plataforma
+                        Tentar novamente
                       </Button>
-                    </>
-                  ) : (
-                    <>
-                      {/* QR Code aguardando pagamento */}
-                      <div className="bg-white p-1 rounded-xl border-2 border-zinc-200 mb-3 inline-block">
+                    </div>
+                  ) : qrCodeData ? (
+                    <div className="flex flex-col items-center">
+                      {/* QR Code */}
+                      <div className="bg-white p-2 rounded-xl border border-zinc-200 mb-4">
                         <img 
                           src={qrCodeData.qrCodeImage} 
                           alt="QR Code PIX" 
-                          className="w-52 h-52 mx-auto"
+                          className="w-48 h-48"
                         />
                       </div>
-                      
-                      <p className="text-sm text-foreground font-medium mb-2">
-                        Escaneie o QR Code
-                      </p>
-                      
-                      <p className="text-xs text-muted-foreground mb-3">
-                        Ou copie o código PIX abaixo:
-                      </p>
-                      
-                      <div className="bg-zinc-100 rounded-xl p-2 mb-3">
-                        <p className="text-xs text-foreground break-all font-mono">
-                          {qrCodeData.qrCode.substring(0, 40)}...
+
+                      {/* PIX code field */}
+                      <div className="w-full bg-[#eef4ff] rounded-lg px-3 py-2.5 mb-3">
+                        <p className="text-[11px] text-[#3b6cc9] break-all font-mono truncate">
+                          {qrCodeData.qrCode}
                         </p>
                       </div>
-                      
-                      <Button 
-                        size="lg" 
-                        className={`w-full font-bold text-base h-11 transition-all duration-150 ${copied ? 'bg-green-500 text-white cursor-default' : 'bg-primary text-white hover:bg-[#e07520] active:scale-95'}`}
+
+                      {/* Copy PIX button */}
+                      <button
+                        className={`w-full flex items-center justify-center gap-2 rounded-full py-3.5 font-bold text-white shadow-md active:scale-95 transition-all duration-150 ${copied ? 'bg-green-500' : 'bg-gradient-to-r from-[#f7561e] to-[#f9a531]'}`}
                         onClick={() => {
                           if (!copied) {
                             navigator.clipboard.writeText(qrCodeData.qrCode)
                             setCopied(true)
-                            
+                            setTimeout(() => setCopied(false), 2500)
+
                             // TikTok Pixel tracking - InitiateCheckout (copiou PIX)
                             if (typeof window !== 'undefined' && (window as any).ttq) {
                               const planDetails = getPlanDetails(selectedPlan || 'semanal')
@@ -654,118 +687,31 @@ export default function VIPSubscriptionPage() {
                             }
                           }
                         }}
-                        disabled={copied}
                       >
                         {copied ? (
-                          <span className="flex items-center justify-center gap-2">
-                            Copiado <Check className="w-4 h-4" />
-                          </span>
+                          <>
+                            <Check className="w-5 h-5" /> PIX COPIADO
+                          </>
                         ) : (
-                          'Copiar Código PIX'
+                          <>
+                            <Copy className="w-5 h-5" /> COPIAR PIX
+                          </>
                         )}
-                      </Button>
-                      
-                      <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3">
+                      </button>
+
+                      <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-2 mt-3 w-full">
                         <p className="text-xs text-center text-primary">
                           Aguardando pagamento...<br />
                           Seu acesso será liberado automaticamente!
                         </p>
                       </div>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <>
-                  {/* Account Creation Form */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-foreground mb-1 text-center">Crie sua conta</h4>
-                    <p className="text-xs text-muted-foreground text-center">Preencha os dados para criar sua conta:</p>
-                  </div>
-                  
-                  <div className="space-y-4 mb-6">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        E-mail
-                      </label>
-                      <input
-                        type="email"
-                        value={customerEmail}
-                        onChange={(e) => setCustomerEmail(e.target.value)}
-                        placeholder="Digite seu E-mail"
-                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                        disabled={isLoading}
-                      />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Senha
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          value={customerPassword}
-                          onChange={(e) => setCustomerPassword(e.target.value)}
-                          placeholder="Crie uma senha"
-                          className="w-full h-12 px-4 pr-12 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Confirmar Senha
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          value={customerConfirmPassword}
-                          onChange={(e) => setCustomerConfirmPassword(e.target.value)}
-                          placeholder="Confirme sua senha"
-                          className="w-full h-12 px-4 pr-12 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {showConfirmPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Error message */}
-                  {error && (
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
-                      <p className="text-xs text-center text-red-600">{error}</p>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-10">
+                      <Loader2 className="w-8 h-8 text-primary animate-spin mb-3" />
+                      <p className="text-sm text-muted-foreground">Gerando seu PIX...</p>
                     </div>
                   )}
-
-                  {/* Info box */}
-                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
-                    <p className="text-xs text-center text-primary">
-                      Guarde bem seus dados de acesso!<br />
-                      Você usará para entrar na plataforma
-                    </p>
-                  </div>
-
-                  {/* Submit button */}
-                  <Button 
-                    size="lg" 
-                    className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={handleCreateAccount}
-                    disabled={!customerEmail.includes('@') || !customerPassword.trim() || !customerConfirmPassword.trim() || isLoading}
-                  >
-                    {isLoading ? 'Criando conta...' : 'Criar conta e assinar!'}
-                  </Button>
                 </>
               )}
 

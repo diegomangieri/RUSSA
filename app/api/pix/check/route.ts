@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const apiToken = process.env.FRUITFY_API_KEY
+    const apiToken = process.env.FRUITFY_API_TOKEN
     const rawStoreId = process.env.FRUITFY_STORE_ID || ''
     const storeId = rawStoreId.replace('Store-Id:', '').replace('Store-Id', '').trim()
 
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const response = await fetch(`${FRUITFY_API_URL}/api/orders/${orderId}`, {
+    const response = await fetch(`${FRUITFY_API_URL}/api/order/${orderId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiToken}`,
