@@ -305,45 +305,24 @@ export default function VIPSubscriptionPage() {
     setPageReady(true)
   }, [])
 
-  // Pré-carrega todas as imagens e vídeos da página real enquanto o usuário
-  // ainda está no quiz, para que ao terminar não haja delay de carregamento.
+  // Trava o scroll do body enquanto o quiz (overlay) estiver ativo.
+  // A página real fica renderizada por baixo, carregando vídeos e imagens,
+  // de modo que ao concluir o quiz tudo já esteja 100% pronto.
   useEffect(() => {
-    const imagesToPreload = ['/images/profile.jpg']
-    imagesToPreload.forEach((src) => {
-      const img = new window.Image()
-      img.decoding = 'async'
-      img.src = src
-    })
-
-    const videosToPreload = [
-      '/videos/banner.mp4',
-      '/videos/video1.mp4',
-      '/videos/video2.mp4',
-      '/videos/video3.mp4',
-    ]
-    const videoEls: HTMLVideoElement[] = []
-    videosToPreload.forEach((src) => {
-      const v = document.createElement('video')
-      v.preload = 'auto'
-      v.muted = true
-      v.playsInline = true
-      v.src = src
-      v.load()
-      videoEls.push(v)
-    })
-
-    return () => {
-      videoEls.forEach((v) => {
-        v.src = ''
-        v.load()
-      })
+    if (showQuiz) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
-  }, [])
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [showQuiz])
 
   const faqItems = [
     {
       question: "É sigiloso? Vai aparecer na minha fatura?",
-      answer: "Sim, é 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
+      answer: "Sim, �� 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
     },
     {
       question: "Tenho acesso imediato aos conteúdos?",
@@ -369,12 +348,16 @@ export default function VIPSubscriptionPage() {
     semestral: 'https://go.fruitfypay.com/9gbJc3tfUXvv634Z',
   }
 
-  if (showQuiz) {
-    return <Quiz onComplete={() => setShowQuiz(false)} />
-  }
-
   return (
     <>
+      {/* Quiz como overlay por cima: a página real (abaixo) já renderiza
+          seus vídeos e imagens durante o quiz, eliminando o delay ao concluir. */}
+      {showQuiz && (
+        <div className="fixed inset-0 z-[100] bg-background overflow-y-auto">
+          <Quiz onComplete={() => setShowQuiz(false)} />
+        </div>
+      )}
+
       {/* Main content with fade-in effect */}
       <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
       {/* Banner Section */}
