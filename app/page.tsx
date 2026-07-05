@@ -376,12 +376,14 @@ export default function VIPSubscriptionPage() {
       {/* Banner Section */}
       <div className="w-full bg-zinc-900">
         <div className="relative w-full h-[130px] overflow-hidden">
-          <Image
-            src="/images/banner.png"
-            alt="Banner"
-            fill
-            className="object-cover object-center"
-            priority
+          <video
+            src="/videos/banner.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 object-cover"
+            style={{ width: '130px', height: '100vw' }}
           />
         </div>
       </div>
@@ -551,6 +553,8 @@ export default function VIPSubscriptionPage() {
               </button>
 
               {/* Creator profile header */}
+              {!showPayment && (
+              <>
               <div className="flex flex-col items-center mb-4 mt-2">
                 <div className="relative">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
@@ -593,6 +597,8 @@ export default function VIPSubscriptionPage() {
                   ))}
                 </ul>
               </div>
+              </>
+              )}
 
               {/* Payment section */}
               {!showPayment ? (
@@ -601,7 +607,7 @@ export default function VIPSubscriptionPage() {
                   className="w-full font-bold text-base h-14 text-white shadow-md active:scale-95 transition-all duration-150 rounded-full bg-gradient-to-r from-[#f7561e] to-[#f9a531] hover:opacity-90"
                   onClick={() => selectedPlan && generatePix(selectedPlan)}
                 >
-                  ASSINAR AGORA!
+                  {selectedPlan ? `ASSINAR AGORA! (${getPlanDetails(selectedPlan).price})` : 'ASSINAR AGORA!'}
                 </Button>
               ) : isPaid ? (
                 <div className="text-center">
@@ -626,7 +632,9 @@ export default function VIPSubscriptionPage() {
                 </div>
               ) : (
                 <>
-                  <h4 className="text-base font-bold text-foreground mb-1">Formas de pagamento</h4>
+                  <h4 className="text-base font-bold text-foreground mb-1">
+                    {selectedPlan ? getPlanDetails(selectedPlan).days : ''}
+                  </h4>
                   <p className="text-xs text-muted-foreground">Valor</p>
                   <p className="text-2xl font-bold text-foreground mb-4">
                     {selectedPlan ? getPlanDetails(selectedPlan).price : ''}
