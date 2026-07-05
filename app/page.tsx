@@ -382,8 +382,8 @@ export default function VIPSubscriptionPage() {
             loop
             muted
             playsInline
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover"
-            style={{ objectPosition: 'center 25%' }}
+            className="absolute left-1/2 -translate-x-1/2 w-full object-cover"
+            style={{ height: '260px', top: '-40px' }}
           />
         </div>
       </div>
