@@ -2,21 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff, Images, Video } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-
-function getPromoDate() {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return tomorrow.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}
 
 const testimonials = [
   {
@@ -116,7 +106,7 @@ function TestimonialsCarousel() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Thayse Mangieri e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
+  const bioText = 'LOIRINHA GOSTOSA E SAFADA 💗🤪🔥 NÃO SOU ATRIZ, SOU PUT* DE VERDADE. 🔞🔥 E eu não vim pra brincar. Vim pra ser a melhor. 👑 Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais me esperando por você...'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -149,7 +139,6 @@ function ProfileBio() {
 
 export default function VIPSubscriptionPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [promoDate] = useState(getPromoDate)
   const [pageReady, setPageReady] = useState(false)
   const [showCheckoutModal, setShowCheckoutModal] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
@@ -382,13 +371,6 @@ export default function VIPSubscriptionPage() {
     <>
       {/* Main content with fade-in effect */}
       <div className={`min-h-screen bg-background transition-opacity duration-700 ease-out ${pageReady ? 'opacity-100' : 'opacity-0'}`}>
-      {/* Promotional Banner */}
-      <div className="bg-primary text-white text-center py-3 px-4 font-semibold text-sm">
-        ESSA PROMOÇÃO É VÁLIDA ATÉ {promoDate}
-      </div>
-
-
-
       {/* Banner Section */}
       <div className="w-full bg-zinc-900">
         <div className="relative w-full h-[130px] overflow-hidden">
@@ -407,32 +389,41 @@ export default function VIPSubscriptionPage() {
         {/* Profile picture and stats row */}
         <div className="flex items-end justify-between">
           {/* Profile picture - half overlapping banner */}
-          <div className="-mt-[38px]">
-            <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
+          <div className="-mt-[42px] relative">
+            <div className="w-[84px] h-[84px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg p-[3px]">
               <Image
                 src="/images/profile.png"
-                alt="Thayse Mangieri"
-                width={76}
-                height={76}
-                className="w-full h-full object-cover"
+                alt="Eduarda Oficial"
+                width={84}
+                height={84}
+                className="w-full h-full object-cover rounded-full"
                 priority
               />
+            </div>
+            {/* AO VIVO badge */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-zinc-900 rounded-md px-2 py-0.5 shadow-md">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-white tracking-wide">AO VIVO</span>
             </div>
           </div>
           
           {/* Stats row - aligned right, same line as profile pic bottom */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground pb-2">
+          <div className="flex items-center gap-3.5 text-sm text-foreground pb-2">
             <div className="flex items-center gap-1">
-              <span className="font-semibold text-foreground">159</span>
-              <span>Fotos</span>
+              <Images className="w-4 h-4 text-zinc-500" />
+              <span className="font-semibold">371</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="font-semibold text-foreground">68</span>
-              <span>{'Vídeos'}</span>
+              <Video className="w-4 h-4 text-primary" />
+              <span className="font-semibold">383</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="font-semibold text-foreground">69.2K</span>
-              <span>Likes</span>
+              <Lock className="w-4 h-4 text-zinc-500" />
+              <span className="font-semibold">176</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Heart className="w-4 h-4 text-zinc-500" />
+              <span className="font-semibold">385.5K</span>
             </div>
           </div>
         </div>
@@ -440,12 +431,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Thayse Mangieri</h2>
+            <h2 className="text-lg font-bold text-foreground">EDUARDA OFICIAL</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@thayse.mangieri</p>
+          <p className="text-sm text-muted-foreground">@eduardaoficial1_</p>
         </div>
         
         <ProfileBio />
