@@ -87,6 +87,7 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
             width={36}
             height={36}
             className="w-full h-full object-cover"
+            unoptimized
           />
         </div>
         <div className="flex-1 min-w-0">

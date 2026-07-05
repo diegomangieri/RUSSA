@@ -225,16 +225,6 @@ export default function VIPSubscriptionPage() {
               currency: 'BRL'
             })
           }
-          
-          // TikTok Pixel tracking - Purchase
-          if (typeof window !== 'undefined' && (window as any).ttq) {
-            (window as any).ttq.track('CompletePayment', {
-              content_name: `Plano ${selectedPlan}`,
-              content_category: 'subscription',
-              value: amount,
-              currency: 'BRL'
-            })
-          }
         }
       } catch (error) {
         // Silently ignore check errors
@@ -286,16 +276,6 @@ export default function VIPSubscriptionPage() {
       // Facebook Pixel tracking - AddToCart (clicou em ASSINAR AGORA / gerou PIX)
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'AddToCart', {
-          content_name: `Plano ${plan}`,
-          content_category: 'subscription',
-          value: amount,
-          currency: 'BRL'
-        })
-      }
-      
-      // TikTok Pixel tracking - AddToCart (QR Code gerado)
-      if (typeof window !== 'undefined' && (window as any).ttq) {
-        (window as any).ttq.track('AddToCart', {
           content_name: `Plano ${plan}`,
           content_category: 'subscription',
           value: amount,
@@ -427,6 +407,7 @@ export default function VIPSubscriptionPage() {
                   height={84}
                   className="w-full h-full object-cover rounded-full"
                   priority
+                  unoptimized
                 />
               </div>
             </div>
@@ -590,6 +571,8 @@ export default function VIPSubscriptionPage() {
                       width={80}
                       height={80}
                       className="w-full h-full object-cover"
+                      priority
+                      unoptimized
                     />
                   </div>
                   <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
@@ -610,9 +593,9 @@ export default function VIPSubscriptionPage() {
                 </p>
                 <ul className="flex flex-col gap-2.5">
                   {[
-                    'Vídeos com fãs e meu Ex Namorado',
-                    'Mais de 754+ mídias explícitas',
-                    'Melhores amigos no instagram',
+                    'Vídeos com fãs e meu ex namorado',
+                    'Mais de 754 postagens explícitas',
+                    'Melhores amigos no Instagram',
                   ].map((benefit) => (
                     <li key={benefit} className="flex items-center gap-2.5 text-sm text-foreground">
                       <span className="w-5 h-5 rounded-full bg-[#fde4cc] flex items-center justify-center flex-shrink-0">
@@ -713,16 +696,6 @@ export default function VIPSubscriptionPage() {
                             // Facebook Pixel tracking - InitiateCheckout (copiou PIX) - dispara uma única vez
                             if (typeof window !== 'undefined' && (window as any).fbq) {
                               (window as any).fbq('track', 'InitiateCheckout', {
-                                content_name: `Plano ${selectedPlan}`,
-                                content_category: 'subscription',
-                                value: amount,
-                                currency: 'BRL'
-                              })
-                            }
-
-                            // TikTok Pixel tracking - InitiateCheckout (copiou PIX)
-                            if (typeof window !== 'undefined' && (window as any).ttq) {
-                              (window as any).ttq.track('InitiateCheckout', {
                                 content_name: `Plano ${selectedPlan}`,
                                 content_category: 'subscription',
                                 value: amount,
