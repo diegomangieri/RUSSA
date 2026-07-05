@@ -6,6 +6,7 @@ import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Che
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Quiz from "@/components/quiz"
 
 
 const testimonials = [
@@ -138,6 +139,7 @@ function ProfileBio() {
 
 
 export default function VIPSubscriptionPage() {
+  const [showQuiz, setShowQuiz] = useState(true)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [pageReady, setPageReady] = useState(false)
   const [showCheckoutModal, setShowCheckoutModal] = useState(false)
@@ -365,6 +367,10 @@ export default function VIPSubscriptionPage() {
     semanal: 'https://go.fruitfypay.com/jGPNBy9dln3rDgyl',
     mensal: 'https://go.fruitfypay.com/prx2C8zbuRY689eG',
     semestral: 'https://go.fruitfypay.com/9gbJc3tfUXvv634Z',
+  }
+
+  if (showQuiz) {
+    return <Quiz onComplete={() => setShowQuiz(false)} />
   }
 
   return (
