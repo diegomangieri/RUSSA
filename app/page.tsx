@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Images, Video, Loader2, Copy } from 'lucide-react'
+import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Images, Video, Loader2, Copy, Star } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import Quiz from "@/components/quiz"
 import SubscriptionCard from "@/components/subscription-card"
@@ -166,18 +166,7 @@ export default function VIPSubscriptionPage() {
     setScrollPosition(currentScroll)
     setSelectedPlan(plan)
     setShowCheckoutModal(true)
-    
-    // Facebook Pixel tracking
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      const planValue = parseFloat(getPlanDetails(plan).price.replace('R$ ', '').replace(',', '.'))
-      ;(window as any).fbq('track', 'InitiateCheckout', {
-        content_name: `Plano ${plan}`,
-        content_category: 'subscription',
-        value: planValue,
-        currency: 'BRL'
-      })
-    }
-    
+
     requestAnimationFrame(() => {
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
@@ -294,9 +283,9 @@ export default function VIPSubscriptionPage() {
         return
       }
       
-      // Facebook Pixel tracking - Lead/PIX generated
+      // Facebook Pixel tracking - AddToCart (clicou em ASSINAR AGORA / gerou PIX)
       if (typeof window !== 'undefined' && (window as any).fbq) {
-        (window as any).fbq('track', 'Lead', {
+        (window as any).fbq('track', 'AddToCart', {
           content_name: `Plano ${plan}`,
           content_category: 'subscription',
           value: amount,
@@ -334,6 +323,41 @@ export default function VIPSubscriptionPage() {
 
   useEffect(() => {
     setPageReady(true)
+  }, [])
+
+  // Pré-carrega todas as imagens e vídeos da página real enquanto o usuário
+  // ainda está no quiz, para que ao terminar não haja delay de carregamento.
+  useEffect(() => {
+    const imagesToPreload = ['/images/profile.jpg']
+    imagesToPreload.forEach((src) => {
+      const img = new window.Image()
+      img.decoding = 'async'
+      img.src = src
+    })
+
+    const videosToPreload = [
+      '/videos/banner.mp4',
+      '/videos/video1.mp4',
+      '/videos/video2.mp4',
+      '/videos/video3.mp4',
+    ]
+    const videoEls: HTMLVideoElement[] = []
+    videosToPreload.forEach((src) => {
+      const v = document.createElement('video')
+      v.preload = 'auto'
+      v.muted = true
+      v.playsInline = true
+      v.src = src
+      v.load()
+      videoEls.push(v)
+    })
+
+    return () => {
+      videoEls.forEach((v) => {
+        v.src = ''
+        v.load()
+      })
+    }
   }, [])
 
   const faqItems = [
@@ -383,7 +407,7 @@ export default function VIPSubscriptionPage() {
             muted
             playsInline
             className="absolute left-1/2 top-1/2 w-full h-full object-cover"
-            style={{ transform: 'translate(-50%, -50%) scale(1.15)', objectPosition: 'center 40%' }}
+            style={{ transform: 'translate(-50%, -50%) scale(1.15)', objectPosition: 'center 62%' }}
           />
         </div>
       </div>
@@ -544,13 +568,15 @@ export default function VIPSubscriptionPage() {
               {/* Handle bar */}
               <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto mb-4" />
               
-              {/* Close button */}
-              <button 
-                onClick={closeCheckout}
-                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
-              >
-                <X className="w-4 h-4 text-zinc-600" />
-              </button>
+              {/* Close button - escondido após gerar o PIX para evitar duplicar eventos */}
+              {!qrCodeData && (
+                <button 
+                  onClick={closeCheckout}
+                  className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+                >
+                  <X className="w-4 h-4 text-zinc-600" />
+                </button>
+              )}
 
               {/* Creator profile header */}
               {!showPayment && (
@@ -580,7 +606,7 @@ export default function VIPSubscriptionPage() {
               {/* Benefits */}
               <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-4 mb-5">
                 <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-1.5">
-                  <span className="text-primary">���</span> BENEFÍCIOS EXCLUSIVOS
+                  <Star className="w-3.5 h-3.5 text-primary fill-primary" /> BENEFÍCIOS EXCLUSIVOS
                 </p>
                 <ul className="flex flex-col gap-2.5">
                   {[
@@ -673,18 +699,30 @@ export default function VIPSubscriptionPage() {
 
                       {/* Copy PIX button */}
                       <button
-                        className={`w-full flex items-center justify-center gap-2 rounded-full py-3.5 font-bold text-white shadow-md active:scale-95 transition-all duration-150 ${copied ? 'bg-green-500' : 'bg-gradient-to-r from-[#f7561e] to-[#f9a531]'}`}
+                        disabled={copied}
+                        className={`w-full flex items-center justify-center gap-2 rounded-full py-3.5 font-bold text-white shadow-md transition-all duration-150 ${copied ? 'bg-green-500 cursor-default' : 'bg-gradient-to-r from-[#f7561e] to-[#f9a531] active:scale-95'}`}
                         onClick={() => {
                           if (!copied) {
                             navigator.clipboard.writeText(qrCodeData.qrCode)
+                            // Trava o botão permanentemente para não duplicar o evento
                             setCopied(true)
-                            setTimeout(() => setCopied(false), 2500)
+
+                            const planDetails = getPlanDetails(selectedPlan || 'semanal')
+                            const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+
+                            // Facebook Pixel tracking - InitiateCheckout (copiou PIX) - dispara uma única vez
+                            if (typeof window !== 'undefined' && (window as any).fbq) {
+                              (window as any).fbq('track', 'InitiateCheckout', {
+                                content_name: `Plano ${selectedPlan}`,
+                                content_category: 'subscription',
+                                value: amount,
+                                currency: 'BRL'
+                              })
+                            }
 
                             // TikTok Pixel tracking - InitiateCheckout (copiou PIX)
                             if (typeof window !== 'undefined' && (window as any).ttq) {
-                              const planDetails = getPlanDetails(selectedPlan || 'semanal')
-                              const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
-                              ;(window as any).ttq.track('InitiateCheckout', {
+                              (window as any).ttq.track('InitiateCheckout', {
                                 content_name: `Plano ${selectedPlan}`,
                                 content_category: 'subscription',
                                 value: amount,
