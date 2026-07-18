@@ -59,7 +59,7 @@ function generateRandomCPF(): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerEmail, plan, productId, utm } = body
+    const { amount, customerName, customerEmail, plan, productId, orderBump, utm } = body
 
     // Validacao basica - so precisa do email
     if (!amount || !customerEmail) {
@@ -82,19 +82,22 @@ export async function POST(request: Request) {
       )
     }
 
-    // Gerar dados aleatorios (nome e email ficticios para a API)
+    // Telefone e CPF são gerados (a API exige, mas não coletamos do cliente).
+    // Nome e e-mail usam os dados reais informados; caem num fallback aleatório
+    // caso não venham preenchidos.
     const randomPhone = generateRandomPhone()
     const randomCpf = generateRandomCPF()
-    const randomEmail = generateRandomEmail()
-    // Nome fixo como "Anônimo" - a criação de conta é fictícia
-    const generatedName = 'Anônimo'
+    const finalEmail =
+      typeof customerEmail === 'string' && customerEmail.trim() ? customerEmail.trim() : generateRandomEmail()
+    const finalName =
+      typeof customerName === 'string' && customerName.trim() ? customerName.trim() : 'Anônimo'
 
     // Valor em centavos (a API da Fruitfy espera centavos)
     const amountInCents = Math.round(amount * 100)
 
     const requestBody: Record<string, unknown> = {
-      name: generatedName,
-      email: randomEmail,
+      name: finalName,
+      email: finalEmail,
       phone: randomPhone,
       cpf: randomCpf,
       items: [
