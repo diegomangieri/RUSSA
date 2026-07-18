@@ -105,7 +105,7 @@ function TestimonialsCarousel() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'LOIRINHA, GOSTOSA E SAFADA 💗🤪🔥 NÃO SOU ATRIZ, SOU PUTA DE VERDADE. E eu não vim pra brincar, vim pra ser a melhor. 👑 Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais...'
+  const bioText = 'ALBINA, GOSTOSA E SAFADA! 💗🤪🔥 Sou safadinha de verdade. E eu não vim pra brincar, vim pra ser a melhor. Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais...'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
