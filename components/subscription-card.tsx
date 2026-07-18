@@ -1,6 +1,6 @@
 'use client'
 
-import { Phone, ArrowRight, Gift, Lock, Check } from 'lucide-react'
+import { Radio, ArrowRight, Gift, Lock, Check } from 'lucide-react'
 
 type PromoPlan = {
   key: string
@@ -12,9 +12,9 @@ type PromoPlan = {
 }
 
 const promoPlans: PromoPlan[] = [
-  { key: '3meses', label: '3 Meses', price: 'R$ 14,90', badge: 'Mais popular', badgeColor: 'green' },
-  { key: '1ano', label: '1 Ano', price: 'R$ 19,90', badge: 'Melhor oferta', badgeColor: 'green' },
-  { key: 'vitalicio', label: 'Vitalício', price: 'R$ 24,90', badge: 'Exclusivo', badgeColor: 'orange' },
+  { key: '3meses', label: '3 Meses', price: 'R$ 24,90', badge: 'Mais popular', badgeColor: 'green' },
+  { key: '1ano', label: '1 Ano', price: 'R$ 29,90', badge: 'Melhor oferta', badgeColor: 'green' },
+  { key: 'vitalicio', label: 'Vitalício', price: 'R$ 34,90', badge: 'Exclusivo', badgeColor: 'orange' },
 ]
 
 export default function SubscriptionCard({ onSubscribe }: { onSubscribe: (plan: string) => void }) {
@@ -40,17 +40,17 @@ export default function SubscriptionCard({ onSubscribe }: { onSubscribe: (plan: 
         >
           <span>30 Dias</span>
           <span className="flex items-center gap-1">
-            R$ 9,99 <ArrowRight className="w-4 h-4" />
+            R$ 19,90 <ArrowRight className="w-4 h-4" />
           </span>
         </button>
 
-        {/* Video call button */}
+        {/* Lives button */}
         <button
           onClick={() => onSubscribe('30dias')}
           className="w-full flex items-center justify-center gap-2 border-2 border-[#f78f3e] text-[#f78f3e] rounded-full px-5 py-2.5 font-bold text-sm active:scale-95 transition-transform mb-3"
         >
-          <Phone className="w-4 h-4" />
-          Chamada de vídeo comigo hoje!
+          <Radio className="w-4 h-4" />
+          Lives exclusivas com meus assinantes!
         </button>
 
         {/* Trust badges */}

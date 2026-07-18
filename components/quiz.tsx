@@ -26,7 +26,7 @@ const STEPS: QuizStep[] = [
     emoji: '🔥',
     title: 'Você está pronto?',
     subtitlePrefix: 'Descubra o conteúdo exclusivo da ',
-    highlight: 'Laninha!',
+    highlight: 'Aninha!',
     button: 'Vamos começar',
   },
   {
@@ -40,7 +40,7 @@ const STEPS: QuizStep[] = [
     type: 'question',
     emoji: '📱',
     title: 'Você me acompanha nas redes sociais?',
-    subtitle: 'Já viu alguma coisa no meu Instagram ou Privacy?',
+    subtitle: 'Já viu alguma postagem no meu Instagram?',
     options: ['Sim, acompanho.', 'Nunca vi.'],
   },
   {
@@ -54,7 +54,7 @@ const STEPS: QuizStep[] = [
     type: 'question',
     emoji: '👀',
     title: 'Última pergunta!',
-    subtitle: 'Você já viu uma bucetinha inchada com manchinhas?',
+    subtitle: 'Você já viu uma bucetinha albina com manchinhas?',
     options: ['Nunca vi.', 'Quero ver agora!'],
   },
 ]

@@ -24,7 +24,7 @@ export function ContentTabs({ children, onUnlock }: ContentTabsProps) {
           }`}
         >
           <LayoutGrid className="w-4 h-4" />
-          754 POSTAGENS
+          125 POSTAGENS
         </button>
         <button
           onClick={() => setTab('media')}
@@ -35,7 +35,7 @@ export function ContentTabs({ children, onUnlock }: ContentTabsProps) {
           }`}
         >
           <PlaySquare className="w-4 h-4" />
-          371 MÍDIAS
+          80 MÍDIAS
         </button>
       </div>
 
@@ -60,7 +60,7 @@ function MediaGrid({ onUnlock }: { onUnlock: () => void }) {
         ))}
       </div>
       <p className="text-center text-xs text-muted-foreground pt-3">
-        Mostrando 12 de 371 mídias
+        Mostrando 12 de 80 mídias
       </p>
     </div>
   )
@@ -82,8 +82,8 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
       <div className="flex items-center gap-3 px-4 py-3">
         <div className="w-9 h-9 rounded-full overflow-hidden border border-zinc-200 shrink-0">
           <Image
-            src="/images/profile.jpg"
-            alt="Lana Oficial"
+            src="/images/aninha-profile.png"
+            alt="Aninha Oficial"
             width={36}
             height={36}
             className="w-full h-full object-cover"
@@ -92,12 +92,12 @@ export default function LockedPost({ caption, likes, comments, videoSrc, imageSr
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-sm text-foreground truncate">LANA OFICIAL</span>
+            <span className="font-semibold text-sm text-foreground truncate">ANINHA OFICIAL</span>
             <span className="w-4 h-4 rounded-full bg-primary flex items-center justify-center shrink-0">
               <Check className="w-2.5 h-2.5 text-white" />
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">@lanaoficial1_</p>
+          <p className="text-xs text-muted-foreground">@ana_bernardes99</p>
         </div>
         <MoreVertical className="w-5 h-5 text-muted-foreground shrink-0" />
       </div>

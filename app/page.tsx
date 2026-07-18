@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Images, Video, Loader2, Copy, Star } from 'lucide-react'
+import { Heart, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Images, Video, Loader2, Copy } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import Quiz from "@/components/quiz"
 import SubscriptionCard from "@/components/subscription-card"
@@ -21,7 +21,7 @@ const testimonials = [
     time: "1 dia atrás"
   },
   {
-    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Ana é diferente de todas, gostosa demais! 😮‍💨",
     user: "Matheus S.",
     time: "2 dias atrás"
   },
@@ -105,7 +105,7 @@ function TestimonialsCarousel() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'LOIRINHA, GOSTOSA E SAFADA 💗🤪🔥 NÃO SOU ATRIZ, SOU PUTA DE VERDADE. E eu não vim pra brincar, vim pra ser a melhor. 👑 Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais...'
+  const bioText = 'ALBINA, GOSTOSA E SAFADA! 💗🤪🔥 Sou safadinha de verdade. E eu não vim pra brincar, vim pra ser a melhor. Aqui é vida real: putaria com tesão 💦, gozada de verdade 😌, boquete até engasgar 😝 e muito mais...'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -159,6 +159,14 @@ const TRACKING_KEYS = [
 ]
 
 const UTM_STORAGE_KEY = 'russa_tracking_params'
+
+// Preço do order bump (Grupo VIP no WhatsApp)
+const ORDER_BUMP_PRICE = 9.9
+
+// Formata um número para o padrão de preço brasileiro (R$ 00,00)
+function formatBRL(value: number): string {
+  return `R$ ${value.toFixed(2).replace('.', ',')}`
+}
 
 // Captura os parâmetros de rastreamento da URL atual e os persiste em
 // localStorage. Deve rodar assim que a pessoa entra no site (com os parâmetros
@@ -216,11 +224,9 @@ export default function VIPSubscriptionPage() {
   const [pageReady, setPageReady] = useState(false)
   const [showCheckoutModal, setShowCheckoutModal] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [customerName, setCustomerName] = useState('')
   const [customerEmail, setCustomerEmail] = useState('')
-  const [customerPassword, setCustomerPassword] = useState('')
-  const [customerConfirmPassword, setCustomerConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [orderBump, setOrderBump] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [qrCodeData, setQrCodeData] = useState<{
     qrCode: string
@@ -259,11 +265,9 @@ export default function VIPSubscriptionPage() {
     window.scrollTo(0, scrollPosition)
     setShowCheckoutModal(false)
     setSelectedPlan(null)
+    setCustomerName('')
     setCustomerEmail('')
-    setCustomerPassword('')
-    setCustomerConfirmPassword('')
-    setShowPassword(false)
-    setShowConfirmPassword(false)
+    setOrderBump(false)
     setQrCodeData(null)
     setError(null)
     setCopied(false)
@@ -340,10 +344,8 @@ export default function VIPSubscriptionPage() {
     setError(null)
 
     const planDetails = getPlanDetails(plan)
-    const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
-
-    // E-mail fictício gerado automaticamente (não pedimos dados ao usuário)
-    const randomEmail = `${Math.random().toString(36).substring(2, 12)}@gmail.com`
+    const basePrice = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+    const amount = orderBump ? basePrice + ORDER_BUMP_PRICE : basePrice
 
     try {
       const response = await fetch('/api/pix', {
@@ -353,8 +355,10 @@ export default function VIPSubscriptionPage() {
         },
         body: JSON.stringify({
           amount,
-          customerEmail: randomEmail,
+          customerName,
+          customerEmail,
           plan: plan,
+          orderBump,
           utm: getUtmParams(),
         }),
       })
@@ -386,10 +390,10 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case '30dias': return { name: '30 Dias', price: 'R$ 9,99', days: '30 dias' }
-      case '3meses': return { name: '3 Meses', price: 'R$ 14,90', days: '90 dias' }
-      case '1ano': return { name: '1 Ano', price: 'R$ 19,90', days: '365 dias' }
-      case 'vitalicio': return { name: 'Vitalício', price: 'R$ 24,90', days: 'Acesso vitalício' }
+      case '30dias': return { name: '30 Dias', price: 'R$ 19,90', days: '30 dias' }
+      case '3meses': return { name: '3 Meses', price: 'R$ 24,90', days: '90 dias' }
+      case '1ano': return { name: '1 Ano', price: 'R$ 29,90', days: '365 dias' }
+      case 'vitalicio': return { name: 'Vitalício', price: 'R$ 34,90', days: 'Acesso vitalício' }
       default: return { name: '', price: '', days: '' }
     }
   }
@@ -418,7 +422,7 @@ export default function VIPSubscriptionPage() {
   const faqItems = [
     {
       question: "É sigiloso? Vai aparecer na minha fatura?",
-      answer: "Sim, �� 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
+      answer: "Sim, é 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
     },
     {
       question: "Tenho acesso imediato aos conteúdos?",
@@ -431,10 +435,6 @@ export default function VIPSubscriptionPage() {
     {
       question: "Possui reembolso ou garantia?",
       answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
-    },
-    {
-    question: "Como funciona a chamada de vídeo?",
-    answer: "Basta mandar uma mensagem no chat da criadora de conteúdo e combinar o horário."
     }
   ]
 
@@ -481,8 +481,8 @@ export default function VIPSubscriptionPage() {
             <div className="w-[84px] h-[84px] rounded-full bg-red-500 overflow-hidden shadow-lg p-[3px]">
               <div className="w-full h-full rounded-full overflow-hidden border-2 border-white">
                 <Image
-                  src="/images/profile.jpg"
-                  alt="Lana Oficial"
+                  src="/images/aninha-profile.png"
+                  alt="Aninha Oficial"
                   width={84}
                   height={84}
                   className="w-full h-full object-cover rounded-full"
@@ -501,19 +501,19 @@ export default function VIPSubscriptionPage() {
           <div className="flex items-center gap-3.5 text-sm text-foreground pb-2">
             <div className="flex items-center gap-1">
               <Images className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">371</span>
+              <span className="font-semibold">80</span>
             </div>
             <div className="flex items-center gap-1">
               <Video className="w-4 h-4 text-primary" />
-              <span className="font-semibold">383</span>
+              <span className="font-semibold">38</span>
             </div>
             <div className="flex items-center gap-1">
               <Lock className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">176</span>
+              <span className="font-semibold">7</span>
             </div>
             <div className="flex items-center gap-1">
               <Heart className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">385.5K</span>
+              <span className="font-semibold">17.9K</span>
             </div>
           </div>
         </div>
@@ -521,12 +521,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-              <h2 className="text-lg font-bold text-foreground">LANA OFICIAL</h2>
+              <h2 className="text-lg font-bold text-foreground">ANINHA OFICIAL</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-              <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+              <p className="text-sm text-muted-foreground">@ana_bernardes99</p>
         </div>
         
         <ProfileBio />
@@ -540,24 +540,24 @@ export default function VIPSubscriptionPage() {
         {/* Publication - locked video post */}
         <LockedPost
           caption="Amor... imagina eu brincando com a minha buceta gordinha, gemendo alto... na casa do meu primo e cheio de gente na sala 😈💦"
-          likes="97,7K"
-          comments="2.523"
+          likes="1.247"
+          comments="43"
           videoSrc="/videos/video1.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
 
         <LockedPost
           caption="Fiz um vídeo novo me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
-          likes="84,2K"
-          comments="1.907"
+          likes="1.893"
+          comments="61"
           videoSrc="/videos/video2.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
 
         <LockedPost
           caption="Acordei com muito tesão e resolvi gravar tudo pra vocês... 😈 vem ver o que eu fiz sozinha na cama 💦"
-          likes="112K"
-          comments="3.148"
+          likes="1.056"
+          comments="34"
           videoSrc="/videos/video3.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
@@ -646,8 +646,8 @@ export default function VIPSubscriptionPage() {
                 <div className="relative">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
                     <Image
-                      src="/images/profile.jpg"
-                      alt="LANA OFICIAL"
+                      src="/images/aninha-profile.png"
+                      alt="ANINHA OFICIAL"
                       width={80}
                       height={80}
                       className="w-full h-full object-cover"
@@ -658,46 +658,97 @@ export default function VIPSubscriptionPage() {
                   <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
                 </div>
                 <div className="flex items-center gap-1.5 mt-2">
-                  <h3 className="text-lg font-bold text-foreground">LANA OFICIAL</h3>
+                  <h3 className="text-lg font-bold text-foreground">ANINHA OFICIAL</h3>
                   <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                     <Check className="w-3 h-3 text-white" />
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+              <p className="text-sm text-muted-foreground">@ana_bernardes99</p>
               </div>
 
-              {/* Benefits */}
-              <div className="bg-zinc-50 border border-zinc-100 rounded-2xl p-4 mb-5">
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-1.5">
-                  <Star className="w-3.5 h-3.5 text-primary fill-primary" /> BENEFÍCIOS EXCLUSIVOS
-                </p>
-                <ul className="flex flex-col gap-2.5">
-                  {[
-                    'Vídeos com fãs e meu ex namorado',
-                    'Mais de 754 postagens explícitas',
-                    'Melhores amigos no Instagram',
-                  ].map((benefit) => (
-                    <li key={benefit} className="flex items-center gap-2.5 text-sm text-foreground">
-                      <span className="w-5 h-5 rounded-full bg-[#fde4cc] flex items-center justify-center flex-shrink-0">
-                        <Check className="w-3 h-3 text-primary" />
-                      </span>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
+              {/* Customer info form */}
+              <div className="flex flex-col gap-3 mb-4">
+                <div>
+                  <label htmlFor="customer-name" className="block text-xs font-semibold text-foreground mb-1.5">
+                    Nome completo
+                  </label>
+                  <input
+                    id="customer-name"
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="Digite seu nome"
+                    className="w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-[#f78f3e]"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="customer-email" className="block text-xs font-semibold text-foreground mb-1.5">
+                    E-mail
+                  </label>
+                  <input
+                    id="customer-email"
+                    type="email"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    placeholder="Digite seu melhor e-mail"
+                    className="w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-[#f78f3e]"
+                  />
+                </div>
               </div>
+
+              {/* Order bump - Grupo VIP no WhatsApp */}
+              <button
+                type="button"
+                onClick={() => setOrderBump((prev) => !prev)}
+                className={`w-full text-left rounded-2xl border-2 border-dashed p-4 mb-5 transition-colors ${
+                  orderBump ? 'border-green-500 bg-green-50' : 'border-[#f78f3e] bg-[#fff7f0]'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      orderBump ? 'bg-green-500 border-green-500' : 'bg-white border-zinc-300'
+                    }`}
+                  >
+                    {orderBump && <Check className="w-3 h-3 text-white" />}
+                  </span>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                      <Crown className="w-4 h-4 text-[#f78f3e] fill-[#f78f3e]" />
+                      Grupo VIP no WhatsApp
+                      <span className="text-[#f78f3e]">{`+ ${formatBRL(ORDER_BUMP_PRICE)}`}</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                      Acesso ao meu grupo secreto + acesso direto para conversar comigo. Toque para adicionar!
+                    </p>
+                  </div>
+                </div>
+              </button>
               </>
               )}
 
               {/* Payment section */}
               {!showPayment ? (
-                <Button 
-                  size="lg" 
-                  className="w-full font-bold text-base h-14 text-white shadow-md active:scale-95 transition-all duration-150 rounded-full bg-gradient-to-r from-[#f7561e] to-[#f9a531] hover:opacity-90"
-                  onClick={() => selectedPlan && generatePix(selectedPlan)}
-                >
-                  {selectedPlan ? `ASSINAR AGORA! (${getPlanDetails(selectedPlan).price})` : 'ASSINAR AGORA!'}
-                </Button>
+                (() => {
+                  const isFormValid =
+                    customerName.trim().length > 1 && /\S+@\S+\.\S+/.test(customerEmail)
+                  const basePrice = selectedPlan
+                    ? parseFloat(getPlanDetails(selectedPlan).price.replace('R$ ', '').replace(',', '.'))
+                    : 0
+                  const totalPrice = orderBump ? basePrice + ORDER_BUMP_PRICE : basePrice
+                  return (
+                    <Button
+                      size="lg"
+                      disabled={!isFormValid}
+                      className="w-full font-bold text-base h-14 text-white shadow-md active:scale-95 transition-all duration-150 rounded-full bg-gradient-to-r from-[#f7561e] to-[#f9a531] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                      onClick={() => selectedPlan && generatePix(selectedPlan)}
+                    >
+                      {isFormValid
+                        ? `ASSINAR AGORA! (${formatBRL(totalPrice)})`
+                        : 'PREENCHA SEUS DADOS'}
+                    </Button>
+                  )
+                })()
               ) : isPaid ? (
                 <div className="text-center">
                   <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
@@ -726,7 +777,13 @@ export default function VIPSubscriptionPage() {
                   </h4>
                   <p className="text-xs text-muted-foreground">Valor</p>
                   <p className="text-2xl font-bold text-foreground mb-4">
-                    {selectedPlan ? getPlanDetails(selectedPlan).price : ''}
+                    {selectedPlan
+                      ? formatBRL(
+                          parseFloat(
+                            getPlanDetails(selectedPlan).price.replace('R$ ', '').replace(',', '.')
+                          ) + (orderBump ? ORDER_BUMP_PRICE : 0)
+                        )
+                      : ''}
                   </p>
 
                   {error ? (
