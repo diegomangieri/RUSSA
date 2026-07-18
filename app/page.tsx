@@ -21,7 +21,7 @@ const testimonials = [
     time: "1 dia atrás"
   },
   {
-    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Ana é diferente de todas, gostosa demais! 😮‍💨",
     user: "Matheus S.",
     time: "2 dias atrás"
   },
@@ -386,10 +386,10 @@ export default function VIPSubscriptionPage() {
 
   const getPlanDetails = (plan: string) => {
     switch(plan) {
-      case '30dias': return { name: '30 Dias', price: 'R$ 9,99', days: '30 dias' }
-      case '3meses': return { name: '3 Meses', price: 'R$ 14,90', days: '90 dias' }
-      case '1ano': return { name: '1 Ano', price: 'R$ 19,90', days: '365 dias' }
-      case 'vitalicio': return { name: 'Vitalício', price: 'R$ 24,90', days: 'Acesso vitalício' }
+      case '30dias': return { name: '30 Dias', price: 'R$ 19,90', days: '30 dias' }
+      case '3meses': return { name: '3 Meses', price: 'R$ 24,90', days: '90 dias' }
+      case '1ano': return { name: '1 Ano', price: 'R$ 29,90', days: '365 dias' }
+      case 'vitalicio': return { name: 'Vitalício', price: 'R$ 34,90', days: 'Acesso vitalício' }
       default: return { name: '', price: '', days: '' }
     }
   }
@@ -418,7 +418,7 @@ export default function VIPSubscriptionPage() {
   const faqItems = [
     {
       question: "É sigiloso? Vai aparecer na minha fatura?",
-      answer: "Sim, �� 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
+      answer: "Sim, é 100% sigiloso. Na sua fatura aparecerá apenas um nome genérico, sem referência ao conteúdo."
     },
     {
       question: "Tenho acesso imediato aos conteúdos?",
@@ -431,10 +431,6 @@ export default function VIPSubscriptionPage() {
     {
       question: "Possui reembolso ou garantia?",
       answer: "Temos garantia de 7 dias. Se não ficar satisfeito, devolvemos 100% do seu dinheiro."
-    },
-    {
-    question: "Como funciona a chamada de vídeo?",
-    answer: "Basta mandar uma mensagem no chat da criadora de conteúdo e combinar o horário."
     }
   ]
 
@@ -482,7 +478,7 @@ export default function VIPSubscriptionPage() {
               <div className="w-full h-full rounded-full overflow-hidden border-2 border-white">
                 <Image
                   src="/images/profile.jpg"
-                  alt="Lana Oficial"
+                  alt="Aninha Oficial"
                   width={84}
                   height={84}
                   className="w-full h-full object-cover rounded-full"
@@ -501,19 +497,19 @@ export default function VIPSubscriptionPage() {
           <div className="flex items-center gap-3.5 text-sm text-foreground pb-2">
             <div className="flex items-center gap-1">
               <Images className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">371</span>
+              <span className="font-semibold">80</span>
             </div>
             <div className="flex items-center gap-1">
               <Video className="w-4 h-4 text-primary" />
-              <span className="font-semibold">383</span>
+              <span className="font-semibold">38</span>
             </div>
             <div className="flex items-center gap-1">
               <Lock className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">176</span>
+              <span className="font-semibold">7</span>
             </div>
             <div className="flex items-center gap-1">
               <Heart className="w-4 h-4 text-zinc-500" />
-              <span className="font-semibold">385.5K</span>
+              <span className="font-semibold">17.9K</span>
             </div>
           </div>
         </div>
@@ -521,12 +517,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-              <h2 className="text-lg font-bold text-foreground">LANA OFICIAL</h2>
+              <h2 className="text-lg font-bold text-foreground">ANINHA OFICIAL</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-              <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+              <p className="text-sm text-muted-foreground">@ana_bernardes99</p>
         </div>
         
         <ProfileBio />
@@ -540,24 +536,24 @@ export default function VIPSubscriptionPage() {
         {/* Publication - locked video post */}
         <LockedPost
           caption="Amor... imagina eu brincando com a minha buceta gordinha, gemendo alto... na casa do meu primo e cheio de gente na sala 😈💦"
-          likes="97,7K"
-          comments="2.523"
+          likes="1.247"
+          comments="43"
           videoSrc="/videos/video1.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
 
         <LockedPost
           caption="Fiz um vídeo novo me provocando no espelho... 🤤 se você visse o final ia se arrepender de não ter assinado antes 🔥"
-          likes="84,2K"
-          comments="1.907"
+          likes="1.893"
+          comments="61"
           videoSrc="/videos/video2.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
 
         <LockedPost
           caption="Acordei com muito tesão e resolvi gravar tudo pra vocês... 😈 vem ver o que eu fiz sozinha na cama 💦"
-          likes="112K"
-          comments="3.148"
+          likes="1.056"
+          comments="34"
           videoSrc="/videos/video3.mp4"
           onUnlock={() => openCheckout('30dias')}
         />
@@ -647,7 +643,7 @@ export default function VIPSubscriptionPage() {
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
                     <Image
                       src="/images/profile.jpg"
-                      alt="LANA OFICIAL"
+                      alt="ANINHA OFICIAL"
                       width={80}
                       height={80}
                       className="w-full h-full object-cover"
@@ -658,12 +654,12 @@ export default function VIPSubscriptionPage() {
                   <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-white" />
                 </div>
                 <div className="flex items-center gap-1.5 mt-2">
-                  <h3 className="text-lg font-bold text-foreground">LANA OFICIAL</h3>
+                  <h3 className="text-lg font-bold text-foreground">ANINHA OFICIAL</h3>
                   <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                     <Check className="w-3 h-3 text-white" />
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground">@lanaoficial1_</p>
+              <p className="text-sm text-muted-foreground">@ana_bernardes99</p>
               </div>
 
               {/* Benefits */}
