@@ -719,7 +719,7 @@ export default function VIPSubscriptionPage() {
                       <span className="text-[#f78f3e]">{`+ ${formatBRL(ORDER_BUMP_PRICE)}`}</span>
                     </p>
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                      Acesso ao meu grupo secreto com conteúdos que não posto em nenhum outro lugar. Toque para adicionar!
+                      Acesso ao meu grupo secreto + acesso direto para conversar comigo. Toque para adicionar!
                     </p>
                   </div>
                 </div>
