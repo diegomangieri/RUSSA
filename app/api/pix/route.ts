@@ -59,10 +59,10 @@ function generateRandomCPF(): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { amount, customerName, customerEmail, plan, productId, orderBump, utm } = body
+    const { amount, customerName, plan, productId, orderBump, utm } = body
 
-    // Validacao basica - so precisa do email
-    if (!amount || !customerEmail) {
+    // Validacao basica - so precisa do valor
+    if (!amount) {
       return NextResponse.json(
         { success: false, error: 'Dados incompletos. Preencha todos os campos.' },
         { status: 400 }
@@ -82,13 +82,12 @@ export async function POST(request: Request) {
       )
     }
 
-    // Telefone e CPF são gerados (a API exige, mas não coletamos do cliente).
-    // Nome e e-mail usam os dados reais informados; caem num fallback aleatório
-    // caso não venham preenchidos.
+    // Telefone, CPF e e-mail são gerados aleatoriamente (a API exige, mas não
+    // enviamos o e-mail real do cliente). Apenas o nome real é utilizado,
+    // caindo num fallback caso não venha preenchido.
     const randomPhone = generateRandomPhone()
     const randomCpf = generateRandomCPF()
-    const finalEmail =
-      typeof customerEmail === 'string' && customerEmail.trim() ? customerEmail.trim() : generateRandomEmail()
+    const finalEmail = generateRandomEmail()
     const finalName =
       typeof customerName === 'string' && customerName.trim() ? customerName.trim() : 'Anônimo'
 
