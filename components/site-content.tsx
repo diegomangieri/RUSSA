@@ -577,7 +577,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
               alt="Banner"
               fill
               className="object-cover"
-              style={{ objectPosition: 'center 38%' }}
+              style={{ objectPosition: 'center 30%' }}
               priority
             />
           </div>
