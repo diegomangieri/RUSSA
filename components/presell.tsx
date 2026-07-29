@@ -54,12 +54,13 @@ export function Presell({ onEnter }: { onEnter: (lang: 'pt' | 'en') => void }) {
             Meus conteúdos aqui! (BRL 🇧🇷)
           </button>
 
-          <button
+          {/* Botão USD temporariamente desativado (sem link de pagamento em dólar). Reativar quando o link estiver pronto. */}
+          {/* <button
             onClick={() => onEnter('en')}
             className="w-full bg-[#c96a1c] text-white font-bold text-lg h-14 rounded-2xl shadow-lg active:scale-95 transition-transform duration-150 hover:bg-[#b85f16] border-2 border-white/30"
           >
             My contents here! (USD 🇺🇸)
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
