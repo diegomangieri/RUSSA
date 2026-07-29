@@ -93,7 +93,7 @@ const CONTENT: Record<Lang, {
     testimonialsTitle: 'O que estão falando 🤭',
     testimonials: [
       {
-        text: 'Foi a melhor punheta que já bati! A buceta dela cheia de manchas é muito diferente, tava curioso pra ver como era 😂',
+        text: 'Foi a melhor punheta que já bati! A buceta dela é muito gostosa, tava curioso pra ver como era 😂',
         user: 'Lucas M.',
         time: '3 horas atrás',
       },
@@ -194,7 +194,7 @@ const CONTENT: Record<Lang, {
     testimonialsTitle: 'What people are saying 🤭',
     testimonials: [
       {
-        text: "Best jerk-off I've ever had! Her pussy covered in spots is so different, I was curious to see what it was like 😂",
+        text: "Best jerk-off I've ever had! Her pussy is so damn good, I was curious to see what it was like 😂",
         user: 'Lucas M.',
         time: '3 hours ago',
       },
@@ -571,8 +571,15 @@ export function SiteContent({ lang }: { lang: Lang }) {
 
         {/* Banner Section */}
         <div className="w-full bg-zinc-900">
-          <div className="relative w-full h-[130px] overflow-hidden">
-            <Image src="/images/banner.png" alt="Banner" fill className="object-cover object-center" priority />
+          <div className="relative w-full h-[150px] overflow-hidden">
+            <Image
+              src="/images/banner.png"
+              alt="Banner"
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center 38%' }}
+              priority
+            />
           </div>
         </div>
 
@@ -839,7 +846,9 @@ export function SiteContent({ lang }: { lang: Lang }) {
 
               {qrCodeData ? (
                 <div className="text-center">
-                  {isPaid ? (
+                  {/* Mesmo após o pagamento ser identificado, a página NÃO muda:
+                      o acesso é enviado manualmente. Mantemos sempre a tela do QR Code. */}
+                  {false ? (
                     <>
                       <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-4">
                         <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
