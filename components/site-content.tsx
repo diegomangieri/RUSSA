@@ -638,7 +638,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
               alt={t.exclusiveContent}
               fill
               priority
-              className="object-cover object-center pointer-events-none"
+              className="object-cover object-center pointer-events-none blur-[2px] scale-105"
               sizes="100vw"
             />
 
@@ -746,7 +746,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
           </div>
 
           <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
-            <Image src="/images/gallery1.webp" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
+            <Image src="/images/gallery1.webp" alt={t.exclusiveContent} fill className="object-cover object-center blur-[2px] scale-105" sizes="100vw" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
                 <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
@@ -759,7 +759,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
           </div>
 
           <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
-            <Image src="/images/gallery4.webp" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
+            <Image src="/images/gallery4.webp" alt={t.exclusiveContent} fill className="object-cover object-center blur-[2px] scale-105" sizes="100vw" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
                 <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
