@@ -98,11 +98,6 @@ const CONTENT: Record<Lang, {
         time: '3 horas atrás',
       },
       {
-        text: 'Foi a melhor punheta que já bati! A buceta dela é muito gostosa, tava curioso pra ver como era 😂',
-        user: 'Pedro R.',
-        time: '1 dia atrás',
-      },
-      {
         text: 'Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨',
         user: 'Matheus S.',
         time: '2 dias atrás',
@@ -197,11 +192,6 @@ const CONTENT: Record<Lang, {
         text: "Best jerk-off I've ever had! Her pussy is so damn good, I was curious to see what it was like 😂",
         user: 'Lucas M.',
         time: '3 hours ago',
-      },
-      {
-        text: "Best jerk-off I've ever had! Her pussy is so damn good, I was curious to see what it was like 😂",
-        user: 'Pedro R.',
-        time: '1 day ago',
       },
       {
         text: "I couldn't resist, subscribed out of curiosity and got hooked. Lana is different from all of them, way too hot! 😮‍💨",
