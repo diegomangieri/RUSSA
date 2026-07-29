@@ -573,7 +573,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
         <div className="w-full bg-zinc-900">
           <div className="relative w-full h-[150px] overflow-hidden">
             <Image
-              src="/images/banner.png"
+              src="/images/banner.webp"
               alt="Banner"
               fill
               className="object-cover"
@@ -589,7 +589,7 @@ export function SiteContent({ lang }: { lang: Lang }) {
             <div className="-mt-[38px]">
               <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
                 <Image
-                  src="/images/profile.png"
+                  src="/images/profile.webp"
                   alt="Lana Alencar"
                   width={76}
                   height={76}
@@ -746,29 +746,11 @@ export function SiteContent({ lang }: { lang: Lang }) {
           </div>
 
           <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden mb-4">
-            <Image src="/images/gallery2.png" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-                <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                  <Lock className="w-7 h-7 text-zinc-600" />
-                </div>
-                <p className="text-foreground font-semibold mb-1">{t.exclusiveContent}</p>
-                <p className="text-muted-foreground text-sm">{t.subscribeToUnlock}</p>
-              </div>
-            </div>
+            <Image src="/images/gallery1.webp" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
           </div>
 
           <div className="relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden -mb-6">
-            <Image src="/images/gallery4.png" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <div className="text-center bg-zinc-100 rounded-2xl px-8 py-6 shadow-lg">
-                <div className="w-14 h-14 rounded-full bg-zinc-200 flex items-center justify-center mx-auto mb-3">
-                  <Lock className="w-7 h-7 text-zinc-600" />
-                </div>
-                <p className="text-foreground font-semibold mb-1">{t.exclusiveContent}</p>
-                <p className="text-muted-foreground text-sm">{t.subscribeToUnlock}</p>
-              </div>
-            </div>
+            <Image src="/images/gallery4.webp" alt={t.exclusiveContent} fill className="object-cover object-center" sizes="100vw" />
           </div>
         </div>
 

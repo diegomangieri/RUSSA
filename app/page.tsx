@@ -24,11 +24,13 @@ type View = 'presell' | 'loading' | 'pt' | 'en'
 
 // Imagens/vídeos usados no site - pré-carregados durante o loading
 const ASSETS = [
-  '/images/banner.png',
-  '/images/profile.png',
-  '/images/gallery2.png',
-  '/images/gallery4.png',
+  '/images/banner.webp',
+  '/images/profile.webp',
+  '/images/gallery1.webp',
+  '/images/gallery4.webp',
 ]
+
+const VIDEO_ASSET = '/videos/preview-locked.mp4'
 
 const LOADING_TEXT: Record<Lang, string> = {
   pt: 'Carregando conteúdos...',
@@ -38,6 +40,19 @@ const LOADING_TEXT: Record<Lang, string> = {
 export default function Page() {
   const [view, setView] = useState<View>('presell')
   const [lang, setLang] = useState<Lang>('pt')
+
+  // Começa a baixar TODOS os assets já na presell, em segundo plano,
+  // para que ao entrar no site não haja mais nada para carregar.
+  useEffect(() => {
+    ASSETS.forEach((src) => {
+      const img = new window.Image()
+      img.src = src
+    })
+    const video = document.createElement('video')
+    video.preload = 'auto'
+    video.src = VIDEO_ASSET
+    video.load()
+  }, [])
 
   const enter = useCallback((chosen: Lang) => {
     setLang(chosen)
@@ -59,7 +74,7 @@ export default function Page() {
       const video = document.createElement('video')
       video.oncanplaythrough = () => resolve()
       video.onerror = () => resolve()
-      video.src = '/videos/preview-locked.mp4'
+      video.src = VIDEO_ASSET
       video.load()
     })
 
