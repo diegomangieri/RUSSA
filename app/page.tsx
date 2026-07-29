@@ -25,7 +25,7 @@ const testimonials = [
     time: "3 horas atrás"
   },
   {
-    text: "Assinei sem esperar muito… mas quando vi os vídeos dela, pqp… que mulher absurda. Aquele vídeo dela pagando boquete é papo de loucura kkkkk",
+    text: "Foi a melhor punheta que já bati! A buceta dela é muito gostosa, tava curioso pra ver como era 😂",
     user: "Pedro R.",
     time: "1 dia atrás"
   },
