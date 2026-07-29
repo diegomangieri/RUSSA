@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X, Eye, EyeOff } from 'lucide-react'
+import { Heart, MessageCircle, ChevronDown, ChevronLeft, ChevronRight, Lock, Check, Crown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -30,7 +30,7 @@ const testimonials = [
     time: "1 dia atrás"
   },
   {
-    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Thayse é diferente de todas, gostosa demais! 😮‍💨",
+    text: "Não aguentei, assinei por curiosidade e fiquei viciado. A Lana é diferente de todas, gostosa demais! 😮‍💨",
     user: "Matheus S.",
     time: "2 dias atrás"
   },
@@ -116,7 +116,7 @@ function TestimonialsCarousel() {
 
 function ProfileBio() {
   const [expanded, setExpanded] = useState(false)
-  const bioText = 'Oi, meus amores 🔥 Sou a Thayse Mangieri e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
+  const bioText = 'Oi, meus amores 🔥 Sou a Lana Alencar e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈'
   
   return (
     <div className="text-sm text-foreground leading-relaxed">
@@ -154,10 +154,8 @@ export default function VIPSubscriptionPage() {
   const [showCheckoutModal, setShowCheckoutModal] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [customerEmail, setCustomerEmail] = useState('')
-  const [customerPassword, setCustomerPassword] = useState('')
-  const [customerConfirmPassword, setCustomerConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [customerName, setCustomerName] = useState('')
+  const [wantsVipGroup, setWantsVipGroup] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [qrCodeData, setQrCodeData] = useState<{
     qrCode: string
@@ -206,10 +204,8 @@ export default function VIPSubscriptionPage() {
     setShowCheckoutModal(false)
     setSelectedPlan(null)
     setCustomerEmail('')
-    setCustomerPassword('')
-    setCustomerConfirmPassword('')
-    setShowPassword(false)
-    setShowConfirmPassword(false)
+    setCustomerName('')
+    setWantsVipGroup(false)
     setQrCodeData(null)
     setError(null)
     setCopied(false)
@@ -270,23 +266,14 @@ export default function VIPSubscriptionPage() {
   }, [qrCodeData?.orderId, isPaid, selectedPlan])
 
   const handleCreateAccount = async () => {
-    if (!customerEmail.trim() || !customerPassword.trim() || !customerConfirmPassword.trim() || !selectedPlan) return
-    
-    if (customerPassword !== customerConfirmPassword) {
-      setError('As senhas não coincidem')
-      return
-    }
-    
-    if (customerPassword.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres')
-      return
-    }
+    if (!customerEmail.trim() || !customerName.trim() || !selectedPlan) return
     
     setIsLoading(true)
     setError(null)
     
     const planDetails = getPlanDetails(selectedPlan)
-    const amount = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+    const basePrice = parseFloat(planDetails.price.replace('R$ ', '').replace(',', '.'))
+    const amount = wantsVipGroup ? basePrice + 9.90 : basePrice
     
     try {
       const response = await fetch('/api/pix', {
@@ -297,7 +284,9 @@ export default function VIPSubscriptionPage() {
         body: JSON.stringify({
           amount,
           customerEmail: customerEmail.trim(),
+          customerName: customerName.trim(),
           plan: selectedPlan,
+          vipGroup: wantsVipGroup,
         }),
       })
       
@@ -411,7 +400,7 @@ export default function VIPSubscriptionPage() {
             <div className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#f78f3e] to-[#f9a55c] overflow-hidden border-[3px] border-white shadow-lg">
               <Image
                 src="/images/profile.png"
-                alt="Thayse Mangieri"
+                alt="Lana Alencar"
                 width={76}
                 height={76}
                 className="w-full h-full object-cover"
@@ -440,12 +429,12 @@ export default function VIPSubscriptionPage() {
         {/* Name and username */}
         <div className="mt-2 mb-2">
           <div className="flex items-center gap-2 mb-0">
-            <h2 className="text-lg font-bold text-foreground">Thayse Mangieri</h2>
+            <h2 className="text-lg font-bold text-foreground">Lana Alencar</h2>
             <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">@thayse.mangieri</p>
+          <p className="text-sm text-muted-foreground">@lana.alencar</p>
         </div>
         
         <ProfileBio />
@@ -831,7 +820,20 @@ export default function VIPSubscriptionPage() {
                     <p className="text-xs text-muted-foreground text-center">Preencha os dados para criar sua conta:</p>
                   </div>
                   
-                  <div className="space-y-4 mb-6">
+                  <div className="space-y-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Nome
+                      </label>
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Digite seu nome"
+                        className="w-full h-12 px-4 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
+                        disabled={isLoading}
+                      />
+                    </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
                         E-mail
@@ -845,51 +847,31 @@ export default function VIPSubscriptionPage() {
                         disabled={isLoading}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Senha
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          value={customerPassword}
-                          onChange={(e) => setCustomerPassword(e.target.value)}
-                          placeholder="Crie uma senha"
-                          className="w-full h-12 px-4 pr-12 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Confirmar Senha
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          value={customerConfirmPassword}
-                          onChange={(e) => setCustomerConfirmPassword(e.target.value)}
-                          placeholder="Confirme sua senha"
-                          className="w-full h-12 px-4 pr-12 rounded-xl border-2 border-zinc-200 focus:border-primary focus:outline-none transition-colors text-foreground placeholder:text-muted-foreground"
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {showConfirmPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
                   </div>
+
+                  {/* Order Bump - Grupo VIP */}
+                  <button
+                    type="button"
+                    onClick={() => setWantsVipGroup(!wantsVipGroup)}
+                    className={`w-full text-left rounded-xl border-2 p-3 mb-4 transition-colors ${wantsVipGroup ? 'border-primary bg-[#fef0e4]' : 'border-dashed border-zinc-300 bg-zinc-50'}`}
+                    disabled={isLoading}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center border-2 transition-colors ${wantsVipGroup ? 'bg-primary border-primary' : 'border-zinc-300 bg-white'}`}>
+                        {wantsVipGroup && <Check className="w-4 h-4 text-white" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <Crown className="w-4 h-4 text-primary" />
+                          <p className="text-sm font-bold text-foreground">Adicionar Grupo VIP</p>
+                          <span className="text-sm font-bold text-primary">+ R$ 9,90</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Acesso ao grupo exclusivo com conteúdos extras e interação direta.
+                        </p>
+                      </div>
+                    </div>
+                  </button>
 
                   {/* Error message */}
                   {error && (
@@ -898,22 +880,14 @@ export default function VIPSubscriptionPage() {
                     </div>
                   )}
 
-                  {/* Info box */}
-                  <div className="bg-[#fef0e4] border border-[#f78f3e] rounded-xl p-3 mb-4">
-                    <p className="text-xs text-center text-primary">
-                      Guarde bem seus dados de acesso!<br />
-                      Você usará para entrar na plataforma
-                    </p>
-                  </div>
-
                   {/* Submit button */}
                   <Button 
                     size="lg" 
                     className="w-full bg-primary text-white hover:bg-[#e07520] font-bold text-base h-14 active:scale-95 transition-all duration-150 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleCreateAccount}
-                    disabled={!customerEmail.includes('@') || !customerPassword.trim() || !customerConfirmPassword.trim() || isLoading}
+                    disabled={!customerEmail.includes('@') || !customerName.trim() || isLoading}
                   >
-                    {isLoading ? 'Criando conta...' : 'Criar conta e assinar!'}
+                    {isLoading ? 'Gerando código PIX...' : 'Gerar código PIX!'}
                   </Button>
                 </>
               )}
