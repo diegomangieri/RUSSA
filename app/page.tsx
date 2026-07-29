@@ -701,7 +701,11 @@ export default function VIPSubscriptionPage() {
                     Plano {getPlanDetails(selectedPlan).name}
                   </h3>
                   <p className="text-xl font-bold text-primary">
-                    {getPlanDetails(selectedPlan).price}
+                    {(() => {
+                      const basePrice = parseFloat(getPlanDetails(selectedPlan).price.replace('R$ ', '').replace(',', '.'))
+                      const total = wantsVipGroup ? basePrice + 9.90 : basePrice
+                      return `R$ ${total.toFixed(2).replace('.', ',')}`
+                    })()}
                   </p>
                 </div>
               )}
@@ -815,11 +819,6 @@ export default function VIPSubscriptionPage() {
               ) : (
                 <>
                   {/* Account Creation Form */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-foreground mb-1 text-center">Crie sua conta</h4>
-                    <p className="text-xs text-muted-foreground text-center">Preencha os dados para criar sua conta:</p>
-                  </div>
-                  
                   <div className="space-y-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
@@ -867,7 +866,8 @@ export default function VIPSubscriptionPage() {
                           <span className="text-sm font-bold text-primary">+ R$ 9,90</span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          Acesso ao grupo exclusivo com conteúdos extras e interação direta.
+                          Acesso ao grupo exclusivo com conteúdos<br />
+                          extras e interação direta.
                         </p>
                       </div>
                     </div>
