@@ -1,20 +1,37 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
 
 export function Presell({ onEnter }: { onEnter: (lang: 'pt' | 'en') => void }) {
+  const [mounted, setMounted] = useState(false)
+  const [imgLoaded, setImgLoaded] = useState(false)
+
+  useEffect(() => {
+    // Fade-in da tela inteira logo após montar
+    const id = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f78f3e] to-[#e07520] flex flex-col items-center justify-center px-6 py-12">
+    <div
+      className={`min-h-screen bg-gradient-to-b from-[#f78f3e] to-[#e07520] flex flex-col items-center justify-center px-6 py-12 transition-opacity duration-700 ease-out ${
+        mounted ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       <div className="w-full max-w-sm flex flex-col items-center text-center">
         {/* Avatar */}
-        <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-5">
+        <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-5 bg-white/20">
           <Image
             src="/images/profile.png"
             alt="Lana Alencar"
             width={112}
             height={112}
-            className="w-full h-full object-cover"
+            onLoad={() => setImgLoaded(true)}
+            className={`w-full h-full object-cover transition-opacity duration-500 ${
+              imgLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
             priority
           />
         </div>

@@ -85,7 +85,7 @@ const CONTENT: Record<Lang, {
     stats: { photos: 'Fotos', videos: 'Vídeos', likes: 'Likes' },
     username: '@lana.alencar',
     bioText:
-      'Oi, meus amores 🔥 Sou a Lana Alencar e depois de muitos pedidos, vou revelar tudinho do meu corpo com manchinhas, rs. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈',
+      'Oi, meus amores 🔥 Sou a Lana Alencar e depois de muitos pedidos, vou revelar tudinho do meu corpinho. Irei mostrar um lado meu que vai te deixar sem fôlego! Aqui você vai encontrar vídeos meus me masturbando, pagando boquete, fazendo sexo no pelo e muito mais... 😈',
     showMore: 'Ver mais',
     showLess: 'Ver menos',
     exclusiveContent: 'Conteúdo Exclusivo',
@@ -186,7 +186,7 @@ const CONTENT: Record<Lang, {
     stats: { photos: 'Photos', videos: 'Videos', likes: 'Likes' },
     username: '@lana.alencar',
     bioText:
-      "Hi, my loves 🔥 I'm Lana Alencar and after so many requests, I'm finally going to reveal everything about my spotted body, hehe. I'll show you a side of me that will leave you breathless! Here you'll find videos of me masturbating, giving blowjobs, having raw sex and so much more... 😈",
+      "Hi, my loves 🔥 I'm Lana Alencar and after so many requests, I'm going to reveal every little bit of my body. I'll show you a side of me that will leave you breathless! Here you'll find videos of me masturbating, giving blowjobs, having raw sex and so much more... 😈",
     showMore: 'Show more',
     showLess: 'Show less',
     exclusiveContent: 'Exclusive Content',

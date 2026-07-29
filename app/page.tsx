@@ -1,8 +1,23 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Presell, LoadingScreen } from '@/components/presell'
 import { SiteContent } from '@/components/site-content'
+
+function SiteFadeIn({ lang }: { lang: 'pt' | 'en' }) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setVisible(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  return (
+    <div className={`transition-opacity duration-700 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}>
+      <SiteContent lang={lang} />
+    </div>
+  )
+}
 
 type Lang = 'pt' | 'en'
 type View = 'presell' | 'loading' | 'pt' | 'en'
@@ -69,5 +84,5 @@ export default function Page() {
     return <LoadingScreen text={LOADING_TEXT[lang]} />
   }
 
-  return <SiteContent lang={view} />
+  return <SiteFadeIn lang={view} />
 }
