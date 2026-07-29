@@ -26,11 +26,10 @@ type View = 'presell' | 'loading' | 'pt' | 'en'
 const ASSETS = [
   '/images/banner.webp',
   '/images/profile.webp',
+  '/images/hero.webp',
   '/images/gallery1.webp',
   '/images/gallery4.webp',
 ]
-
-const VIDEO_ASSET = '/videos/preview-locked.mp4'
 
 const LOADING_TEXT: Record<Lang, string> = {
   pt: 'Carregando conteúdos...',
@@ -48,10 +47,6 @@ export default function Page() {
       const img = new window.Image()
       img.src = src
     })
-    const video = document.createElement('video')
-    video.preload = 'auto'
-    video.src = VIDEO_ASSET
-    video.load()
   }, [])
 
   const enter = useCallback((chosen: Lang) => {
@@ -69,21 +64,12 @@ export default function Page() {
         })
     )
 
-    // Pré-carrega o vídeo do preview
-    const videoPreload = new Promise<void>((resolve) => {
-      const video = document.createElement('video')
-      video.oncanplaythrough = () => resolve()
-      video.onerror = () => resolve()
-      video.src = VIDEO_ASSET
-      video.load()
-    })
-
     // Garante tempo mínimo de exibição do loading + espera os assets (com teto de segurança)
     const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 900))
     const safetyCap = new Promise<void>((resolve) => setTimeout(resolve, 3500))
 
     Promise.race([
-      Promise.all([...preloads, videoPreload, minDelay]).then(() => undefined),
+      Promise.all([...preloads, minDelay]).then(() => undefined),
       safetyCap,
     ]).then(() => {
       setView(chosen)
